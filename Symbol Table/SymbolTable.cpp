@@ -1,5 +1,6 @@
 #include<bits/stdc++.h>
 #include <iostream>
+#include <fstream>
 #define NULL_VALUE -999999
 #define LEN 10000
 #define WHITE 0
@@ -64,12 +65,12 @@ ScopeTable::ScopeTable(int len )
 
 void ScopeTable::printHash(){
     for(int i=0 ; i< length ; i++){
-      // cout<<array[i]->getName()<<" "<<array[i]->getType()<<endl;
+      cout<<i<<" -->  ";
       SymbolInfo *head;
       head = array[i];
       while(head->next != NULL){
         if(head->next->getName() != "empty" ){
-            cout<<"("<<head->next->getName()<<" , "<<head->next->getType()<<") --- ";
+            cout<<"< "<<head->next->getName()<<" : "<<head->next->getType()<<"> ";
         }
         head = head->next;
       }
@@ -189,20 +190,65 @@ class SymbolTable{
 
 
 int main(){
+
 //input from file
   int n ;
+  char cmd;
+  string name , type;
 
-  scanf("%d",&n);
+  // scanf("%d",&n);
+  // ScopeTable scope(n);
+
+  fstream filein , fileout;
+  filein.open ("input.txt", ios::in );
+  fileout.open ("output.txt", ios::out );
+
+  filein>>n;
   ScopeTable scope(n);
 
-  scope.Insert("foo" , "FUNCTION");
-  scope.Insert("i" , "VAR");
-  scope.Insert("a" , "VAR");
-  scope.Insert("5" , "NUMBER");
-  scope.Insert("<=" , "RELOP");
+  while (filein >> cmd) {
+    /* code */
+    // cin>>cmd;
 
-cout<<"Printing hash ------"<<endl;
-  scope.printHash();
+    if (cmd == 'I') {
+      /* code */
+      filein>>name>>type;
+      scope.Insert(name , type);
+
+    } else if (cmd == 'L') {
+      filein>>name;
+      scope.Lookup(name);
+
+    } else if (cmd == 'P') {
+      filein>>cmd;
+      if(cmd == 'A'){
+        scope.printHash();
+      }
+      else{
+
+      }
+
+    } else if (cmd == 'D') {
+      filein>>name;
+      scope.Delete(name);
+
+    }  else if (cmd == 'S') {
+      /* code */
+      //Different ScopeTable
+
+
+    }else {
+      /* code */
+      cout<<"Not a recognised instruction."<<endl;
+    }
+
+
+
+  }
+
+  filein.close();
+  fileout.close();
+
 
   return 0;
 
