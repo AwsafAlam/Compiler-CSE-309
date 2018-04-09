@@ -184,7 +184,20 @@ ScopeTable::~ScopeTable()
 
 
 class SymbolTable{
-    // cout<<"";
+  ScopeTable *parentScope;
+  vector<ScopeTable> scopelist;
+  int buckets;
+public:
+  SymbolTable(int buck = 0);
+	~SymbolTable();
+  void EnterScope();
+  void ExitScope();
+  bool Insert(name , type);
+  bool Remove(name , type);
+  SymbolInfo * Lookup(name);
+  void PrintCurrentScope();
+  void PrintAllScopes();
+
 };
 
 
