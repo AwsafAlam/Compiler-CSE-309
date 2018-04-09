@@ -37,16 +37,14 @@ public:
 	int hash1(string key);
 	int hash2(string key);
 	int hash3(string key);
-	int LinerProbeInsert(string key , int value , int func);
-    bool LinerProbeSearch(string key , int func);
-    void LinerProbeDelete(string key , int func);
 
-    int SeparateChainInsert(string key , int value , int func);
-    bool SeparateChainSearch(string key , int func);
-    void SeparateChainDelete(string key , int func);
+  int SeparateChainInsert(string key , int value , int func);
+  bool SeparateChainSearch(string key , int func);
+  void SeparateChainDelete(string key , int func);
 
-    int getCollision(){return collision;}
-    void printHash();
+  int getCollision(){return collision;}
+  void printHash();
+
 };
 
 HashTable::HashTable(int len)
@@ -62,6 +60,7 @@ HashTable::HashTable(int len)
         array[i]->next = NULL;
     }
 }
+
 void HashTable::printHash(){
     for(int i=0 ; i< length ; i++){
         if(array[i]->value != -1 && array[i]->value != -2){
@@ -69,6 +68,7 @@ void HashTable::printHash(){
         }
     }
 }
+
 int HashTable::hash1(string key){
     int h=7 ;
     for(int i=0 ; i< key.length() ; i++){
@@ -97,110 +97,6 @@ int HashTable::hash3(string key){
 
 }
 
-int HashTable::LinerProbeInsert(string key , int value , int func)
-{
-    int index;
-    if(func == 1)
-         index = hash1(key);
-    else if(func == 2)
-         index = hash2(key);
-    else
-         index = hash3(key);
-
-
-    int idx = index;
-    int empty = -1;
-
-    if(array[index]->value != -1 && array[index]->key ==  key) //Same alue exists
-        return NULL_VALUE;
-    else if(array[index]->value != -1 && array[index]->key !=  key)
-        collision++;
-    while(array[index]->value != -1){
-        index = (index+1)%length;
-        if(array[index]->value == -2){
-            empty = index;
-        }
-    }
-    if(empty == -1){
-        array[index]->key = key;
-        array[index]->value = value;
-        array[index]->index = idx;
-    }
-    else{
-        array[empty]->key = key;
-        array[empty]->value = value;
-        array[empty]->index = idx;
-
-    }
-
-    return collision;
-}
-
-bool HashTable::LinerProbeSearch(string key , int func)
-{
-    int index;
-    if(func == 1)
-         index = hash1(key);
-    else if(func == 2)
-         index = hash2(key);
-    else
-         index = hash3(key);
-
-
-    int idx = index;
-    if(array[index]->key == key){
-        return true;
-    }
-    else{
-        while(array[index]->key != key && array[index]->value != -1){
-            index = (index+1)%length;
-           // collision--;
-//            cout<<index<<" HIiiiiiiiiiii";
-            if(index == idx)
-                return false;
-        }
-        if(array[index]->key== key ){
-//            cout<<index<<" "<<collision<<endl;
-            return true;
-        }
-        else
-            return false;
-    }
-
-}
-void HashTable::LinerProbeDelete(string key , int func)
-{
-    int index;
-    if(func == 1)
-         index = hash1(key);
-    else if(func == 2)
-         index = hash2(key);
-    else
-         index = hash3(key);
-
-
-    int idx = index;
-
-    if(array[index]->value != -1 && array[index]->key ==  key){
-        array[index]->key = "empty";
-        array[index]->value = -2;
-        array[index]->index = -1;
-        return;
-
-    }
-    while(array[index]->value != -1 ){
-            index = (index+1)%length;
-            if(array[index]->key ==  key)
-            {
-               array[index]->key = "empty";
-                array[index]->value = -2;
-                array[index]->index = -1;
-                return;
-            }
-    }
-
-
-}
 
 int HashTable::SeparateChainInsert(string key , int value , int func)
 {
@@ -317,8 +213,7 @@ int main()
     int n , len ;
 
     scanf("%d%d",&n,&len);
-    HashTable LinearProbe1(n), LinearProbe2(n) , LinearProbe3(n)
-              , SeparateChain1(n) , SeparateChain2(n) , SeparateChain3(n);
+    HashTable SeparateChain1(n) , SeparateChain2(n) , SeparateChain3(n);
 
 
     string a , test[n];
@@ -356,7 +251,7 @@ int main()
 
     }
 
-    LinearProbe1.printHash();
+    // LinearProbe1.printHash();
     for(int j =0 ; j< n; j++){
 
         for(int i = 0 ; i< len; i++){
@@ -376,10 +271,10 @@ int main()
     cout<<"\n\nReport Generation:"<<endl;
     cout<<"-------------------"<<endl;
     cout<<"\t\tHash1\tHash2\tHash3"<<endl;
-    cout<<"Linear Probing  ";
-    cout<<LinearProbe1.getCollision()<<"\t";
-    cout<<LinearProbe2.getCollision()<<"\t";
-    cout<<LinearProbe3.getCollision() <<"\t\n";
+    // cout<<"Linear Probing  ";
+    // cout<<LinearProbe1.getCollision()<<"\t";
+    // cout<<LinearProbe2.getCollision()<<"\t";
+    // cout<<LinearProbe3.getCollision() <<"\t\n";
     cout<<" Chaining   \t";
 
     cout<<SeparateChain1.getCollision()<<"\t";
@@ -389,33 +284,33 @@ int main()
     cout<<"-------------------"<<endl;
     cout<<"\t\tHash1\tHash2\tHash3"<<endl;
 
-    clock_t start = clock();
+    // clock_t start = clock();
 
-    for(int j=0 ; j<n ; j++){
-        LinearProbe1.LinerProbeSearch(test[j]  , 1);
-    }
-    clock_t end = clock();
-    cout <<"Linear Probing  "<<diffclock(start,end)<<"\t";
-     start = clock();
-
-    for(int j=0 ; j<n ; j++){
-        LinearProbe2.LinerProbeSearch(test[j]  , 2);
-    }
-     end = clock();
-    cout <<diffclock(start,end)<<"\t";
-     start = clock();
-
-    for(int j=0 ; j<n ; j++){
-        LinearProbe3.LinerProbeSearch(test[j]  , 3);
-    }
-     end = clock();
-    cout<<diffclock(start,end)<<"\t\n";
-     start = clock();
+    // for(int j=0 ; j<n ; j++){
+    //     LinearProbe1.LinerProbeSearch(test[j]  , 1);
+    // }
+    // clock_t end = clock();
+    // cout <<"Linear Probing  "<<diffclock(start,end)<<"\t";
+    //  start = clock();
+    //
+    // for(int j=0 ; j<n ; j++){
+    //     LinearProbe2.LinerProbeSearch(test[j]  , 2);
+    // }
+    //  end = clock();
+    // cout <<diffclock(start,end)<<"\t";
+    //  start = clock();
+    //
+    // for(int j=0 ; j<n ; j++){
+    //     LinearProbe3.LinerProbeSearch(test[j]  , 3);
+    // }
+    //  end = clock();
+    // cout<<diffclock(start,end)<<"\t\n";
+     clock_t start = clock();
 
     for(int j=0 ; j<n ; j++){
         SeparateChain1.SeparateChainSearch(test[j]  , 1);
     }
-     end = clock();
+    clock_t end = clock();
     cout <<" Chaining   \t"<<diffclock(start,end)<<"\t";
      start = clock();
 
