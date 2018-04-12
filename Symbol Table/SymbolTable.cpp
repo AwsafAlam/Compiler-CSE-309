@@ -154,7 +154,6 @@ void ScopeTable::Delete(string name)
     int index;
     index = hash(name);
 
-
     SymbolInfo *head;
     head = array[index];
 
@@ -184,24 +183,79 @@ ScopeTable::~ScopeTable()
 
 
 class SymbolTable{
-  ScopeTable *parentScope;
+  ScopeTable *CurrentScope;
   vector<ScopeTable> scopelist;
   int buckets;
 public:
-  SymbolTable(int buck = 0);
+  SymbolTable(int length = 0);
 	~SymbolTable();
   void EnterScope();
   void ExitScope();
-  bool Insert(name , type);
-  bool Remove(name , type);
-  SymbolInfo * Lookup(name);
+  bool Insert(string name ,string type);
+  bool Remove(string name);
+  SymbolInfo * Lookup(string name);
   void PrintCurrentScope();
   void PrintAllScopes();
 
 };
 
+SymbolTable::SymbolTable(int length){
+    buckets = length;
+    CurrentScope = NULL;
+}
+
+SymbolTable::~SymbolTable(){
+
+}
+
+void SymbolTable::EnterScope() {
+  /* code */
+  ScopeTable *newScope;
+  newScope = new ScopeTable(buckets);
+  CurrentScope = newScope;
+  // scopelist.push_back(newScope);
+
+}
+
+void SymbolTable::ExitScope() {
+  /* code */
 
 
+}
+
+bool SymbolTable::Insert(string name , string type) {
+  /* code */
+  if(CurrentScope == NULL ){
+    EnterScope();
+  }
+  CurrentScope->Insert(name , type);
+
+}
+
+bool SymbolTable::Remove(string name) {
+  /* code */
+
+
+}
+
+SymbolInfo * SymbolTable::Lookup(string name) {
+  /* code */
+
+
+}
+
+void SymbolTable::PrintCurrentScope() {
+  /* code */
+  CurrentScope->printHash();
+
+}
+
+void SymbolTable::PrintAllScopes() {
+  /* code */
+  CurrentScope->printHash();
+
+
+}
 
 int main(){
 
@@ -218,7 +272,7 @@ int main(){
   fileout.open ("output.txt", ios::out );
 
   filein>>n;
-  ScopeTable scope(n);
+  SymbolTable symboltable(n);
 
   while (filein >> cmd) {
     /* code */
@@ -227,24 +281,24 @@ int main(){
     if (cmd == 'I') {
       /* code */
       filein>>name>>type;
-      scope.Insert(name , type);
+      symboltable.Insert(name , type);
 
     } else if (cmd == 'L') {
       filein>>name;
-      scope.Lookup(name);
+      symboltable.Lookup(name);
 
     } else if (cmd == 'P') {
       filein>>cmd;
       if(cmd == 'A'){
-        scope.printHash();
+        symboltable.PrintAllScopes();
       }
-      else{
-
+      else if(cmd == 'C'){
+        symboltable.PrintCurrentScope();
       }
 
     } else if (cmd == 'D') {
       filein>>name;
-      scope.Delete(name);
+      symboltable.Remove(name);
 
     }  else if (cmd == 'S') {
       /* code */
