@@ -32,14 +32,14 @@ public:
 
 class ScopeTable
 {
-    int length , collision;
+    int length , collision , scope;
     SymbolInfo **array;
 public:
-	ScopeTable(int length = 0);
+	ScopeTable(int length = 0 , int num = 1);
 	~ScopeTable();
 	int hash(string key);
   int Insert(string name , string type);
-  bool Lookup(string name );
+  SymbolInfo* Lookup(string name );
   void Delete(string name );
 
   int getCollision(){return collision;}
@@ -47,9 +47,10 @@ public:
 
 };
 
-ScopeTable::ScopeTable(int len )
+ScopeTable::ScopeTable(int len , int num)
 {
     length = len;
+    scope = num;
     collision = 0;
     array = new SymbolInfo*[len];
     for(int i=0 ; i< len ; i++){
@@ -62,6 +63,8 @@ ScopeTable::ScopeTable(int len )
 }
 
 void ScopeTable::printHash(){
+    cout<<"ScopeTable # "<<scope<<endl;
+    cout<<"----------------------"<<endl;
     for(int i=0 ; i< length ; i++){
       cout<<i<<" -->  ";
       SymbolInfo *head;
@@ -87,7 +90,7 @@ int ScopeTable::hash(string key){
 
 int ScopeTable::Insert(string name , string type )
 {
-  int position = 0;
+    int position = 0;
     int index;
     index = hash(name);
     // cout<<name<<" "<<type<<endl;
@@ -105,13 +108,14 @@ int ScopeTable::Insert(string name , string type )
    if(head->next == NULL)
    {
        head->next = item;
+       cout<<"   Inserted in ScopeTable# "<<scope<<" at position ";
        cout<<index<<", 0"<<endl;
    }
    else{
 
    //Discarding repeating values
     if( head->next->getName() ==  name){
-      cout<<"<"<<name<<","<<type<<"> already exists in current ScopeTable"<<name<<endl;
+      cout<<"<"<<name<<","<<type<<"> already exists in current ScopeTable#"<<scope<<endl;
       return NULL_VALUE;
     }
     else{
@@ -121,6 +125,7 @@ int ScopeTable::Insert(string name , string type )
             position++;
         }
         head->next = item;
+        cout<<"   Inserted in ScopeTable# "<<scope<<" at position ";
         cout<<index<<", "<<position<<endl;
 
     }
@@ -130,7 +135,8 @@ int ScopeTable::Insert(string name , string type )
 //    cout<<index<<" "<<collision<<endl;
     return collision;
 }
-bool ScopeTable::Lookup(string name)
+
+SymbolInfo* ScopeTable::Lookup(string name)
 {
     int position = 0;
     int index;
@@ -143,18 +149,19 @@ bool ScopeTable::Lookup(string name)
     while(head->next !=NULL){
         head = head->next;
         if(head->getName() == name){
+          cout<<"   Found in Scopetable# "<<scope<<" at position ";
           cout<<index<<" , "<<position<<endl;
-          return true;
+          return head;
         }
         position++;
     }
-    return false;
+    return NULL;
 
 }
 
 void ScopeTable::Delete(string name)
 {
-  int position =0 ;
+    int position =0 ;
     int index;
     index = hash(name);
 
@@ -165,6 +172,7 @@ void ScopeTable::Delete(string name)
       cout<<name<<" Not found"<<endl;
       return;
     }
+
     while(head->next != NULL){
         if(head->next->getName() == name){
            SymbolInfo *temp;
@@ -180,6 +188,21 @@ void ScopeTable::Delete(string name)
     }
 
     cout<<name<<" Not found"<<endl;
+
+    // SymbolInfo* element;
+    // element = Lookup(name);
+    //
+    // if(element == NULL){
+    //   cout<<name<<" Not found"<<endl;
+    // }
+    // else{
+    //   SymbolInfo *temp;
+    //   temp = head->next;
+    //   cout<<"Deleted entry <"<<temp->getName()<<" "<<temp->getType()<<" > at position "<<index<<" , "<<position<<endl;
+    //   head->next = temp->next;
+    //   free(temp);
+    //   return;
+    // }
 
 
 }
@@ -226,15 +249,15 @@ SymbolTable::SymbolTable(int length){
 }
 
 SymbolTable::~SymbolTable(){
-
 }
 
 void SymbolTable::EnterScope() {
   /* code */
   ScopeTable *newScope;
-  newScope = new ScopeTable(buckets);
+  scopeNumber++;
+  newScope = new ScopeTable(buckets , scopeNumber);
   CurrentScope = newScope;
-
+  cout<<"New ScopeTable with id "<<scopeNumber<<" created"<<endl;
   struct ScopeNode * newNode ;
 	newNode = (struct ScopeNode*) malloc (sizeof(struct ScopeNode)) ;
 	newNode->CurrentNode = CurrentScope ;
@@ -254,7 +277,6 @@ void SymbolTable::EnterScope() {
       head = newNode;
   }
 
-  scopeNumber++;
   scopelist.push_back(CurrentScope);
 
 }
@@ -292,7 +314,6 @@ bool SymbolTable::Insert(string name , string type) {
     EnterScope();
   }
   cout<<"I "<<name<<" "<<type<<endl;
-  cout<<"\tInserted in ScopeTable# "<<scopeNumber<<" at position ";
 
   CurrentScope->Insert(name , type);
 
@@ -300,19 +321,31 @@ bool SymbolTable::Insert(string name , string type) {
 
 bool SymbolTable::Remove(string name) {
   /* code */
+  cout<<"D "<<name<<endl;
     CurrentScope->Delete(name);
 
 }
 
 SymbolInfo * SymbolTable::Lookup(string name) {
-  /* code */
-  if (CurrentScope->Lookup(name)) {
+  cout<<"L "<<name<<endl;
+  ScopeNode * tmp;
+  SymbolInfo * element;
+
+  tmp = head;
+
+  while (tmp != NULL) {
     /* code */
-    cout<<"Found in Scopetable# "<<scopeNumber<<" at position ";
-  } else {
-    /* code */
-    cout<<"Not found"<<endl;
+    element = tmp->CurrentNode->Lookup(name);
+    if(element == NULL){
+        tmp = tmp->next;
+    }
+    else
+      return element;
+
   }
+
+  cout<<"  Not found"<<endl;
+
 }
 
 void SymbolTable::PrintCurrentScope() {
@@ -323,7 +356,13 @@ void SymbolTable::PrintCurrentScope() {
 
 void SymbolTable::PrintAllScopes() {
   /* code */
-  CurrentScope->printHash();
+  ScopeNode* tmp;
+  tmp = head;
+
+  while(tmp!= NULL){
+    tmp->CurrentNode->printHash();
+    tmp = tmp->next;
+  }
 
 }
 
@@ -339,7 +378,7 @@ int main(){
 
   fstream filein , fileout;
   filein.open ("input.txt", ios::in );
-  fileout.open ("output.txt", ios::out );
+  fileout.open ("1505114.txt", ios::out );
 
   filein>>n;
   SymbolTable symboltable(n);
@@ -386,8 +425,6 @@ int main(){
       /* code */
       cout<<"Not a recognised instruction."<<endl;
     }
-
-
 
   }
 
