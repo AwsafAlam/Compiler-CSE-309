@@ -20,9 +20,9 @@ P A
 E
 I t t
 I k k
-E
-E
-E
 I print FUNCTION
 I another VAR
+P A
+L foo
+D foo
 P A

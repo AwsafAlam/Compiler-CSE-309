@@ -3,9 +3,6 @@
 #include <fstream>
 #define NULL_VALUE -999999
 #define LEN 10000
-#define WHITE 0
-#define GREY 1
-#define BLACK -1
 #define INFINITY 99999
 
 using namespace std;
