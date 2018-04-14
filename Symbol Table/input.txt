@@ -9,6 +9,7 @@ D j
 D i
 P A
 S
+S
 I <= RELOP
 I == RELOP
 P A
@@ -19,4 +20,9 @@ P A
 E
 I t t
 I k k
+E
+E
+E
+I print FUNCTION
+I another VAR
 P A

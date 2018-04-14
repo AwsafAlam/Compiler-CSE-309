@@ -283,28 +283,32 @@ void SymbolTable::EnterScope() {
 
 void SymbolTable::ExitScope() {
   /* code */
-  scopelist.pop_back();
+  // scopelist.pop_back();
   // CurrentScope scopelist.back();
-  scopeNumber--;
   if( head == 0 ){
     cout<<"No items to delete "<<endl;
+    CurrentScope = NULL;
     return;
   }
       struct ScopeNode *temp, *pre ;
       temp = head ; //Delete First Element
+      scopeNumber--;
 
     if (temp == tail) //has only one node
   	{
   		head = 0;
   		tail = 0;
   		free(temp) ;
+
   	}
     else{
       head = head->next;
     	head->prev = 0;
       free(temp);
     }
-    CurrentScope = head->CurrentNode;
+    if(head != 0 ){
+      CurrentScope = head->CurrentNode;
+    }
 
 }
 
