@@ -1,0 +1,190 @@
+Line no 1: TOKEN <CONST_INT> Lexeme 30 found
+
+ScopeTable # 1
+----------------------
+4 -->  <0xFF; : CONST_INT> 
+
+Line no 2: TOKEN <IF> Lexeme if found
+
+Line no 2: TOKEN <ELSE> Lexeme else found
+
+Line no 3: TOKEN <ELSE> Lexeme else found
+
+Error at line 4: Invalid prefix on ID or invalid suffix on Number 12345
+12abc
+
+Line no 5: TOKEN <ID> Lexeme abc123 found
+
+ScopeTable # 1
+----------------------
+1 -->  <abc123 : ID> 
+4 -->  <0xFF; : CONST_INT> 
+
+Line no 6: TOKEN <CONST_FLOAT> Lexeme 1.2 found
+
+ScopeTable # 1
+----------------------
+1 -->  <abc123 : ID> 
+2 -->  <1.2 : CONST_FLOAT> 
+4 -->  <0xFF; : CONST_INT> 
+
+Line no 7: TOKEN <CONST_FLOAT> Lexeme 1.2E2 found
+
+ScopeTable # 1
+----------------------
+1 -->  <abc123 : ID> <1.2E2 : CONST_FLOAT> 
+2 -->  <1.2 : CONST_FLOAT> 
+4 -->  <0xFF; : CONST_INT> 
+
+Line no 8: TOKEN <CONST_FLOAT> Lexeme 1.2E+2 found
+
+ScopeTable # 1
+----------------------
+1 -->  <abc123 : ID> <1.2E2 : CONST_FLOAT> 
+2 -->  <1.2 : CONST_FLOAT> 
+4 -->  <0xFF; : CONST_INT> <1.2E+2 : CONST_FLOAT> 
+
+Line no 9: TOKEN <CONST_FLOAT> Lexeme 1.2E-2 found
+
+ScopeTable # 1
+----------------------
+1 -->  <abc123 : ID> <1.2E2 : CONST_FLOAT> 
+2 -->  <1.2 : CONST_FLOAT> 
+4 -->  <0xFF; : CONST_INT> <1.2E+2 : CONST_FLOAT> 
+6 -->  <1.2E-2 : CONST_FLOAT> 
+
+Error at line 10: Too many decimal point  1.2E0.4
+
+Line no 11: TOKEN <CONST_FLOAT> Lexeme .78 found
+
+ScopeTable # 1
+----------------------
+1 -->  <abc123 : ID> <1.2E2 : CONST_FLOAT> 
+2 -->  <1.2 : CONST_FLOAT> 
+4 -->  <0xFF; : CONST_INT> <1.2E+2 : CONST_FLOAT> <.78 : CONST_FLOAT> 
+6 -->  <1.2E-2 : CONST_FLOAT> 
+
+Line no 12: TOKEN <CONST_CHAR> Lexeme 'a' found
+
+ScopeTable # 1
+----------------------
+1 -->  <abc123 : ID> <1.2E2 : CONST_FLOAT> 
+2 -->  <1.2 : CONST_FLOAT> <'a' : CONST_CHAR> 
+4 -->  <0xFF; : CONST_INT> <1.2E+2 : CONST_FLOAT> <.78 : CONST_FLOAT> 
+6 -->  <1.2E-2 : CONST_FLOAT> 
+
+Error at line 13: Empty character constant error ''
+
+Error at line 14: Multi character constant error 'abc'
+
+Line no 15: TOKEN <CONST_CHAR> Lexeme '\t' found
+
+ScopeTable # 1
+----------------------
+1 -->  <abc123 : ID> <1.2E2 : CONST_FLOAT> 
+2 -->  <1.2 : CONST_FLOAT> <'a' : CONST_CHAR> 
+3 -->  <'\t' : CONST_CHAR> 
+4 -->  <0xFF; : CONST_INT> <1.2E+2 : CONST_FLOAT> <.78 : CONST_FLOAT> 
+6 -->  <1.2E-2 : CONST_FLOAT> 
+
+Line no 16: TOKEN <CONST_CHAR> Lexeme '\n' found
+
+ScopeTable # 1
+----------------------
+1 -->  <abc123 : ID> <1.2E2 : CONST_FLOAT> 
+2 -->  <1.2 : CONST_FLOAT> <'a' : CONST_CHAR> 
+3 -->  <'\t' : CONST_CHAR> 
+4 -->  <0xFF; : CONST_INT> <1.2E+2 : CONST_FLOAT> <.78 : CONST_FLOAT> 
+6 -->  <1.2E-2 : CONST_FLOAT> 
+7 -->  <'\n' : CONST_CHAR> 
+
+Error at line 17: Unterminated character '\'
+
+Line no 18: TOKEN <ADDOP> Lexeme + found
+
+Line no 19: TOKEN <ADDOP> Lexeme - found
+
+Line no 20: TOKEN <INCOP> Lexeme ++ found
+
+Line no 21: TOKEN <INCOP> Lexeme ++ found
+
+Line no 21: TOKEN <ADDOP> Lexeme + found
+
+Error at line 22: Invalid prefix on ID or invalid suffix on Number 12abcd
+
+Line No. 23: Token <STRING> Lexeme this is 	 a string 
+ thi
+
+Line No. 24: Token <STRING> Lexeme this is 	 a string 
+ thi
+
+Error at line 26: Unterminated string this is 	 a
+
+Line no 26: TOKEN <ID> Lexeme string found
+
+ScopeTable # 1
+----------------------
+0 -->  <string : ID> 
+1 -->  <abc123 : ID> <1.2E2 : CONST_FLOAT> 
+2 -->  <1.2 : CONST_FLOAT> <'a' : CONST_CHAR> 
+3 -->  <'\t' : CONST_CHAR> 
+4 -->  <0xFF; : CONST_INT> <1.2E+2 : CONST_FLOAT> <.78 : CONST_FLOAT> 
+6 -->  <1.2E-2 : CONST_FLOAT> 
+7 -->  <'\n' : CONST_CHAR> 
+
+Error at line 26: Unrecognized character \
+
+Line no 26: TOKEN <ID> Lexeme n found
+
+ScopeTable # 1
+----------------------
+0 -->  <string : ID> 
+1 -->  <abc123 : ID> <1.2E2 : CONST_FLOAT> 
+2 -->  <1.2 : CONST_FLOAT> <'a' : CONST_CHAR> 
+3 -->  <'\t' : CONST_CHAR> 
+4 -->  <0xFF; : CONST_INT> <1.2E+2 : CONST_FLOAT> <.78 : CONST_FLOAT> 
+6 -->  <1.2E-2 : CONST_FLOAT> 
+7 -->  <'\n' : CONST_CHAR> <n : ID> 
+
+Line no 26: TOKEN <ID> Lexeme this found
+
+ScopeTable # 1
+----------------------
+0 -->  <string : ID> 
+1 -->  <abc123 : ID> <1.2E2 : CONST_FLOAT> 
+2 -->  <1.2 : CONST_FLOAT> <'a' : CONST_CHAR> 
+3 -->  <'\t' : CONST_CHAR> 
+4 -->  <0xFF; : CONST_INT> <1.2E+2 : CONST_FLOAT> <.78 : CONST_FLOAT> 
+6 -->  <1.2E-2 : CONST_FLOAT> 
+7 -->  <'\n' : CONST_CHAR> <n : ID> <this : ID> 
+
+Error at line 27: Unterminated string 
+
+Error at line 28: Unterminated string this is unfinished
+
+Line no 28: TOKEN <COMMENT> Lexeme // comment found
+
+Line 29: Token <COMMENT> Lexeme /****** comment **** */
+
+Line 32: Token <COMMENT> Lexeme /**gusgwg'sjwgwu
+gjgjgdw
+hwdjgwjdgwjdgw*/
+
+Error at line 37: Unterminated chr /**gswgjsgwj
+swshkwhskws'wshwh
+hefge
+fehfjefehfhe
+
+
+ScopeTable # 1
+----------------------
+0 -->  <string : ID> 
+1 -->  <abc123 : ID> <1.2E2 : CONST_FLOAT> 
+2 -->  <1.2 : CONST_FLOAT> <'a' : CONST_CHAR> 
+3 -->  <'\t' : CONST_CHAR> 
+4 -->  <0xFF; : CONST_INT> <1.2E+2 : CONST_FLOAT> <.78 : CONST_FLOAT> 
+6 -->  <1.2E-2 : CONST_FLOAT> 
+7 -->  <'\n' : CONST_CHAR> <n : ID> <this : ID> 
+
+Total Lines : 37
+Total Errors: 11

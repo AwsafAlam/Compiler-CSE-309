@@ -1,0 +1,182 @@
+Error at line 1: Multi character constant error '\\'
+
+Line no 2: TOKEN <CONST_CHAR> Lexeme 'a' found
+
+ScopeTable # 1
+----------------------
+2 -->  <'a' : CONST_CHAR> 
+
+Line no 3: TOKEN <CONST_CHAR> Lexeme '\n' found
+
+ScopeTable # 1
+----------------------
+2 -->  <'a' : CONST_CHAR> 
+7 -->  <'\n' : CONST_CHAR> 
+
+Line no 4: TOKEN <CONST_CHAR> Lexeme '\x' found
+
+ScopeTable # 1
+----------------------
+2 -->  <'a' : CONST_CHAR> 
+7 -->  <'\n' : CONST_CHAR> <'\x' : CONST_CHAR> 
+
+Line no 6: TOKEN <INT> Lexeme int found
+
+Line no 6: TOKEN <ID> Lexeme a found
+
+ScopeTable # 1
+----------------------
+2 -->  <'a' : CONST_CHAR> 
+4 -->  <a : ID> 
+7 -->  <'\n' : CONST_CHAR> <'\x' : CONST_CHAR> 
+
+Line no 6: TOKEN <COMMA> Lexeme , found
+
+Line no 6: TOKEN <ID> Lexeme b found
+
+ScopeTable # 1
+----------------------
+2 -->  <'a' : CONST_CHAR> 
+4 -->  <a : ID> 
+5 -->  <b : ID> 
+7 -->  <'\n' : CONST_CHAR> <'\x' : CONST_CHAR> 
+
+Line no 6: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 7: TOKEN <ID> Lexeme a found
+
+Line no 7: TOKEN <ASSIGNOP> Lexeme = found
+
+Line no 7: TOKEN <ID> Lexeme a found
+
+Line no 7: TOKEN <ADDOP> Lexeme + found
+
+Line no 7: TOKEN <CONST_INT> Lexeme 1 found
+
+ScopeTable # 1
+----------------------
+2 -->  <'a' : CONST_CHAR> 
+4 -->  <a : ID> 
+5 -->  <b : ID> 
+6 -->  <1 : CONST_INT> 
+7 -->  <'\n' : CONST_CHAR> <'\x' : CONST_CHAR> 
+
+Line no 7: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 8: TOKEN <CHAR> Lexeme char found
+
+Line no 8: TOKEN <ID> Lexeme ch found
+
+ScopeTable # 1
+----------------------
+0 -->  <ch : ID> 
+2 -->  <'a' : CONST_CHAR> 
+4 -->  <a : ID> 
+5 -->  <b : ID> 
+6 -->  <1 : CONST_INT> 
+7 -->  <'\n' : CONST_CHAR> <'\x' : CONST_CHAR> 
+
+Line no 8: TOKEN <ASSIGNOP> Lexeme = found
+
+Line no 8: TOKEN <CONST_CHAR> Lexeme 'a' found
+
+Line no 8: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 9: TOKEN <ID> Lexeme ch found
+
+Line no 9: TOKEN <ASSIGNOP> Lexeme = found
+
+Line no 9: TOKEN <CONST_CHAR> Lexeme '\t' found
+
+ScopeTable # 1
+----------------------
+0 -->  <ch : ID> 
+2 -->  <'a' : CONST_CHAR> 
+3 -->  <'\t' : CONST_CHAR> 
+4 -->  <a : ID> 
+5 -->  <b : ID> 
+6 -->  <1 : CONST_INT> 
+7 -->  <'\n' : CONST_CHAR> <'\x' : CONST_CHAR> 
+
+Line no 9: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 10: TOKEN <CHAR> Lexeme char found
+
+Line no 10: TOKEN <ID> Lexeme c found
+
+ScopeTable # 1
+----------------------
+0 -->  <ch : ID> 
+2 -->  <'a' : CONST_CHAR> 
+3 -->  <'\t' : CONST_CHAR> 
+4 -->  <a : ID> 
+5 -->  <b : ID> 
+6 -->  <1 : CONST_INT> <c : ID> 
+7 -->  <'\n' : CONST_CHAR> <'\x' : CONST_CHAR> 
+
+Line no 10: TOKEN <LTHIRD> Lexeme [ found
+
+Line no 10: TOKEN <RTHIRD> Lexeme ] found
+
+Line no 10: TOKEN <ASSIGNOP> Lexeme = found
+
+Line No. 10: Token <STRING> Lexeme ab	
+
+Line no 10: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 11: TOKEN <ID> Lexeme printf found
+
+ScopeTable # 1
+----------------------
+0 -->  <ch : ID> 
+2 -->  <'a' : CONST_CHAR> 
+3 -->  <'\t' : CONST_CHAR> 
+4 -->  <a : ID> 
+5 -->  <b : ID> 
+6 -->  <1 : CONST_INT> <c : ID> <printf : ID> 
+7 -->  <'\n' : CONST_CHAR> <'\x' : CONST_CHAR> 
+
+Line no 11: TOKEN <LPAREN> Lexeme ( found
+
+Line No. 11: Token <STRING> Lexeme abcdefgh
+
+Line no 11: TOKEN <RPAREN> Lexeme ) found
+
+Line no 11: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 12: TOKEN <COMMENT> Lexeme // a comment\
+dfsfsdf found
+
+Line 14: Token <COMMENT> Lexeme /** another**
+*** comment ***/
+
+Line no 15: TOKEN <RETURN> Lexeme return found
+
+Line no 15: TOKEN <CONST_INT> Lexeme 0 found
+
+ScopeTable # 1
+----------------------
+0 -->  <ch : ID> 
+2 -->  <'a' : CONST_CHAR> 
+3 -->  <'\t' : CONST_CHAR> 
+4 -->  <a : ID> 
+5 -->  <b : ID> <0 : CONST_INT> 
+6 -->  <1 : CONST_INT> <c : ID> <printf : ID> 
+7 -->  <'\n' : CONST_CHAR> <'\x' : CONST_CHAR> 
+
+Line no 15: TOKEN <SEMICOLON> Lexeme ; found
+
+Line no 16: TOKEN <RCURL> Lexeme } found
+
+ScopeTable # 1
+----------------------
+0 -->  <ch : ID> 
+2 -->  <'a' : CONST_CHAR> 
+3 -->  <'\t' : CONST_CHAR> 
+4 -->  <a : ID> 
+5 -->  <b : ID> <0 : CONST_INT> 
+6 -->  <1 : CONST_INT> <c : ID> <printf : ID> 
+7 -->  <'\n' : CONST_CHAR> <'\x' : CONST_CHAR> 
+
+Total Lines : 17
+Total Errors: 1

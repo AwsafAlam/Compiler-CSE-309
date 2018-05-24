@@ -1,0 +1,4 @@
+<CONST_INT,30><IF><ELSE><ELSE><ID,abc123><CONST_FLOAT,1.2><CONST_FLOAT,1.2E2><CONST_FLOAT,1.2E+2><CONST_FLOAT,1.2E-2><CONST_FLOAT,.78><CONST_CHAR,a><CONST_CHAR,	><CONST_CHAR,
+><ADDOP,+><ADDOP,-><INCOP,++><INCOP,++><ADDOP,+><STRING,this is 	 a string 
+ thi><STRING,this is 	 a string 
+ thi><ID,string><ID,n><ID,this>
