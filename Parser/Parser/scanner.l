@@ -27,4 +27,35 @@ NUMBER [-]?{DIGIT}+(\.{DIGIT}+)?
 "("       { return LPAREN; }
 ")"       { return RPAREN; }
 "\n"      { return NEWLINE; }
-{WS} { /* No action and no return */}
+{WS}      { /* No action and no return */}
+"if"	    {}
+"else"	{
+				}
+"for"	{
+				}
+"do"	{
+				}
+"int"	{
+				}
+"float"	{
+				}
+"void"	{
+				}
+"switch"	{
+					}
+"default"	{
+					}
+"while"	{
+				}
+"break"	{
+				}
+"char"	{
+				}
+"double"	{
+					}
+"return"	{
+					}
+"case"	{
+				}
+"continue"	{
+						}

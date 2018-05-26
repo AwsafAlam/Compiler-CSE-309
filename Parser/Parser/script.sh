@@ -1,3 +1,4 @@
+clear
 bison -d -y -v parser.y	# -d creates the header file y.tab.h that helps in communication(i.e. pass tokens) between parser and scanner; -y is something similar to -o y.tab.c, that is it creates the parser; -v creates an .output file containing verbose descriptions of the parser states and all the conflicts, both those resolved by operator precedence and the unresolved ones
 echo '1'
 g++ -w -c -o y.o y.tab.c	# -w stops the list of warnings from showing; -c compiles and assembles the c code, -o creates the y.o output file

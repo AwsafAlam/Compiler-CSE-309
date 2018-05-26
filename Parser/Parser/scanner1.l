@@ -4,15 +4,16 @@
 %x STR
 
 %{
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-FILE *logout;
-FILE *tokenout;
-
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "y.tab.h"
 #include "SymbolTable.h"
 
 using namespace std;
+
+FILE *logout;
+FILE *tokenout;
 
 int line_count=1;
 int error_count = 0;
@@ -20,6 +21,7 @@ char chr[1000];
 int chr_COUNT  = 0;
 
 SymbolTable symboltable(10);
+
 
 %}
 
@@ -577,35 +579,3 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 										}
 
 %%
-
-int main(int argc,char *argv[]){
-
-	if(argc!=2){
-		printf("Please provide input file name and try again\n");
-		return 0;
-	}
-
-	FILE *fin=fopen(argv[1],"r");
-	if(fin==NULL){
-		printf("Cannot open specified file\n");
-		return 0;
-	}
-
-	logout= fopen("log.txt","w");
-	tokenout= fopen("token.txt","w");
-
-	yyin= fin;
-	yylex();
-	// st.print();
-	symboltable.PrintAllScopes();
-	fprintf(logout,"Total Lines : %d\n",line_count);
-	fprintf(logout,"Total Errors: %d\n",error_count);
-
-	printf("Total Lines : %d\n",line_count);
-	printf("Total Errors: %d\n",error_count);
-
-	fclose(yyin);
-	fclose(tokenout);
-	fclose(logout);
-	return 0;
-}
