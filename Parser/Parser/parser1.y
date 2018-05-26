@@ -1,10 +1,11 @@
+
 %{
 #include <stdio.h>
 #include <stdlib.h>
 #define YYSTYPE double      /* yyparse() stack type */
 
 void yyerror(char *s){
-	printf("%s\n",s);
+	printf("Error: %s\n",s);
 }
 
 int yylex(void);
@@ -36,6 +37,20 @@ factor:  LPAREN expr RPAREN  { $$ = $2; }
 
 main()
 {
-    yyparse();
+    // if(argc!=2){
+    // 		printf("Please provide input file name and try again\n");
+    // 		return 0;
+    // 	}
+
+
+    	FILE *fin=fopen(argv[1],"r");
+    	if(fin==NULL){
+    		printf("Cannot open specified file\n");
+    		exit(1);
+    	}
+
+    	yyin= fin;
+      yyparse();
+
     exit(0);
 }
