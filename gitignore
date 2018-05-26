@@ -1,2 +1,7 @@
 *.o
 *.exe
+*.output
+*.out
+*.tab.c
+*.tab.h
+*.yy.c
