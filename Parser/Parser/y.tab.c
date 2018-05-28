@@ -536,13 +536,13 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    36,    36,    43,    44,    47,    48,    49,    52,    53,
-      56,    57,    64,    65,    66,    67,    71,    72,    75,    77,
-      78,    79,    82,    83,    84,    85,    88,    89,    92,    97,
-      98,    99,   100,   101,   102,   103,   104,   107,   108,   111,
-     112,   115,   116,   119,   120,   123,   124,   127,   128,   131,
-     132,   135,   136,   137,   140,   141,   142,   143,   144,   145,
-     146,   149,   150,   153,   154
+       0,    36,    36,    43,    44,    47,    48,    49,    52,    55,
+      58,    62,    69,    72,    75,    78,    82,    85,    90,    94,
+      95,    96,    99,   102,   106,   110,   116,   117,   120,   124,
+     127,   130,   133,   136,   139,   142,   145,   150,   153,   158,
+     161,   166,   169,   174,   177,   182,   185,   190,   193,   198,
+     201,   206,   209,   212,   215,   218,   221,   224,   227,   230,
+     233,   238,   241,   246,   249
 };
 #endif
 
@@ -1407,391 +1407,489 @@ yyreduce:
 #line 37 "parser.y" /* yacc.c:1646  */
     {
 					//write your code in this block in all the similar blocks below
-					printf("start : program\n");
+					printf("start : program\n\n");
 				}
 #line 1413 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
 #line 43 "parser.y" /* yacc.c:1646  */
-    { cout<<"--Another rule"<<endl;}
+    { printf("program : program unit\n\n");}
 #line 1419 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
 #line 44 "parser.y" /* yacc.c:1646  */
-    { printf("program : | unit\n");}
+    { printf("program : | unit\n\n");}
 #line 1425 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
 #line 47 "parser.y" /* yacc.c:1646  */
-    { printf(" unit \n");}
+    { printf("unit : var_declaration\n\n");}
 #line 1431 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 48 "parser.y" /* yacc.c:1646  */
-    {printf("Function dec\n");}
+    {printf("unit : func_declaration\n\n");}
 #line 1437 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
 #line 49 "parser.y" /* yacc.c:1646  */
-    { cout<<"unit : var_declaration"<<endl;}
+    { printf("unit : var_declaration\n\n");}
 #line 1443 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
 #line 52 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1449 "y.tab.c" /* yacc.c:1646  */
+    {
+		 			 	printf("func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON\n\n");
+				  }
+#line 1451 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 53 "parser.y" /* yacc.c:1646  */
-    { printf("\nfunc_declaration :type_specifier ID LPAREN RPAREN SEMICOLON\n");}
-#line 1455 "y.tab.c" /* yacc.c:1646  */
+#line 55 "parser.y" /* yacc.c:1646  */
+    { printf("func_declaration :type_specifier ID LPAREN RPAREN SEMICOLON\n\n");}
+#line 1457 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 56 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1461 "y.tab.c" /* yacc.c:1646  */
+#line 58 "parser.y" /* yacc.c:1646  */
+    {
+						printf("func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n\n");
+
+					}
+#line 1466 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 57 "parser.y" /* yacc.c:1646  */
+#line 62 "parser.y" /* yacc.c:1646  */
     {
-													/* printf("func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n"); */
-													cout<<(yyvsp[-3].strval)<<"()";
+													printf("func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n\n");
+													/* cout<<$2<<"()"; */
 												}
-#line 1470 "y.tab.c" /* yacc.c:1646  */
+#line 1475 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 64 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1476 "y.tab.c" /* yacc.c:1646  */
+#line 69 "parser.y" /* yacc.c:1646  */
+    {
+						printf("parameter_list  : parameter_list COMMA type_specifier ID\n\n");
+					}
+#line 1483 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 65 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1482 "y.tab.c" /* yacc.c:1646  */
+#line 72 "parser.y" /* yacc.c:1646  */
+    {
+						printf("parameter_list : parameter_list COMMA type_specifier\n\n");
+					}
+#line 1491 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 66 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1488 "y.tab.c" /* yacc.c:1646  */
+#line 75 "parser.y" /* yacc.c:1646  */
+    {
+						printf("parameter_list : type_specifier ID\n\n");
+					}
+#line 1499 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 67 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1494 "y.tab.c" /* yacc.c:1646  */
+#line 78 "parser.y" /* yacc.c:1646  */
+    { printf("parameter_list : type_specifier\n\n");}
+#line 1505 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 71 "parser.y" /* yacc.c:1646  */
-    { cout<<"{ \n}\n"<<endl;}
-#line 1500 "y.tab.c" /* yacc.c:1646  */
+#line 82 "parser.y" /* yacc.c:1646  */
+    {
+							printf("compound_statement : LCURL statements RCURL\n\n");
+						}
+#line 1513 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 72 "parser.y" /* yacc.c:1646  */
-    { cout<<"\n{}\n"<<endl;}
-#line 1506 "y.tab.c" /* yacc.c:1646  */
+#line 85 "parser.y" /* yacc.c:1646  */
+    {
+							 printf("compound_statement : LCURL RCURL\n\n");
+						 }
+#line 1521 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 75 "parser.y" /* yacc.c:1646  */
-    {cout<<";"<<endl;}
-#line 1512 "y.tab.c" /* yacc.c:1646  */
+#line 90 "parser.y" /* yacc.c:1646  */
+    {
+				printf("var_declaration : type_specifier declaration_list SEMICOLON\n\n");
+			}
+#line 1529 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 77 "parser.y" /* yacc.c:1646  */
-    { printf("int "); }
-#line 1518 "y.tab.c" /* yacc.c:1646  */
+#line 94 "parser.y" /* yacc.c:1646  */
+    { printf("type_specifier:INT\n\n"); }
+#line 1535 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 78 "parser.y" /* yacc.c:1646  */
-    { cout<<"float ";}
-#line 1524 "y.tab.c" /* yacc.c:1646  */
+#line 95 "parser.y" /* yacc.c:1646  */
+    { printf("type_specifier : FLOAT\n\n");}
+#line 1541 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 79 "parser.y" /* yacc.c:1646  */
-    { cout<<"void ";}
-#line 1530 "y.tab.c" /* yacc.c:1646  */
+#line 96 "parser.y" /* yacc.c:1646  */
+    { printf("type_specifier : VOID\n\n");}
+#line 1547 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 82 "parser.y" /* yacc.c:1646  */
-    { cout<<","<<endl;}
-#line 1536 "y.tab.c" /* yacc.c:1646  */
+#line 99 "parser.y" /* yacc.c:1646  */
+    {
+						printf("declaration_list : declaration_list COMMA ID\n\n");
+					}
+#line 1555 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 83 "parser.y" /* yacc.c:1646  */
-    { printf(", %s[%c]",(yyvsp[-3].strval) , (yyvsp[-1].ivar));}
-#line 1542 "y.tab.c" /* yacc.c:1646  */
+#line 102 "parser.y" /* yacc.c:1646  */
+    {
+						printf("declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD\n\n");
+						/* printf(", %s[%c]",$3 , $5); */
+					}
+#line 1564 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 84 "parser.y" /* yacc.c:1646  */
-    { cout<<(yyvsp[0].strval); }
-#line 1548 "y.tab.c" /* yacc.c:1646  */
+#line 106 "parser.y" /* yacc.c:1646  */
+    {
+						printf("declaration_list : ID\n\n");
+						 /* cout<<$1;  */
+					}
+#line 1573 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 85 "parser.y" /* yacc.c:1646  */
-    { cout<<(yyvsp[-3].strval)<<"["<<(yyvsp[-1].ivar)<<"]";}
-#line 1554 "y.tab.c" /* yacc.c:1646  */
+#line 110 "parser.y" /* yacc.c:1646  */
+    {
+						printf("declaration_list : ID LTHIRD CONST_INT RTHIRD\n\n");
+						 /* cout<<$1<<"["<<$3<<"]"; */
+					 }
+#line 1582 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 88 "parser.y" /* yacc.c:1646  */
-    { cout<<"statements : statement "<<endl;}
-#line 1560 "y.tab.c" /* yacc.c:1646  */
+#line 116 "parser.y" /* yacc.c:1646  */
+    { printf("statements : statement \n\n");}
+#line 1588 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 89 "parser.y" /* yacc.c:1646  */
-    { cout<<"statements :| statements statement "<<endl;}
-#line 1566 "y.tab.c" /* yacc.c:1646  */
+#line 117 "parser.y" /* yacc.c:1646  */
+    { printf("statements :| statements statement \n\n");}
+#line 1594 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 92 "parser.y" /* yacc.c:1646  */
+#line 120 "parser.y" /* yacc.c:1646  */
     {
-					cout<<"statement : var_declaration"<<endl;
-						/* fprintf(log,"statement : var_declaration\n"); */
+					printf("statement : var_declaration\n\n");
+						/* fprintf(log,"statement : var_declaration\n\n"); */
 					}
-#line 1575 "y.tab.c" /* yacc.c:1646  */
+#line 1603 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 97 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1581 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 30:
-#line 98 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1587 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 31:
-#line 99 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1593 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 32:
-#line 100 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1599 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 33:
-#line 101 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1605 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 34:
-#line 102 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
+#line 124 "parser.y" /* yacc.c:1646  */
+    {
+						 printf("statement : expression_statement\n\n");
+					 }
 #line 1611 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 35:
-#line 103 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1617 "y.tab.c" /* yacc.c:1646  */
+  case 30:
+#line 127 "parser.y" /* yacc.c:1646  */
+    {
+						printf("statement : compound_statement\n\n");
+					}
+#line 1619 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 36:
-#line 104 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1623 "y.tab.c" /* yacc.c:1646  */
+  case 31:
+#line 130 "parser.y" /* yacc.c:1646  */
+    {
+						printf("statement :  FOR LPAREN expression_statement expression_statement expression RPAREN statement\n\n");
+					}
+#line 1627 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 37:
-#line 107 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1629 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 38:
-#line 108 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
+  case 32:
+#line 133 "parser.y" /* yacc.c:1646  */
+    {
+							printf("statement : IF LPAREN expression RPAREN statement\n\n");
+					}
 #line 1635 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 39:
-#line 111 "parser.y" /* yacc.c:1646  */
-    { cout<<"-ID-"<<endl;}
-#line 1641 "y.tab.c" /* yacc.c:1646  */
+  case 33:
+#line 136 "parser.y" /* yacc.c:1646  */
+    {
+						printf("statement : IF LPAREN expression RPAREN statement ELSE statement\n\n");
+					}
+#line 1643 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 40:
-#line 112 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1647 "y.tab.c" /* yacc.c:1646  */
+  case 34:
+#line 139 "parser.y" /* yacc.c:1646  */
+    {
+						printf("statement : WHILE LPAREN expression RPAREN statement\n\n");
+					}
+#line 1651 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 41:
-#line 115 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1653 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 42:
-#line 116 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
+  case 35:
+#line 142 "parser.y" /* yacc.c:1646  */
+    {
+						printf("statement : PRINTLN LPAREN ID RPAREN SEMICOLON\n\n");
+					}
 #line 1659 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 43:
-#line 119 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1665 "y.tab.c" /* yacc.c:1646  */
+  case 36:
+#line 145 "parser.y" /* yacc.c:1646  */
+    {
+						printf("statement : RETURN expression SEMICOLON\n\n");
+					}
+#line 1667 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 44:
-#line 120 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1671 "y.tab.c" /* yacc.c:1646  */
+  case 37:
+#line 150 "parser.y" /* yacc.c:1646  */
+    {
+						printf("expression_statement 	: SEMICOLON\n\n");
+					}
+#line 1675 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 45:
-#line 123 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1677 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 46:
-#line 124 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
+  case 38:
+#line 153 "parser.y" /* yacc.c:1646  */
+    {
+						printf("expression_statement 	: expression SEMICOLON\n\n");
+					}
 #line 1683 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 47:
-#line 127 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1689 "y.tab.c" /* yacc.c:1646  */
+  case 39:
+#line 158 "parser.y" /* yacc.c:1646  */
+    {
+					printf("variable : ID\n\n");
+				}
+#line 1691 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 48:
-#line 128 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1695 "y.tab.c" /* yacc.c:1646  */
+  case 40:
+#line 161 "parser.y" /* yacc.c:1646  */
+    {
+				 printf("variable : ID LTHIRD expression RTHIRD\n\n");
+			 }
+#line 1699 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 49:
-#line 131 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1701 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 50:
-#line 132 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
+  case 41:
+#line 166 "parser.y" /* yacc.c:1646  */
+    {
+						 printf("expression : logic_expression\n\n");
+					 }
 #line 1707 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 51:
-#line 135 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1713 "y.tab.c" /* yacc.c:1646  */
+  case 42:
+#line 169 "parser.y" /* yacc.c:1646  */
+    {
+						 printf("expression : variable ASSIGNOP logic_expression\n\n");
+					 }
+#line 1715 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 52:
-#line 136 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1719 "y.tab.c" /* yacc.c:1646  */
+  case 43:
+#line 174 "parser.y" /* yacc.c:1646  */
+    {
+				 			printf("logic_expression : rel_expression\n\n");
+						}
+#line 1723 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 53:
-#line 137 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1725 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 54:
-#line 140 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
+  case 44:
+#line 177 "parser.y" /* yacc.c:1646  */
+    {
+						 printf("logic_expression : rel_expression LOGICOP rel_expression\n\n");
+					 }
 #line 1731 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 55:
-#line 141 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1737 "y.tab.c" /* yacc.c:1646  */
+  case 45:
+#line 182 "parser.y" /* yacc.c:1646  */
+    {
+							printf("rel_expression	: simple_expression\n\n");
+					}
+#line 1739 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 56:
-#line 142 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1743 "y.tab.c" /* yacc.c:1646  */
+  case 46:
+#line 185 "parser.y" /* yacc.c:1646  */
+    {
+						printf("rel_expression	: simple_expression RELOP simple_expression\n\n");
+					}
+#line 1747 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 57:
-#line 143 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1749 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 58:
-#line 144 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
+  case 47:
+#line 190 "parser.y" /* yacc.c:1646  */
+    {
+						printf("simple_expression : term\n\n");
+					}
 #line 1755 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 59:
-#line 145 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1761 "y.tab.c" /* yacc.c:1646  */
+  case 48:
+#line 193 "parser.y" /* yacc.c:1646  */
+    {
+						printf("simple_expression : simple_expression ADDOP term\n\n");
+					}
+#line 1763 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 60:
-#line 146 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1767 "y.tab.c" /* yacc.c:1646  */
+  case 49:
+#line 198 "parser.y" /* yacc.c:1646  */
+    {
+						printf("term :	unary_expression\n\n");
+					}
+#line 1771 "y.tab.c" /* yacc.c:1646  */
     break;
 
-  case 61:
-#line 149 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1773 "y.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 62:
-#line 150 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
+  case 50:
+#line 201 "parser.y" /* yacc.c:1646  */
+    {
+					 printf("term :	term MULOP unary_expression\n\n");
+				 }
 #line 1779 "y.tab.c" /* yacc.c:1646  */
     break;
 
+  case 51:
+#line 206 "parser.y" /* yacc.c:1646  */
+    {
+							printf("unary_expression : ADDOP unary_expression\n\n");
+					}
+#line 1787 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 52:
+#line 209 "parser.y" /* yacc.c:1646  */
+    {
+						 printf("unary_expression : NOT unary_expression\n\n");
+					 }
+#line 1795 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 53:
+#line 212 "parser.y" /* yacc.c:1646  */
+    { printf("unary_expression : factor\n\n");}
+#line 1801 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 54:
+#line 215 "parser.y" /* yacc.c:1646  */
+    {
+					printf("factor	: variable\n\n");
+				}
+#line 1809 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 55:
+#line 218 "parser.y" /* yacc.c:1646  */
+    {
+					printf("factor	: ID LPAREN argument_list RPAREN\n\n");
+				}
+#line 1817 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 56:
+#line 221 "parser.y" /* yacc.c:1646  */
+    {
+					printf("factor : LPAREN expression RPAREN\n\n");
+				}
+#line 1825 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 57:
+#line 224 "parser.y" /* yacc.c:1646  */
+    {
+					printf("factor : CONST_INT\n\n");
+				}
+#line 1833 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 58:
+#line 227 "parser.y" /* yacc.c:1646  */
+    {
+					printf("factor : CONST_FLOAT\n\n");
+				}
+#line 1841 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 59:
+#line 230 "parser.y" /* yacc.c:1646  */
+    {
+					printf("factor : variable INCOP\n\n");
+				}
+#line 1849 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 60:
+#line 233 "parser.y" /* yacc.c:1646  */
+    {
+					printf("factor : variable DECOP\n\n");
+				}
+#line 1857 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 61:
+#line 238 "parser.y" /* yacc.c:1646  */
+    {
+						printf("argument_list : arguments\n\n");
+					}
+#line 1865 "y.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 62:
+#line 241 "parser.y" /* yacc.c:1646  */
+    {
+						printf("argument_list :\n\n");
+					}
+#line 1873 "y.tab.c" /* yacc.c:1646  */
+    break;
+
   case 63:
-#line 153 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1785 "y.tab.c" /* yacc.c:1646  */
+#line 246 "parser.y" /* yacc.c:1646  */
+    {
+						printf("arguments : arguments COMMA logic_expression\n\n");
+					}
+#line 1881 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 154 "parser.y" /* yacc.c:1646  */
-    { cout<<"Another rule"<<endl;}
-#line 1791 "y.tab.c" /* yacc.c:1646  */
+#line 249 "parser.y" /* yacc.c:1646  */
+    {
+						printf("arguments : logic_expression\n\n");
+					}
+#line 1889 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1795 "y.tab.c" /* yacc.c:1646  */
+#line 1893 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2019,14 +2117,14 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 157 "parser.y" /* yacc.c:1906  */
+#line 254 "parser.y" /* yacc.c:1906  */
 
 int main(int argc,char *argv[])
 {
   FILE *fp;
 	if((fp=fopen(argv[1],"r"))==NULL)
 	{
-		printf("Cannot Open Input File.\n");
+		printf("Cannot Open Input File.\n\n");
 		exit(1);
 	}
 

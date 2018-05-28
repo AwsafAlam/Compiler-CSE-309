@@ -36,126 +36,220 @@ void yyerror(char *s){
 			start : program
 				{
 					//write your code in this block in all the similar blocks below
-					printf("start : program\n");
+					printf("start : program\n\n");
 				}
 				;
 
-			program : program unit	{ cout<<"--Another rule"<<endl;}
-				| unit	{ printf("program : | unit\n");}
+			program : program unit	{ printf("program : program unit\n\n");}
+				| unit	{ printf("program : | unit\n\n");}
 				;
 
-			unit : var_declaration	{ printf(" unit \n");}
-			     | func_declaration		  {printf("Function dec\n");}
-			     | func_definition	{ cout<<"unit : var_declaration"<<endl;}
+			unit : var_declaration	{ printf("unit : var_declaration\n\n");}
+			     | func_declaration		  {printf("unit : func_declaration\n\n");}
+			     | func_definition	{ printf("unit : var_declaration\n\n");}
 			     ;
 
-			func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON	{ cout<<"Another rule"<<endl;}
-					| type_specifier ID LPAREN RPAREN SEMICOLON	{ printf("\nfunc_declaration :type_specifier ID LPAREN RPAREN SEMICOLON\n");}
+			func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON	{
+		 			 	printf("func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON\n\n");
+				  }
+					| type_specifier ID LPAREN RPAREN SEMICOLON	{ printf("func_declaration :type_specifier ID LPAREN RPAREN SEMICOLON\n\n");}
 					;
 
-			func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement  { cout<<"Another rule"<<endl;}
+			func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement  {
+						printf("func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n\n");
+
+					}
 					| type_specifier ID LPAREN RPAREN compound_statement  {
-													/* printf("func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n"); */
-													cout<<$2<<"()";
+													printf("func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n\n");
+													/* cout<<$2<<"()"; */
 												}
 			 		;
 
 
-			parameter_list  : parameter_list COMMA type_specifier ID  { cout<<"Another rule"<<endl;}
-					| parameter_list COMMA type_specifier  { cout<<"Another rule"<<endl;}
-			 		| type_specifier ID  { cout<<"Another rule"<<endl;}
-					| type_specifier  { cout<<"Another rule"<<endl;}
+			parameter_list  : parameter_list COMMA type_specifier ID  {
+						printf("parameter_list  : parameter_list COMMA type_specifier ID\n\n");
+					}
+					| parameter_list COMMA type_specifier  {
+						printf("parameter_list : parameter_list COMMA type_specifier\n\n");
+					}
+			 		| type_specifier ID  {
+						printf("parameter_list : type_specifier ID\n\n");
+					}
+					| type_specifier  { printf("parameter_list : type_specifier\n\n");}
 			 		;
 
 
-			compound_statement : LCURL statements RCURL  { cout<<"{ \n}\n"<<endl;}
-			 		    | LCURL RCURL  { cout<<"\n{}\n"<<endl;}
-			 		    ;
+			compound_statement : LCURL statements RCURL  {
+							printf("compound_statement : LCURL statements RCURL\n\n");
+						}
+		 		    | LCURL RCURL  {
+							 printf("compound_statement : LCURL RCURL\n\n");
+						 }
+		 		    ;
 
-			var_declaration : type_specifier declaration_list SEMICOLON  {cout<<";"<<endl;};
+			var_declaration : type_specifier declaration_list SEMICOLON  {
+				printf("var_declaration : type_specifier declaration_list SEMICOLON\n\n");
+			};
 
-			type_specifier	: INT { printf("int "); }
-			 		| FLOAT { cout<<"float ";}
-			 		| VOID { cout<<"void ";}
+			type_specifier	: INT { printf("type_specifier:INT\n\n"); }
+			 		| FLOAT { printf("type_specifier : FLOAT\n\n");}
+			 		| VOID { printf("type_specifier : VOID\n\n");}
 			 		;
 
-			declaration_list : declaration_list COMMA ID { cout<<","<<endl;}
-			 		  | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD { printf(", %s[%c]",$3 , $5);}
-			 		  | ID { cout<<$1; }
-			 		  | ID LTHIRD CONST_INT RTHIRD { cout<<$1<<"["<<$3<<"]";}
-			 		  ;
+			declaration_list : declaration_list COMMA ID {
+						printf("declaration_list : declaration_list COMMA ID\n\n");
+					}
+		 		  | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD {
+						printf("declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD\n\n");
+						/* printf(", %s[%c]",$3 , $5); */
+					}
+		 		  | ID {
+						printf("declaration_list : ID\n\n");
+						 /* cout<<$1;  */
+					}
+		 		  | ID LTHIRD CONST_INT RTHIRD {
+						printf("declaration_list : ID LTHIRD CONST_INT RTHIRD\n\n");
+						 /* cout<<$1<<"["<<$3<<"]"; */
+					 }
+		 		  ;
 
-			statements : statement { cout<<"statements : statement "<<endl;}
-				   | statements statement { cout<<"statements :| statements statement "<<endl;}
+			statements : statement { printf("statements : statement \n\n");}
+				   | statements statement { printf("statements :| statements statement \n\n");}
 				   ;
 
 			statement : var_declaration	{
-					cout<<"statement : var_declaration"<<endl;
-						/* fprintf(log,"statement : var_declaration\n"); */
+					printf("statement : var_declaration\n\n");
+						/* fprintf(log,"statement : var_declaration\n\n"); */
 					}
-
-				  | expression_statement	{ cout<<"statement : expression_statement"<<endl;}
-				  | compound_statement	{ cout<<"statement : compound_statement"<<endl;}
-				  | FOR LPAREN expression_statement expression_statement expression RPAREN statement	{ cout<<"statement :  FOR LPAREN expression_statement expression_statement expression RPAREN statement"<<endl;}
+					| expression_statement	{
+						 printf("statement : expression_statement\n\n");
+					 }
+				  | compound_statement	{
+						printf("statement : compound_statement\n\n");
+					}
+				  | FOR LPAREN expression_statement expression_statement expression RPAREN statement	{
+						printf("statement :  FOR LPAREN expression_statement expression_statement expression RPAREN statement\n\n");
+					}
 				  | IF LPAREN expression RPAREN statement	{
-							cout<<"statement : IF LPAREN expression RPAREN statement"<<endl;}
+							printf("statement : IF LPAREN expression RPAREN statement\n\n");
+					}
 				  | IF LPAREN expression RPAREN statement ELSE statement	{
-						cout<<"statement : IF LPAREN expression RPAREN statement ELSE statement"<<endl;}
+						printf("statement : IF LPAREN expression RPAREN statement ELSE statement\n\n");
+					}
 				  | WHILE LPAREN expression RPAREN statement	{
-						cout<<"statement : WHILE LPAREN expression RPAREN statement"<<endl;}
-				  | PRINTLN LPAREN ID RPAREN SEMICOLON	{ cout<<"statement : PRINTLN LPAREN ID RPAREN SEMICOLON"<<endl;}
-				  | RETURN expression SEMICOLON	{ cout<<"statement : RETURN expression SEMICOLON"<<endl;}
+						printf("statement : WHILE LPAREN expression RPAREN statement\n\n");
+					}
+				  | PRINTLN LPAREN ID RPAREN SEMICOLON	{
+						printf("statement : PRINTLN LPAREN ID RPAREN SEMICOLON\n\n");
+					}
+				  | RETURN expression SEMICOLON	{
+						printf("statement : RETURN expression SEMICOLON\n\n");
+					}
 				  ;
 
-			expression_statement 	: SEMICOLON	{ cout<<"Another rule"<<endl;}
-						| expression SEMICOLON	{ cout<<"Another rule"<<endl;}
-						;
-
-			variable : ID	{ cout<<"-ID-"<<endl;}
-				 | ID LTHIRD expression RTHIRD	{ cout<<"Another rule"<<endl;}
-				 ;
-
-			 expression : logic_expression	{ cout<<"Another rule"<<endl;}
-				   | variable ASSIGNOP logic_expression	{ cout<<"Another rule"<<endl;}
-				   ;
-
-			logic_expression : rel_expression	{ cout<<"Another rule"<<endl;}
-					 | rel_expression LOGICOP rel_expression	{ cout<<"Another rule"<<endl;}
-					 ;
-
-			rel_expression	: simple_expression	{ cout<<"Another rule"<<endl;}
-					| simple_expression RELOP simple_expression	{ cout<<"Another rule"<<endl;}
+			expression_statement 	: SEMICOLON	{
+						printf("expression_statement 	: SEMICOLON\n\n");
+					}
+					| expression SEMICOLON	{
+						printf("expression_statement 	: expression SEMICOLON\n\n");
+					}
 					;
 
-			simple_expression : term	{ cout<<"Another rule"<<endl;}
-					  | simple_expression ADDOP term	{ cout<<"Another rule"<<endl;}
-					  ;
+			variable : ID	{
+					printf("variable : ID\n\n");
+				}
+			 | ID LTHIRD expression RTHIRD	{
+				 printf("variable : ID LTHIRD expression RTHIRD\n\n");
+			 }
+			 ;
 
-			term :	unary_expression	{ cout<<"Another rule"<<endl;}
-			     |  term MULOP unary_expression	{ cout<<"Another rule"<<endl;}
-			     ;
+			 expression : logic_expression	{
+						 printf("expression : logic_expression\n\n");
+					 }
+				   | variable ASSIGNOP logic_expression	{
+						 printf("expression : variable ASSIGNOP logic_expression\n\n");
+					 }
+				   ;
 
-			unary_expression : ADDOP unary_expression	{ cout<<"Another rule"<<endl;}
-					 | NOT unary_expression	{ cout<<"Another rule"<<endl;}
-					 | factor	{ cout<<"Another rule"<<endl;}
+			logic_expression : rel_expression	{
+				 			printf("logic_expression : rel_expression\n\n");
+						}
+					 | rel_expression LOGICOP rel_expression	{
+						 printf("logic_expression : rel_expression LOGICOP rel_expression\n\n");
+					 }
 					 ;
 
-			factor	: variable	{ cout<<"Another rule"<<endl;}
-				| ID LPAREN argument_list RPAREN	{ cout<<"Another rule"<<endl;}
-				| LPAREN expression RPAREN	{ cout<<"Another rule"<<endl;}
-				| CONST_INT	{ cout<<"Another rule"<<endl;}
-				| CONST_FLOAT	{ cout<<"Another rule"<<endl;}
-				| variable INCOP	{ cout<<"Another rule"<<endl;}
-				| variable DECOP	{ cout<<"Another rule"<<endl;}
+			rel_expression	: simple_expression	{
+							printf("rel_expression	: simple_expression\n\n");
+					}
+					| simple_expression RELOP simple_expression	{
+						printf("rel_expression	: simple_expression RELOP simple_expression\n\n");
+					}
+					;
+
+			simple_expression : term	{
+						printf("simple_expression : term\n\n");
+					}
+				  | simple_expression ADDOP term	{
+						printf("simple_expression : simple_expression ADDOP term\n\n");
+					}
+				  ;
+
+			term :	unary_expression	{
+						printf("term :	unary_expression\n\n");
+					}
+		     |  term MULOP unary_expression	{
+					 printf("term :	term MULOP unary_expression\n\n");
+				 }
+		     ;
+
+			unary_expression : ADDOP unary_expression	{
+							printf("unary_expression : ADDOP unary_expression\n\n");
+					}
+					 | NOT unary_expression	{
+						 printf("unary_expression : NOT unary_expression\n\n");
+					 }
+					 | factor	{ printf("unary_expression : factor\n\n");}
+					 ;
+
+			factor	: variable	{
+					printf("factor	: variable\n\n");
+				}
+				| ID LPAREN argument_list RPAREN	{
+					printf("factor	: ID LPAREN argument_list RPAREN\n\n");
+				}
+				| LPAREN expression RPAREN	{
+					printf("factor : LPAREN expression RPAREN\n\n");
+				}
+				| CONST_INT	{
+					printf("factor : CONST_INT\n\n");
+				}
+				| CONST_FLOAT	{
+					printf("factor : CONST_FLOAT\n\n");
+				}
+				| variable INCOP	{
+					printf("factor : variable INCOP\n\n");
+				}
+				| variable DECOP	{
+					printf("factor : variable DECOP\n\n");
+				}
 				;
 
-			argument_list : arguments	{ cout<<"Another rule"<<endl;}
-						  |	{ cout<<"Another rule"<<endl;}
-						  ;
+			argument_list : arguments	{
+						printf("argument_list : arguments\n\n");
+					}
+				  |	{
+						printf("argument_list :\n\n");
+					}
+				  ;
 
-			arguments : arguments COMMA logic_expression	{ cout<<"Another rule"<<endl;}
-				      | logic_expression	{ cout<<"Another rule"<<endl;}
-				      ;
+			arguments : arguments COMMA logic_expression	{
+						printf("arguments : arguments COMMA logic_expression\n\n");
+					}
+		      | logic_expression	{
+						printf("arguments : logic_expression\n\n");
+					}
+		      ;
 
 %%
 int main(int argc,char *argv[])
@@ -163,7 +257,7 @@ int main(int argc,char *argv[])
   FILE *fp;
 	if((fp=fopen(argv[1],"r"))==NULL)
 	{
-		printf("Cannot Open Input File.\n");
+		printf("Cannot Open Input File.\n\n");
 		exit(1);
 	}
 
