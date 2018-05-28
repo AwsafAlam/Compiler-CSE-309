@@ -4,24 +4,32 @@
 %x STR
 
 %{
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include "y.tab.h"
+#include<iostream>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 #include "SymbolTable.h"
+/* #include "SymbolInfo.h" */
+#include "y.tab.h"
+
+/* FILE *logout;
+FILE *tokenout; */
 
 using namespace std;
 
-FILE *logout;
-FILE *tokenout;
+/* extern YYSTYPE yylval; */
+extern SymbolTable *symboltable;
+extern FILE *logout = fopen("log.txt","w");
+extern FILE *tokenout= fopen("token.txt","w");
+
+void yyerror(char *);
 
 int line_count=1;
 int error_count = 0;
 char chr[1000];
 int chr_COUNT  = 0;
 
-SymbolTable symboltable(10);
-
+/* SymbolTable symboltable(10); */
 
 %}
 
@@ -226,67 +234,83 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 "if"	{
 				fprintf(tokenout,"<IF>");
 				fprintf(logout,"Line no %d: TOKEN <IF> Lexeme %s found\n\n",line_count,yytext);
-			}
+        return IF;
+      }
 "else"	{
 				fprintf(tokenout,"<ELSE>");
 				fprintf(logout,"Line no %d: TOKEN <ELSE> Lexeme %s found\n\n",line_count,yytext);
-			}
+        return ELSE;
+      }
 "for"	{
 				fprintf(tokenout,"<FOR>");
 				fprintf(logout,"Line no %d: TOKEN <FOR> Lexeme %s found\n\n",line_count,yytext);
-			}
+        return FOR;
+      }
 "do"	{
 				fprintf(tokenout,"<DO>");
 				fprintf(logout,"Line no %d: TOKEN <DO> Lexeme %s found\n\n",line_count,yytext);
-			}
+        return DO;
+      }
 "int"	{
 				fprintf(tokenout,"<INT>");
 				fprintf(logout,"Line no %d: TOKEN <INT> Lexeme %s found\n\n",line_count,yytext);
-			}
+        return INT;
+      }
 "float"	{
 					fprintf(tokenout,"<FLOAT>");
 					fprintf(logout,"Line no %d: TOKEN <FLOAT> Lexeme %s found\n\n",line_count,yytext);
-				}
+          return FLOAT;
+        }
 "void"	{
 					fprintf(tokenout,"<VOID>");
 					fprintf(logout,"Line no %d: TOKEN <VOID> Lexeme %s found\n\n",line_count,yytext);
-				}
+          return VOID;
+        }
 "switch"	{
 						fprintf(tokenout,"<SWITCH>");
 						fprintf(logout,"Line no %d: TOKEN <SWITCH> Lexeme %s found\n\n",line_count,yytext);
-					}
+            return SWITCH;
+          }
 "default"	{
 						fprintf(tokenout,"<DEFAULT>");
 						fprintf(logout,"Line no %d: TOKEN <DEFAULT> Lexeme %s found\n\n",line_count,yytext);
-					}
+            return DEFAULT;
+          }
 "while"	{
 					fprintf(tokenout,"<WHILE>");
 					fprintf(logout,"Line no %d: TOKEN <WHILE> Lexeme %s found\n\n",line_count,yytext);
-				}
+          return WHILE;
+        }
 "break"	{
 					fprintf(tokenout,"<BREAK>");
 					fprintf(logout,"Line no %d: TOKEN <BREAK> Lexeme %s found\n\n",line_count,yytext);
-				}
+          return BREAK;
+        }
 "char"	{
 					fprintf(tokenout,"<CHAR>");
 					fprintf(logout,"Line no %d: TOKEN <CHAR> Lexeme %s found\n\n",line_count,yytext);
-				}
+          return CHAR;
+        }
 "double"	{
 						fprintf(tokenout,"<DOUBLE>");
 						fprintf(logout,"Line no %d: TOKEN <DOUBLE> Lexeme %s found\n\n",line_count,yytext);
-					}
+            return DOUBLE;
+          }
 "return"	{
 						fprintf(tokenout,"<RETURN>");
 						fprintf(logout,"Line no %d: TOKEN <RETURN> Lexeme %s found\n\n",line_count,yytext);
-					}
+            return RETURN;
+          }
 "case"	{
 					fprintf(tokenout,"<CASE>");
 					fprintf(logout,"Line no %d: TOKEN <CASE> Lexeme %s found\n\n",line_count,yytext);
-				}
+          return CASE;
+        }
 "continue"	{
 							fprintf(tokenout,"<CONTINUE>");
 							fprintf(logout,"Line no %d: TOKEN <CONTINUE> Lexeme %s found\n\n",line_count,yytext);
-						}
+              return CONTINUE;
+            }
 
 "+"		|
 
@@ -297,7 +321,10 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 			// symboltable.Insert(yytext , "ADDOP");
 
 			// There is a '|' in "+"'s rule, this means match execute the action for following rule
-		}
+      /* SymbolInfo *s= new  SymbolInfo(yytext, (char *)"ADDOP");
+			yylval = (YYSTYPE)s; */
+			return ADDOP;
+    }
 
 "*"		|
 
@@ -310,18 +337,34 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 			// symboltable.Insert(yytext , "MULOP");
 
 			// There is a '|' in "+"'s rule, this means match execute the action for following rule
-		}
+      /* SymbolInfo *s= new  SymbolInfo(yytext, (char *)"MULOP");
+      yylval = (YYSTYPE)s; */
+      return MULOP;
+    }
 
-"++"		|
-
-"--"		{
+"++"		{
 			fprintf(tokenout,"<INCOP,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <INCOP> Lexeme %s found\n\n",line_count,yytext);
 			//insert in symbol table and print symbol table content(only non empty buckets)
 			// symboltable.Insert(yytext , "INCOP");
 
 			// There is a '|' in "+"'s rule, this means match execute the action for following rule
-		}
+      /* SymbolInfo *s= new  SymbolInfo(yytext, (char *)"INCOP");
+      yylval = (YYSTYPE)s; */
+      return INCOP;
+    }
+
+"--"		{
+			fprintf(tokenout,"<DECOP,%s>",yytext);
+			fprintf(logout,"Line no %d: TOKEN <DECOP> Lexeme %s found\n\n",line_count,yytext);
+			//insert in symbol table and print symbol table content(only non empty buckets)
+			// symboltable.Insert(yytext , "INCOP");
+
+			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+      /* SymbolInfo *s= new  SymbolInfo(yytext, (char *)"DECOP");
+      yylval = (YYSTYPE)s; */
+      return DECOP;
+    }
 
 "<"		|
 
@@ -340,15 +383,16 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 			// symboltable.Insert(yytext , "RELOP");
 
 			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+      /* SymbolInfo *s= new  SymbolInfo(yytext, (char *)"RELOP");
+  		yylval = (YYSTYPE)s; */
+  		return RELOP;
 		}
 
 "="	{
 			fprintf(tokenout,"<ASSIGNOP,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <ASSIGNOP> Lexeme %s found\n\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// symboltable.Insert(yytext , "ASSIGNOP");
 
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+      return ASSIGNOP;
 		}
 
 "&&"		|
@@ -356,10 +400,10 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 "||"		{
 			fprintf(tokenout,"<LOGICOP,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <LOGICOP> Lexeme %s found\n\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// symboltable.Insert(yytext , "LOGICOP");
 
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+      /* SymbolInfo *s= new  SymbolInfo(yytext, (char *)"LOGICOP");
+			yylval = (YYSTYPE)s; */
+			return LOGICOP;
 		}
 
 "&"		|
@@ -373,83 +417,64 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 ">>"		{
 			fprintf(tokenout,"<BITOP,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <BITOP> Lexeme %s found\n\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// symboltable.Insert(yytext , "BITOP");
 
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+      /* SymbolInfo *s= new  SymbolInfo(yytext, (char *)"BITOP");
+      yylval = (YYSTYPE)s; */
+      return BITOP;
 		}
 
 "!"	{
 			fprintf(tokenout,"<NOT,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <NOT> Lexeme %s found\n\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// symboltable.Insert(yytext , "NOT");
-
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			return NOT;
 		}
 
 "("	{
 			fprintf(tokenout,"<LPAREN,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <LPAREN> Lexeme %s found\n\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// symboltable.Insert(yytext , "LPAREN");
-
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			return LPAREN;
 		}
 
 ")"	{
 			fprintf(tokenout,"<RPAREN,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <RPAREN> Lexeme %s found\n\n",line_count,yytext);
+      return RPAREN;
 		}
 
 "{"	{
 			fprintf(tokenout,"<LCURL,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <LCURL> Lexeme %s found\n\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// symboltable.Insert(yytext , "LCURL");
-
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			return LCURL;
 		}
 
 "}"	{
 			fprintf(tokenout,"<RCURL,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <RCURL> Lexeme %s found\n\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// symboltable.Insert(yytext , "RCURL");
-
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			return RCURL;
 		}
 
 "["	{
 			fprintf(tokenout,"<LTHIRD,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <LTHIRD> Lexeme %s found\n\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// symboltable.Insert(yytext , "LTHIRD");
-
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			return LTHIRD;
 		}
 
 "]"	{
 			fprintf(tokenout,"<RTHIRD,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <RTHIRD> Lexeme %s found\n\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// symboltable.Insert(yytext , "RTHIRD");
-
-			// There is a '|' in "+"'s rule, this means match execute the action for following rule
+			return RTHIRD;
 		}
 
 ","	{
 			fprintf(tokenout,"<COMMA,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <COMMA> Lexeme %s found\n\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// symboltable.Insert(yytext , "COMMA");
+			return COMMA;
 		}
 
 ";"	{
 			fprintf(tokenout,"<SEMICOLON,%s>",yytext);
 			fprintf(logout,"Line no %d: TOKEN <SEMICOLON> Lexeme %s found\n\n",line_count,yytext);
-			//insert in symbol table and print symbol table content(only non empty buckets)
-			// symboltable.Insert(yytext , "SEMICOLON");
+			return SEMICOLON;
 		}
 
 
@@ -463,7 +488,7 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 {CHAR}		{
 							// printf("CharACTER found %s\n",yytext );
 							fprintf(logout,"Line no %d: TOKEN <CONST_CHAR> Lexeme %s found\n\n",line_count,yytext);
-							symboltable.Insert(yytext , "CONST_CHAR");
+							/* symboltable.Insert(yytext , "CONST_CHAR"); */
 
 							char tmp[2];
 							if (yytext[3] != '\0') {
@@ -505,7 +530,9 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 								tmp[0] = yytext[1];
 							}
 							fprintf(tokenout,"<CONST_CHAR,%s>",tmp);
-
+              /* SymbolInfo *s= new  SymbolInfo(tmp, (char *)"CONST_CHAR");
+              yylval = (YYSTYPE)s; */
+              return CONST_CHAR;
 					}
 
 {ERR_MULT_CHAR_CONSTANT}	{
@@ -531,18 +558,25 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 {DIGIT}+ {
 						fprintf(tokenout,"<CONST_INT,%s>",yytext);
 						fprintf(logout,"Line no %d: TOKEN <CONST_INT> Lexeme %s found\n\n",line_count,yytext);
-						//insert in symbol table and print symbol table content(only non empty buckets)
-						// SymbolInfo *si=new SymbolInfo(string(yytext),"CONST_INT");
-						symboltable.Insert(yytext , "CONST_INT");
-					}
+
+						//symboltable.Insert(yytext , "CONST_INT");
+            /* SymbolInfo *s= new  SymbolInfo(yytext, (char *)"CONST_INT");
+            yylval = (YYSTYPE)s; */
+            return CONST_INT;	//insert in symbol table and print symbol table content(only non empty buckets)
+					// SymbolInfo *si=new SymbolInfo(string(yytext),"CONST_INT");
+
+          }
 
 {FLOAT}	{
 					fprintf(tokenout,"<CONST_FLOAT,%s>",yytext);
 					fprintf(logout,"Line no %d: TOKEN <CONST_FLOAT> Lexeme %s found\n\n",line_count,yytext);
 					//insert in symbol table and print symbol table content(only non empty buckets)
 					// SymbolInfo *si=new SymbolInfo(string(yytext),"CONST_INT");
-					symboltable.Insert(yytext , "CONST_FLOAT");
-				}
+					/* symboltable.Insert(yytext , "CONST_FLOAT"); */
+          /* SymbolInfo *s= new  SymbolInfo(yytext, (char *)"CONST_FLOAT");
+          yylval = (YYSTYPE)s; */
+          return CONST_FLOAT;
+        }
 
 {ERR_TOO_MANY_DECIMAL_PTS}	{
 																error_count++;
@@ -567,9 +601,17 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 				fprintf(logout,"Line no %d: TOKEN <ID> Lexeme %s found\n\n",line_count,yytext);
 				//insert in symbol table and print symbol table content(only non empty buckets)
 
-				symboltable.Insert(string(yytext) , "ID");
+				//symboltable.Insert(string(yytext) , "ID");
 				// symboltable.PrintAllScopes();
-			}
+        /* SymbolInfo *s= table->lookup(yytext);
+        if(s==NULL)
+        {
+          s= new SymbolInfo(yytext, (char *)"ID");
+        }
+        yylval = (YYSTYPE)s; */
+
+        return ID;
+      }
 
 
 .										{
@@ -579,3 +621,39 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 										}
 
 %%
+/* int yywrap()
+{
+	return 1;
+} */
+
+/* int main(int argc,char *argv[]){
+
+	if(argc!=2){
+		printf("Please provide input file name and try again\n");
+		return 0;
+	}
+
+	FILE *fin=fopen(argv[1],"r");
+	if(fin==NULL){
+		printf("Cannot open specified file\n");
+		return 0;
+	}
+
+	logout= fopen("log.txt","w");
+	tokenout= fopen("token.txt","w");
+
+	yyin= fin;
+	yylex();
+	// st.print();
+	symboltable.PrintAllScopes();
+	fprintf(logout,"Total Lines : %d\n",line_count);
+	fprintf(logout,"Total Errors: %d\n",error_count);
+
+	printf("Total Lines : %d\n",line_count);
+	printf("Total Errors: %d\n",error_count);
+
+	fclose(yyin);
+	fclose(tokenout);
+	fclose(logout);
+	return 0;
+} */

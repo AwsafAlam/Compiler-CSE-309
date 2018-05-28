@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 class ScopeTable
 {
     int length , collision , scope;
@@ -41,9 +42,9 @@ ScopeTable::ScopeTable(int len , int num)
 void ScopeTable::printHash(){
     // fprintf(logout,"ScopeTable # %d\n",scope);
 
-    cout<<"ScopeTable # "<<scope<<endl;
+    // //cout<<"ScopeTable # "<<scope<<endl;
     // fprintf(logout,"----------------------\n");
-    cout<<"----------------------"<<endl;
+    // //cout<<"----------------------"<<endl;
     for(int i=0 ; i< length ; i++){
       SymbolInfo *head;
       head = array[i];
@@ -51,17 +52,17 @@ void ScopeTable::printHash(){
         continue;
       }
       // fprintf(logout,"%d -->  ",i);
-      cout<<i<<" -->  ";
+      // //cout<<i<<" -->  ";
       while(head->next != NULL){
         // if( head->next->getType() == "ID" ){
           // fprintf(logout,"<%s : %s> ", head->next->getName().c_str(),head->next->getType().c_str());
-          cout<<"< "<<head->next->getName()<<" : "<<head->next->getType()<<"> ";
+          // //cout<<"< "<<head->next->getName()<<" : "<<head->next->getType()<<"> ";
         // }
         head = head->next;
       }
       // fprintf(logout,"\n");
 
-      cout<<endl;
+      // //cout<<endl;
     }
     // fprintf(logout,"\n");
 
