@@ -60,8 +60,10 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 {NEWLINE} {
 						line_count++;
-            return NEWLINE;
-						// printf("Line %d\n", line_count);
+						printf("\nNew Line %d\n", line_count);
+						//
+
+//            return NEWLINE;
 					}
 {WHITESPACE}	{
 								//do nothing
@@ -230,79 +232,140 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 							}
 
 
-"if"	{	printf("At line no: %d ",line_count);
-				return IF;}
+"if"	{
+				printf("At line no: %d ",line_count);
+				//
+				return IF;
+			}
 
 "else"	{
 				printf("At line no: %d ",line_count);
+				//
 				return ELSE;
         }
 "for"	{
 				printf("At line no: %d ",line_count);
+				//
 				return FOR;
         }
 "do"	{
 				printf("At line no: %d ",line_count);
+				//
 				return DO;
       }
 "int"	{
 				printf("At line no: %d ",line_count);
-       return INT;
+				//
+			 return INT;
        }
 "float"	{
 					printf("At line no: %d ",line_count);
+					//
 					return FLOAT;
           }
 "void"	{
 					printf("At line no: %d ",line_count);
+					//
 					return VOID;
         }
 "switch"	{
 						printf("At line no: %d ",line_count);
+						//
 						return SWITCH;
           }
 "default"	{
+						//
 						return DEFAULT;
           }
 "while"	{
+					//
 					return WHILE;
           }
 "break"	{
+					//
 					return BREAK;
           }
 "char"	{
+					//
 					return CHAR;
         }
 "double"	{
+						//
 						return DOUBLE;
           }
-"return"	{
-						return RETURN;
-          }
+"return"	{	return RETURN;}
 "case"	{
+					//
 					return CASE;
         }
 "continue"	{
+							//
 							return CONTINUE;
             }
 
-"+"       { return PLUS; }
-"-"       { return MINUS; }
-"/"       { return SLASH; }
-"*"       { return ASTERISK; }
-"("       { //printf("LPAREN lex");
- 						return LPAREN; }
-")"       { //printf("RPAREN lex");
-						return RPAREN; }
+
+"+"|"-"   {yylval.cvar = *yytext; return ADDOP;}
+
+"*"|"/" { yylval.cvar =*yytext;cout<<"MULOP"<<endl;return MULOP;}
+"%" 		{ yylval.cvar =*yytext;cout<<"MULOP"<<endl;return MULOP;}
+
+"("       { //printf("\nLPAREN lex\n");
+						//
+ 						return LPAREN;
+					}
+")"       { //printf("\nRPAREN lex\n");
+						return RPAREN;
+					}
 "!"       { return NOT;}
-"{"	      { //printf("LCURL lex");
+"{"	      { //printf("\n\nLCURL lex\n\n");
+						//
 						return LCURL;}
-"}"	      { //printf("RCURL lex");
+"}"	      { //printf("RCURL lex\n");
 						return RCURL;}
 "["	      { return LTHIRD;}
 "]"	      { return RTHIRD;}
-","	      {return COMMA;}
-";"	      {return SEMICOLON;}
+","	      {	return COMMA;}
+";"	      {	return SEMICOLON;}
+"="				{	return ASSIGNOP;}
+"++"			{
+						printf("Line no %d: TOKEN <DECOP> Lexeme %s found\n\n",line_count,yytext);
+						yylval.strval =strdup(yytext);
+						return DECOP;
+					}
+
+"--"		{
+					printf("Line no %d: TOKEN <INCOP> Lexeme %s found\n\n",line_count,yytext);
+					yylval.strval =strdup(yytext);
+					return INCOP;
+				}
+
+"<"		|
+
+"<="		|
+
+">"		|
+
+">="		|
+
+"=="		|
+
+"!="	{
+
+			printf("Line no %d: TOKEN <RELOP> Lexeme %s found\n\n",line_count,yytext);
+			yylval.strval =strdup(yytext);
+			//
+			return RELOP;
+		}
+
+"&&"		|
+
+"||"		{
+					printf("Line no %d: TOKEN <LOGICOP> Lexeme %s found\n\n",line_count,yytext);
+					yylval.strval =strdup(yytext);
+					//
+					return LOGICOP;
+				}
+
 
 {ERR_EMPTY_CHAR}	{
 										error_count++;
@@ -358,6 +421,7 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 							/* fprintf(tokenout,"<CONST_CHAR,%s>",tmp); */
               /* SymbolInfo *s= new  SymbolInfo(tmp, (char *)"CONST_CHAR");
               yylval = (YYSTYPE)s; */
+
 							yylval.strval =strdup(tmp);
 			        return CONST_CHAR;
 					}
@@ -376,22 +440,16 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 
 {DIGIT}+  {
-						/* printf("This \n"); */
-            /* sscanf(yytext,"%lf", &yylval); */
-						yylval.ivar = *yytext;
-					  return CONST_INT;
+						/* sscanf(yytext,"%lf", &yylval); */
+						printf("INT %s\n\n",yytext);
+						yylval.ivar = atoi(yytext);
+						return CONST_INT;
 	         }
 
 {FLOAT}	{
-					/* fprintf(tokenout,"<CONST_FLOAT,%s>",yytext); */
+					printf("<CONST_FLOAT,%s>\n\n",yytext);
 					/* fprintf(logout,"Line no %d: TOKEN <CONST_FLOAT> Lexeme %s found\n\n",line_count,yytext); */
-					//insert in symbol table and print symbol table content(only non empty buckets)
-					// SymbolInfo *si=new SymbolInfo(string(yytext),"CONST_INT");
-					/* symboltable.Insert(yytext , "CONST_FLOAT"); */
-          /* SymbolInfo *s= new  SymbolInfo(yytext, (char *)"CONST_FLOAT");
-          yylval = (YYSTYPE)s; */
-
-					yylval.dval = *yytext;
+					yylval.strval = yytext;
 					return CONST_FLOAT;
         }
 
@@ -412,8 +470,9 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 {ID}  {
 				/* printf("Line %d : - %s", line_count , yytext); */
-				printf("At line no: %d ",line_count);
+				printf("At line no: %d - id %s\n",line_count,yytext);
       	yylval.strval =strdup(yytext);
+				//
         return ID;
       }
 

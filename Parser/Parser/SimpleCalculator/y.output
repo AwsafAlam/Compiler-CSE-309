@@ -4,7 +4,6 @@ Terminals unused in grammar
    ELSE
    FOR
    DO
-   INT
    FLOAT
    VOID
    SWITCH
@@ -44,39 +43,40 @@ Grammar
 
     1 input: %empty
     2      | input line
+    3      | INT
 
-    3 line: NEWLINE
-    4     | expr NEWLINE
+    4 line: NEWLINE
+    5     | expr NEWLINE
 
-    5 expr: expr PLUS term
-    6     | expr MINUS term
-    7     | term
+    6 expr: expr PLUS term
+    7     | expr MINUS term
+    8     | term
 
-    8 term: term ASTERISK factor
-    9     | term SLASH factor
-   10     | factor
+    9 term: term ASTERISK factor
+   10     | term SLASH factor
+   11     | factor
 
-   11 factor: LPAREN expr RPAREN
-   12       | NUMBER
+   12 factor: LPAREN expr RPAREN
+   13       | NUMBER
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-NEWLINE (258) 3 4
-NUMBER (259) 12
-PLUS (260) 5
-MINUS (261) 6
-SLASH (262) 9
-ASTERISK (263) 8
-LPAREN (264) 11
-RPAREN (265) 11
+NEWLINE (258) 4 5
+NUMBER (259) 13
+PLUS (260) 6
+MINUS (261) 7
+SLASH (262) 10
+ASTERISK (263) 9
+LPAREN (264) 12
+RPAREN (265) 12
 IF (266)
 ELSE (267)
 FOR (268)
 DO (269)
-INT (270)
+INT (270) 3
 FLOAT (271)
 VOID (272)
 SWITCH (273)
@@ -115,212 +115,221 @@ Nonterminals, with rules where they appear
 $accept (47)
     on left: 0
 input (48)
-    on left: 1 2, on right: 0 2
+    on left: 1 2 3, on right: 0 2
 line (49)
-    on left: 3 4, on right: 2
+    on left: 4 5, on right: 2
 expr (50)
-    on left: 5 6 7, on right: 4 5 6 11
+    on left: 6 7 8, on right: 5 6 7 12
 term (51)
-    on left: 8 9 10, on right: 5 6 7 8 9
+    on left: 9 10 11, on right: 6 7 8 9 10
 factor (52)
-    on left: 11 12, on right: 8 9 10
+    on left: 12 13, on right: 9 10 11
 
 
 State 0
 
     0 $accept: . input $end
 
+    INT  shift, and go to state 1
+
     $default  reduce using rule 1 (input)
 
-    input  go to state 1
+    input  go to state 2
 
 
 State 1
 
-    0 $accept: input . $end
-    2 input: input . line
+    3 input: INT .
 
-    $end     shift, and go to state 2
-    NEWLINE  shift, and go to state 3
-    NUMBER   shift, and go to state 4
-    LPAREN   shift, and go to state 5
-
-    line    go to state 6
-    expr    go to state 7
-    term    go to state 8
-    factor  go to state 9
+    $default  reduce using rule 3 (input)
 
 
 State 2
+
+    0 $accept: input . $end
+    2 input: input . line
+
+    $end     shift, and go to state 3
+    NEWLINE  shift, and go to state 4
+    NUMBER   shift, and go to state 5
+    LPAREN   shift, and go to state 6
+
+    line    go to state 7
+    expr    go to state 8
+    term    go to state 9
+    factor  go to state 10
+
+
+State 3
 
     0 $accept: input $end .
 
     $default  accept
 
 
-State 3
-
-    3 line: NEWLINE .
-
-    $default  reduce using rule 3 (line)
-
-
 State 4
 
-   12 factor: NUMBER .
+    4 line: NEWLINE .
 
-    $default  reduce using rule 12 (factor)
+    $default  reduce using rule 4 (line)
 
 
 State 5
 
-   11 factor: LPAREN . expr RPAREN
+   13 factor: NUMBER .
 
-    NUMBER  shift, and go to state 4
-    LPAREN  shift, and go to state 5
-
-    expr    go to state 10
-    term    go to state 8
-    factor  go to state 9
+    $default  reduce using rule 13 (factor)
 
 
 State 6
+
+   12 factor: LPAREN . expr RPAREN
+
+    NUMBER  shift, and go to state 5
+    LPAREN  shift, and go to state 6
+
+    expr    go to state 11
+    term    go to state 9
+    factor  go to state 10
+
+
+State 7
 
     2 input: input line .
 
     $default  reduce using rule 2 (input)
 
 
-State 7
-
-    4 line: expr . NEWLINE
-    5 expr: expr . PLUS term
-    6     | expr . MINUS term
-
-    NEWLINE  shift, and go to state 11
-    PLUS     shift, and go to state 12
-    MINUS    shift, and go to state 13
-
-
 State 8
 
-    7 expr: term .
-    8 term: term . ASTERISK factor
-    9     | term . SLASH factor
+    5 line: expr . NEWLINE
+    6 expr: expr . PLUS term
+    7     | expr . MINUS term
 
-    SLASH     shift, and go to state 14
-    ASTERISK  shift, and go to state 15
-
-    $default  reduce using rule 7 (expr)
+    NEWLINE  shift, and go to state 12
+    PLUS     shift, and go to state 13
+    MINUS    shift, and go to state 14
 
 
 State 9
 
-   10 term: factor .
+    8 expr: term .
+    9 term: term . ASTERISK factor
+   10     | term . SLASH factor
 
-    $default  reduce using rule 10 (term)
+    SLASH     shift, and go to state 15
+    ASTERISK  shift, and go to state 16
+
+    $default  reduce using rule 8 (expr)
 
 
 State 10
 
-    5 expr: expr . PLUS term
-    6     | expr . MINUS term
-   11 factor: LPAREN expr . RPAREN
+   11 term: factor .
 
-    PLUS    shift, and go to state 12
-    MINUS   shift, and go to state 13
-    RPAREN  shift, and go to state 16
+    $default  reduce using rule 11 (term)
 
 
 State 11
 
-    4 line: expr NEWLINE .
+    6 expr: expr . PLUS term
+    7     | expr . MINUS term
+   12 factor: LPAREN expr . RPAREN
 
-    $default  reduce using rule 4 (line)
+    PLUS    shift, and go to state 13
+    MINUS   shift, and go to state 14
+    RPAREN  shift, and go to state 17
 
 
 State 12
 
-    5 expr: expr PLUS . term
+    5 line: expr NEWLINE .
 
-    NUMBER  shift, and go to state 4
-    LPAREN  shift, and go to state 5
-
-    term    go to state 17
-    factor  go to state 9
+    $default  reduce using rule 5 (line)
 
 
 State 13
 
-    6 expr: expr MINUS . term
+    6 expr: expr PLUS . term
 
-    NUMBER  shift, and go to state 4
-    LPAREN  shift, and go to state 5
+    NUMBER  shift, and go to state 5
+    LPAREN  shift, and go to state 6
 
     term    go to state 18
-    factor  go to state 9
+    factor  go to state 10
 
 
 State 14
 
-    9 term: term SLASH . factor
+    7 expr: expr MINUS . term
 
-    NUMBER  shift, and go to state 4
-    LPAREN  shift, and go to state 5
+    NUMBER  shift, and go to state 5
+    LPAREN  shift, and go to state 6
 
-    factor  go to state 19
+    term    go to state 19
+    factor  go to state 10
 
 
 State 15
 
-    8 term: term ASTERISK . factor
+   10 term: term SLASH . factor
 
-    NUMBER  shift, and go to state 4
-    LPAREN  shift, and go to state 5
+    NUMBER  shift, and go to state 5
+    LPAREN  shift, and go to state 6
 
     factor  go to state 20
 
 
 State 16
 
-   11 factor: LPAREN expr RPAREN .
+    9 term: term ASTERISK . factor
 
-    $default  reduce using rule 11 (factor)
+    NUMBER  shift, and go to state 5
+    LPAREN  shift, and go to state 6
+
+    factor  go to state 21
 
 
 State 17
 
-    5 expr: expr PLUS term .
-    8 term: term . ASTERISK factor
-    9     | term . SLASH factor
+   12 factor: LPAREN expr RPAREN .
 
-    SLASH     shift, and go to state 14
-    ASTERISK  shift, and go to state 15
-
-    $default  reduce using rule 5 (expr)
+    $default  reduce using rule 12 (factor)
 
 
 State 18
 
-    6 expr: expr MINUS term .
-    8 term: term . ASTERISK factor
-    9     | term . SLASH factor
+    6 expr: expr PLUS term .
+    9 term: term . ASTERISK factor
+   10     | term . SLASH factor
 
-    SLASH     shift, and go to state 14
-    ASTERISK  shift, and go to state 15
+    SLASH     shift, and go to state 15
+    ASTERISK  shift, and go to state 16
 
     $default  reduce using rule 6 (expr)
 
 
 State 19
 
-    9 term: term SLASH factor .
+    7 expr: expr MINUS term .
+    9 term: term . ASTERISK factor
+   10     | term . SLASH factor
 
-    $default  reduce using rule 9 (term)
+    SLASH     shift, and go to state 15
+    ASTERISK  shift, and go to state 16
+
+    $default  reduce using rule 7 (expr)
 
 
 State 20
 
-    8 term: term ASTERISK factor .
+   10 term: term SLASH factor .
 
-    $default  reduce using rule 8 (term)
+    $default  reduce using rule 10 (term)
+
+
+State 21
+
+    9 term: term ASTERISK factor .
+
+    $default  reduce using rule 9 (term)

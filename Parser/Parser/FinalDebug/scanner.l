@@ -8,10 +8,9 @@
 #include<stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "SymbolTable.h"
+/* #include "SymbolTable.h" */
 #include "y.tab.h"
-
-/* extern YYSTYPE yylval; */
+extern YYSTYPE yylval;
 
 using namespace std;
 
@@ -61,9 +60,8 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 {NEWLINE} {
 						line_count++;
-						 printf("\nNew Line %d\n", line_count);
-
             return NEWLINE;
+						// printf("Line %d\n", line_count);
 					}
 {WHITESPACE}	{
 								//do nothing
@@ -244,11 +242,11 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 				return FOR;
         }
 "do"	{
-				printf("At line no: %d \n",line_count);
+				printf("At line no: %d ",line_count);
 				return DO;
       }
 "int"	{
-				printf("At line no: %d \n",line_count);
+				printf("At line no: %d ",line_count);
        return INT;
        }
 "float"	{
@@ -292,21 +290,19 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 "-"       { return MINUS; }
 "/"       { return SLASH; }
 "*"       { return ASTERISK; }
-"("       { printf("\nLPAREN lex\n");
+"("       { //printf("LPAREN lex");
  						return LPAREN; }
-")"       { printf("\nRPAREN lex\n");
+")"       { //printf("RPAREN lex");
 						return RPAREN; }
 "!"       { return NOT;}
-"{"	      { printf("\nLCURL lex\n");
+"{"	      { //printf("LCURL lex");
 						return LCURL;}
-"}"	      { printf("\nRCURL lex\n");
+"}"	      { //printf("RCURL lex");
 						return RCURL;}
 "["	      { return LTHIRD;}
 "]"	      { return RTHIRD;}
-","	      {printf("\nCOMMA\n");
-						return COMMA;}
-";"	      {printf("\nSEMICOLON\n");
-						return SEMICOLON;}
+","	      {return COMMA;}
+";"	      {return SEMICOLON;}
 
 {ERR_EMPTY_CHAR}	{
 										error_count++;
@@ -362,7 +358,7 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 							/* fprintf(tokenout,"<CONST_CHAR,%s>",tmp); */
               /* SymbolInfo *s= new  SymbolInfo(tmp, (char *)"CONST_CHAR");
               yylval = (YYSTYPE)s; */
-							//yylval.strval =strdup(tmp);
+							yylval.strval =strdup(tmp);
 			        return CONST_CHAR;
 					}
 
@@ -382,7 +378,7 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 {DIGIT}+  {
 						/* printf("This \n"); */
             /* sscanf(yytext,"%lf", &yylval); */
-					//	yylval.ivar = *yytext;
+						yylval.ivar = *yytext;
 					  return CONST_INT;
 	         }
 
@@ -395,7 +391,7 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
           /* SymbolInfo *s= new  SymbolInfo(yytext, (char *)"CONST_FLOAT");
           yylval = (YYSTYPE)s; */
 
-					//yylval.dval = *yytext;
+					yylval.dval = *yytext;
 					return CONST_FLOAT;
         }
 
@@ -416,8 +412,8 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 {ID}  {
 				/* printf("Line %d : - %s", line_count , yytext); */
-				printf("\nAt line no: %d \n",line_count);
-      	/* yylval.strval =strdup(yytext); */
+				printf("At line no: %d ",line_count);
+      	yylval.strval =strdup(yytext);
         return ID;
       }
 

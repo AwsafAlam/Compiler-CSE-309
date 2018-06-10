@@ -1,0 +1,314 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: line program
+    2        | line
+
+    3 line: expr '\n'
+    4     | NAME '=' expr '\n'
+
+    5 expr: expr '+' mulex
+    6     | expr '-' mulex
+    7     | mulex
+
+    8 mulex: mulex '*' term
+    9      | mulex '/' term
+   10      | term
+
+   11 term: '(' expr ')'
+   12     | NAME
+   13     | DOUBLE
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\n' (10) 3 4
+'(' (40) 11
+')' (41) 11
+'*' (42) 8
+'+' (43) 5
+'-' (45) 6
+'/' (47) 9
+'=' (61) 4
+error (256)
+DOUBLE (258) 13
+NAME (259) 4 12
+
+
+Nonterminals, with rules where they appear
+
+$accept (13)
+    on left: 0
+program (14)
+    on left: 1 2, on right: 0 1
+line (15)
+    on left: 3 4, on right: 1 2
+expr (16)
+    on left: 5 6 7, on right: 3 4 5 6 11
+mulex (17)
+    on left: 8 9 10, on right: 5 6 7 8 9
+term (18)
+    on left: 11 12 13, on right: 8 9 10
+
+
+State 0
+
+    0 $accept: . program $end
+
+    DOUBLE  shift, and go to state 1
+    NAME    shift, and go to state 2
+    '('     shift, and go to state 3
+
+    program  go to state 4
+    line     go to state 5
+    expr     go to state 6
+    mulex    go to state 7
+    term     go to state 8
+
+
+State 1
+
+   13 term: DOUBLE .
+
+    $default  reduce using rule 13 (term)
+
+
+State 2
+
+    4 line: NAME . '=' expr '\n'
+   12 term: NAME .
+
+    '='  shift, and go to state 9
+
+    $default  reduce using rule 12 (term)
+
+
+State 3
+
+   11 term: '(' . expr ')'
+
+    DOUBLE  shift, and go to state 1
+    NAME    shift, and go to state 10
+    '('     shift, and go to state 3
+
+    expr   go to state 11
+    mulex  go to state 7
+    term   go to state 8
+
+
+State 4
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 12
+
+
+State 5
+
+    1 program: line . program
+    2        | line .
+
+    DOUBLE  shift, and go to state 1
+    NAME    shift, and go to state 2
+    '('     shift, and go to state 3
+
+    $default  reduce using rule 2 (program)
+
+    program  go to state 13
+    line     go to state 5
+    expr     go to state 6
+    mulex    go to state 7
+    term     go to state 8
+
+
+State 6
+
+    3 line: expr . '\n'
+    5 expr: expr . '+' mulex
+    6     | expr . '-' mulex
+
+    '\n'  shift, and go to state 14
+    '+'   shift, and go to state 15
+    '-'   shift, and go to state 16
+
+
+State 7
+
+    7 expr: mulex .
+    8 mulex: mulex . '*' term
+    9      | mulex . '/' term
+
+    '*'  shift, and go to state 17
+    '/'  shift, and go to state 18
+
+    $default  reduce using rule 7 (expr)
+
+
+State 8
+
+   10 mulex: term .
+
+    $default  reduce using rule 10 (mulex)
+
+
+State 9
+
+    4 line: NAME '=' . expr '\n'
+
+    DOUBLE  shift, and go to state 1
+    NAME    shift, and go to state 10
+    '('     shift, and go to state 3
+
+    expr   go to state 19
+    mulex  go to state 7
+    term   go to state 8
+
+
+State 10
+
+   12 term: NAME .
+
+    $default  reduce using rule 12 (term)
+
+
+State 11
+
+    5 expr: expr . '+' mulex
+    6     | expr . '-' mulex
+   11 term: '(' expr . ')'
+
+    '+'  shift, and go to state 15
+    '-'  shift, and go to state 16
+    ')'  shift, and go to state 20
+
+
+State 12
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 13
+
+    1 program: line program .
+
+    $default  reduce using rule 1 (program)
+
+
+State 14
+
+    3 line: expr '\n' .
+
+    $default  reduce using rule 3 (line)
+
+
+State 15
+
+    5 expr: expr '+' . mulex
+
+    DOUBLE  shift, and go to state 1
+    NAME    shift, and go to state 10
+    '('     shift, and go to state 3
+
+    mulex  go to state 21
+    term   go to state 8
+
+
+State 16
+
+    6 expr: expr '-' . mulex
+
+    DOUBLE  shift, and go to state 1
+    NAME    shift, and go to state 10
+    '('     shift, and go to state 3
+
+    mulex  go to state 22
+    term   go to state 8
+
+
+State 17
+
+    8 mulex: mulex '*' . term
+
+    DOUBLE  shift, and go to state 1
+    NAME    shift, and go to state 10
+    '('     shift, and go to state 3
+
+    term  go to state 23
+
+
+State 18
+
+    9 mulex: mulex '/' . term
+
+    DOUBLE  shift, and go to state 1
+    NAME    shift, and go to state 10
+    '('     shift, and go to state 3
+
+    term  go to state 24
+
+
+State 19
+
+    4 line: NAME '=' expr . '\n'
+    5 expr: expr . '+' mulex
+    6     | expr . '-' mulex
+
+    '\n'  shift, and go to state 25
+    '+'   shift, and go to state 15
+    '-'   shift, and go to state 16
+
+
+State 20
+
+   11 term: '(' expr ')' .
+
+    $default  reduce using rule 11 (term)
+
+
+State 21
+
+    5 expr: expr '+' mulex .
+    8 mulex: mulex . '*' term
+    9      | mulex . '/' term
+
+    '*'  shift, and go to state 17
+    '/'  shift, and go to state 18
+
+    $default  reduce using rule 5 (expr)
+
+
+State 22
+
+    6 expr: expr '-' mulex .
+    8 mulex: mulex . '*' term
+    9      | mulex . '/' term
+
+    '*'  shift, and go to state 17
+    '/'  shift, and go to state 18
+
+    $default  reduce using rule 6 (expr)
+
+
+State 23
+
+    8 mulex: mulex '*' term .
+
+    $default  reduce using rule 8 (mulex)
+
+
+State 24
+
+    9 mulex: mulex '/' term .
+
+    $default  reduce using rule 9 (mulex)
+
+
+State 25
+
+    4 line: NAME '=' expr '\n' .
+
+    $default  reduce using rule 4 (line)

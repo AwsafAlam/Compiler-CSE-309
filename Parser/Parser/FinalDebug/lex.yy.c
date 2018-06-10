@@ -634,10 +634,9 @@ char *yytext;
 #include<stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "SymbolTable.h"
+/* #include "SymbolTable.h" */
 #include "y.tab.h"
-
-/* extern YYSTYPE yylval; */
+extern YYSTYPE yylval;
 
 using namespace std;
 
@@ -651,8 +650,8 @@ int chr_COUNT  = 0;
 
 /* FILE *log; */
 
+#line 654 "lex.yy.c"
 #line 655 "lex.yy.c"
-#line 656 "lex.yy.c"
 
 #define INITIAL 0
 #define MYSTATE 1
@@ -871,10 +870,10 @@ YY_DECL
 		}
 
 	{
-#line 60 "scanner.l"
+#line 59 "scanner.l"
 
 
-#line 878 "lex.yy.c"
+#line 877 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -934,24 +933,23 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 62 "scanner.l"
+#line 61 "scanner.l"
 {
 						line_count++;
-						 printf("\nNew Line %d\n", line_count);
-
             return NEWLINE;
+						// printf("Line %d\n", line_count);
 					}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 68 "scanner.l"
+#line 66 "scanner.l"
 {
 								//do nothing
 							}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 72 "scanner.l"
+#line 70 "scanner.l"
 {
 		BEGIN STR;
 		printf("STR started at --\n %s",yytext);
@@ -959,7 +957,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 77 "scanner.l"
+#line 75 "scanner.l"
 {
 			printf("%s", yytext);
 			chr[chr_COUNT] = yytext[0];
@@ -999,7 +997,7 @@ YY_RULE_SETUP
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 113 "scanner.l"
+#line 111 "scanner.l"
 {
 					printf("Terminate\n");
 					line_count++;
@@ -1024,7 +1022,7 @@ YY_RULE_SETUP
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 133 "scanner.l"
+#line 131 "scanner.l"
 {
 										BEGIN STR;
 										printf("%s <--> ", yytext);
@@ -1032,7 +1030,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 138 "scanner.l"
+#line 136 "scanner.l"
 {
 										printf("%s --Ending\n",yytext);
 										printf("Line No. %d: Token <STRING> Lexeme ",line_count);
@@ -1053,7 +1051,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 157 "scanner.l"
+#line 155 "scanner.l"
 {
 		BEGIN MYSTATE;
 		chr[0] = '/';
@@ -1064,7 +1062,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 165 "scanner.l"
+#line 163 "scanner.l"
 {
 								// printf("- %s \nEnding Comment--\n", yytext);
 								chr[chr_COUNT] = '*';
@@ -1092,7 +1090,7 @@ YY_RULE_SETUP
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 188 "scanner.l"
+#line 186 "scanner.l"
 {
 						line_count++;
 						// printf("New line %s\n",yytext );
@@ -1102,7 +1100,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 195 "scanner.l"
+#line 193 "scanner.l"
 {
 							// printf("%s" , yytext);
 							chr[chr_COUNT] = yytext[0];
@@ -1112,7 +1110,7 @@ YY_RULE_SETUP
 						}
 	YY_BREAK
 case YY_STATE_EOF(MYSTATE):
-#line 203 "scanner.l"
+#line 201 "scanner.l"
 {
 										error_count++;
 										chr[chr_COUNT] = '\0';
@@ -1135,7 +1133,7 @@ case YY_STATE_EOF(MYSTATE):
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 222 "scanner.l"
+#line 220 "scanner.l"
 {
 															// printf("SIngle--Muiltiline--Comment in line %s\n", yytext);
 															printf("Line no %d: TOKEN <COMMENT> Lexeme %s found\n\n",line_count,yytext);
@@ -1144,7 +1142,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 228 "scanner.l"
+#line 226 "scanner.l"
 {
 									// printf("Comment in line %s\n", yytext);
 									printf("Line no %d: TOKEN <COMMENT> Lexeme %s found\n\n",line_count,yytext);
@@ -1153,13 +1151,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 235 "scanner.l"
+#line 233 "scanner.l"
 {	printf("At line no: %d ",line_count);
 				return IF;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 238 "scanner.l"
+#line 236 "scanner.l"
 {
 				printf("At line no: %d ",line_count);
 				return ELSE;
@@ -1167,7 +1165,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 242 "scanner.l"
+#line 240 "scanner.l"
 {
 				printf("At line no: %d ",line_count);
 				return FOR;
@@ -1175,23 +1173,23 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 246 "scanner.l"
+#line 244 "scanner.l"
 {
-				printf("At line no: %d \n",line_count);
+				printf("At line no: %d ",line_count);
 				return DO;
       }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 250 "scanner.l"
+#line 248 "scanner.l"
 {
-				printf("At line no: %d \n",line_count);
+				printf("At line no: %d ",line_count);
        return INT;
        }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 254 "scanner.l"
+#line 252 "scanner.l"
 {
 					printf("At line no: %d ",line_count);
 					return FLOAT;
@@ -1199,7 +1197,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 258 "scanner.l"
+#line 256 "scanner.l"
 {
 					printf("At line no: %d ",line_count);
 					return VOID;
@@ -1207,7 +1205,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 262 "scanner.l"
+#line 260 "scanner.l"
 {
 						printf("At line no: %d ",line_count);
 						return SWITCH;
@@ -1215,134 +1213,132 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 266 "scanner.l"
+#line 264 "scanner.l"
 {
 						return DEFAULT;
           }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 269 "scanner.l"
+#line 267 "scanner.l"
 {
 					return WHILE;
           }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 272 "scanner.l"
+#line 270 "scanner.l"
 {
 					return BREAK;
           }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 275 "scanner.l"
+#line 273 "scanner.l"
 {
 					return CHAR;
         }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 278 "scanner.l"
+#line 276 "scanner.l"
 {
 						return DOUBLE;
           }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 281 "scanner.l"
+#line 279 "scanner.l"
 {
 						return RETURN;
           }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 284 "scanner.l"
+#line 282 "scanner.l"
 {
 					return CASE;
         }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 287 "scanner.l"
+#line 285 "scanner.l"
 {
 							return CONTINUE;
             }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 291 "scanner.l"
+#line 289 "scanner.l"
 { return PLUS; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 292 "scanner.l"
+#line 290 "scanner.l"
 { return MINUS; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 293 "scanner.l"
+#line 291 "scanner.l"
 { return SLASH; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 294 "scanner.l"
+#line 292 "scanner.l"
 { return ASTERISK; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 295 "scanner.l"
-{ printf("\nLPAREN lex\n");
+#line 293 "scanner.l"
+{ //printf("LPAREN lex");
  						return LPAREN; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 297 "scanner.l"
-{ printf("\nRPAREN lex\n");
+#line 295 "scanner.l"
+{ //printf("RPAREN lex");
 						return RPAREN; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 299 "scanner.l"
+#line 297 "scanner.l"
 { return NOT;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 300 "scanner.l"
-{ printf("\nLCURL lex\n");
+#line 298 "scanner.l"
+{ //printf("LCURL lex");
 						return LCURL;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 302 "scanner.l"
-{ printf("\nRCURL lex\n");
+#line 300 "scanner.l"
+{ //printf("RCURL lex");
 						return RCURL;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 304 "scanner.l"
+#line 302 "scanner.l"
 { return LTHIRD;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 305 "scanner.l"
+#line 303 "scanner.l"
 { return RTHIRD;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 306 "scanner.l"
-{printf("\nCOMMA\n");
-						return COMMA;}
+#line 304 "scanner.l"
+{return COMMA;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 308 "scanner.l"
-{printf("\nSEMICOLON\n");
-						return SEMICOLON;}
+#line 305 "scanner.l"
+{return SEMICOLON;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 311 "scanner.l"
+#line 307 "scanner.l"
 {
 										error_count++;
 										printf("Error at line %d: Empty character constant error %s\n\n", line_count , yytext);
@@ -1352,7 +1348,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 318 "scanner.l"
+#line 314 "scanner.l"
 {
 							// printf("CharACTER found %s\n",yytext );
 							/* fprintf(logout,"Line no %d: TOKEN <CONST_CHAR> Lexeme %s found\n\n",line_count,yytext); */
@@ -1400,13 +1396,13 @@ YY_RULE_SETUP
 							/* fprintf(tokenout,"<CONST_CHAR,%s>",tmp); */
               /* SymbolInfo *s= new  SymbolInfo(tmp, (char *)"CONST_CHAR");
               yylval = (YYSTYPE)s; */
-							//yylval.strval =strdup(tmp);
+							yylval.strval =strdup(tmp);
 			        return CONST_CHAR;
 					}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 369 "scanner.l"
+#line 365 "scanner.l"
 {
 														error_count++;
 														printf("Error at line %d: Multi character constant error %s\n\n", line_count , yytext);
@@ -1415,7 +1411,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 375 "scanner.l"
+#line 371 "scanner.l"
 {
 									error_count++;
 									printf("Error at line %d: Unterminated character %s\n\n", line_count , yytext);
@@ -1424,17 +1420,17 @@ YY_RULE_SETUP
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 382 "scanner.l"
+#line 378 "scanner.l"
 {
 						/* printf("This \n"); */
             /* sscanf(yytext,"%lf", &yylval); */
-					//	yylval.ivar = *yytext;
+						yylval.ivar = *yytext;
 					  return CONST_INT;
 	         }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 389 "scanner.l"
+#line 385 "scanner.l"
 {
 					/* fprintf(tokenout,"<CONST_FLOAT,%s>",yytext); */
 					/* fprintf(logout,"Line no %d: TOKEN <CONST_FLOAT> Lexeme %s found\n\n",line_count,yytext); */
@@ -1444,13 +1440,13 @@ YY_RULE_SETUP
           /* SymbolInfo *s= new  SymbolInfo(yytext, (char *)"CONST_FLOAT");
           yylval = (YYSTYPE)s; */
 
-					//yylval.dval = *yytext;
+					yylval.dval = *yytext;
 					return CONST_FLOAT;
         }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 402 "scanner.l"
+#line 398 "scanner.l"
 {
 																error_count++;
 																printf("Error at line %d: Too many decimal point  %s\n\n",line_count , yytext );
@@ -1460,7 +1456,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 410 "scanner.l"
+#line 406 "scanner.l"
 {
 															error_count++;
 															printf("Error at Line: %d Ill formed number %s\n\n", line_count , yytext);
@@ -1469,18 +1465,18 @@ YY_RULE_SETUP
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 417 "scanner.l"
+#line 413 "scanner.l"
 {
 				/* printf("Line %d : - %s", line_count , yytext); */
-				printf("\nAt line no: %d \n",line_count);
-      	/* yylval.strval =strdup(yytext); */
+				printf("At line no: %d ",line_count);
+      	yylval.strval =strdup(yytext);
         return ID;
       }
 	YY_BREAK
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 424 "scanner.l"
+#line 420 "scanner.l"
 {
 											error_count++;
 											printf("Error at line %d: Invalid prefix on ID or invalid suffix on Number %s\n\n",line_count , yytext );
@@ -1490,10 +1486,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 430 "scanner.l"
+#line 426 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1497 "lex.yy.c"
+#line 1493 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(STR):
 	yyterminate();
@@ -2499,4 +2495,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 430 "scanner.l"
+#line 426 "scanner.l"

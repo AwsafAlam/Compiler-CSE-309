@@ -1,10 +1,18 @@
 %{
-#include <stdlib.h>
-#include <stdio.h>
+#include<iostream>
+#include<stdio.h>
+#include<cstdlib>
+#include<cstring>
+#include<cmath>
+
 
 //int yydebug;
+using namespace std;
+
 int yyparse(void);
 int yylex(void);
+extern FILE *yyin;
+
 double var[26];
 
 void yyerror(char *s)
@@ -48,8 +56,31 @@ term:
 	;
 %%
 
-int main(void){
-	/*yydebug=1;*/
+int main(int argc,char *argv[])
+{
+	/* yydebug = 1; */
+  FILE *fp;
+	if((fp=fopen(argv[1],"r"))==NULL)
+	{
+		printf("Cannot Open Input File.\n");
+		exit(1);
+	}
+
+	// fp2= fopen(argv[2],"w");
+	// fclose(fp2);
+	// fp3= fopen(argv[3],"w");
+	// fclose(fp3);
+  //
+	// fp2= fopen(argv[2],"a");
+	// fp3= fopen(argv[3],"a");
+
+
+	yyin=fp;
 	yyparse();
+
+
+	// fclose(fp2);
+	// fclose(fp3);
+
 	return 0;
 }

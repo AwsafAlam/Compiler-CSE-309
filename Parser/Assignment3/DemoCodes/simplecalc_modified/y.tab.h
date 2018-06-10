@@ -46,102 +46,22 @@ extern int yydebug;
   enum yytokentype
   {
     DOUBLE = 258,
-    CONST_FLOAT = 259,
-    ADDOP = 260,
-    MULOP = 261,
-    ID = 262,
-    LOGICOP = 263,
-    RELOP = 264,
-    CONST_CHAR = 265,
-    CONST_INT = 266,
-    NEWLINE = 267,
-    PLUS = 268,
-    MINUS = 269,
-    SLASH = 270,
-    ASTERISK = 271,
-    LPAREN = 272,
-    RPAREN = 273,
-    IF = 274,
-    ELSE = 275,
-    FOR = 276,
-    DO = 277,
-    INT = 278,
-    FLOAT = 279,
-    VOID = 280,
-    SWITCH = 281,
-    DEFAULT = 282,
-    WHILE = 283,
-    BREAK = 284,
-    CHAR = 285,
-    RETURN = 286,
-    CASE = 287,
-    CONTINUE = 288,
-    ASSIGNOP = 289,
-    COMMA = 290,
-    INCOP = 291,
-    DECOP = 292,
-    LCURL = 293,
-    RCURL = 294,
-    LTHIRD = 295,
-    RTHIRD = 296,
-    NOT = 297,
-    PRINTLN = 298,
-    SEMICOLON = 299
+    NAME = 259
   };
 #endif
 /* Tokens.  */
 #define DOUBLE 258
-#define CONST_FLOAT 259
-#define ADDOP 260
-#define MULOP 261
-#define ID 262
-#define LOGICOP 263
-#define RELOP 264
-#define CONST_CHAR 265
-#define CONST_INT 266
-#define NEWLINE 267
-#define PLUS 268
-#define MINUS 269
-#define SLASH 270
-#define ASTERISK 271
-#define LPAREN 272
-#define RPAREN 273
-#define IF 274
-#define ELSE 275
-#define FOR 276
-#define DO 277
-#define INT 278
-#define FLOAT 279
-#define VOID 280
-#define SWITCH 281
-#define DEFAULT 282
-#define WHILE 283
-#define BREAK 284
-#define CHAR 285
-#define RETURN 286
-#define CASE 287
-#define CONTINUE 288
-#define ASSIGNOP 289
-#define COMMA 290
-#define INCOP 291
-#define DECOP 292
-#define LCURL 293
-#define RCURL 294
-#define LTHIRD 295
-#define RTHIRD 296
-#define NOT 297
-#define PRINTLN 298
-#define SEMICOLON 299
+#define NAME 259
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 32 "parser.y" /* yacc.c:1909  */
- double dval;float fval; int ivar; char cvar; char *strval; int line_count; 
+#line 26 "simpleParser.y" /* yacc.c:1909  */
+ double dval; int ivar; 
 
-#line 145 "y.tab.h" /* yacc.c:1909  */
+#line 65 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -24,7 +24,8 @@ void yyerror(char *s){
 
 input:              /* empty string */
     | input line
-    ;
+		| INT	{printf("Founr");}
+		;
 line: NEWLINE
     | expr NEWLINE           { printf("\t%.10g\n",$1); }
     ;

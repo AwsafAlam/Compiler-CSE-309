@@ -1,14 +1,25 @@
-%{
-#include <stdlib.h>
-#include <stdio.h>
-# include "y.tab.h"
+%option noyywrap
 
-void yyerror(char*);
-extern YYSTYPE yylval;
+%{
+#include<iostream>
+#include<stdlib.h>
+#include <stdio.h>
+#include <string.h>
+//#include "SymbolTable.h"
+#include "y.tab.h"
+
+using namespace std;
+
+//extern SymbolTable *symboltable;
+void yyerror(char *);
+
+int line_count=1;
+int error=0;
 
 %}
-NAME	[a-z]
-DOUBLE	(([0-9]+(\.[0-9]*)?)|([0-9]*\.[0-9]+)) 
+
+NAME	[a-z]+
+DOUBLE	(([0-9]+(\.[0-9]*)?)|([0-9]*\.[0-9]+))
 %%
 [ \t]+ 	{}
 (([0-9]+(\.[0-9]*)?)|([0-9]*\.[0-9]+)) 	{
@@ -24,7 +35,7 @@ DOUBLE	(([0-9]+(\.[0-9]*)?)|([0-9]*\.[0-9]+))
 ")" 	{
 		return *yytext;
 	}
-[a-z] 	{
+[a-z]+ 	{
 		yylval.ivar = *yytext;
 		return NAME;
 	}
