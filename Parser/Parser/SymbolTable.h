@@ -6,6 +6,7 @@
 #define LEN 10000
 
 using namespace std;
+extern FILE *logout;
 
 class ScopeTable
 {
@@ -39,31 +40,31 @@ ScopeTable::ScopeTable(int len , int num)
 }
 
 void ScopeTable::printHash(){
-    // fprintf(logout,"ScopeTable # %d\n",scope);
+     fprintf(logout,"ScopeTable # %d\n",scope);
 
-    cout<<"ScopeTable # "<<scope<<endl;
-    // fprintf(logout,"----------------------\n");
-    cout<<"----------------------"<<endl;
+    //cout<<"ScopeTable # "<<scope<<endl;
+    fprintf(logout,"----------------------\n");
+    //cout<<"----------------------"<<endl;
     for(int i=0 ; i< length ; i++){
       SymbolInfo *head;
       head = array[i];
       if(head->next == NULL){
         continue;
       }
-      // fprintf(logout,"%d -->  ",i);
-      cout<<i<<" -->  ";
+       fprintf(logout,"%d -->  ",i);
+      //cout<<i<<" -->  ";
       while(head->next != NULL){
         // if( head->next->getType() == "ID" ){
-          // fprintf(logout,"<%s : %s> ", head->next->getName().c_str(),head->next->getType().c_str());
-          cout<<"< "<<head->next->getName()<<" : "<<head->next->getType()<<"> ";
+           fprintf(logout,"<%s : %s> ", head->next->getName().c_str(),head->next->getType().c_str());
+        //  cout<<"< "<<head->next->getName()<<" : "<<head->next->getType()<<"> ";
         // }
         head = head->next;
       }
-      // fprintf(logout,"\n");
+       fprintf(logout,"\n");
 
-      cout<<endl;
+    //  cout<<endl;
     }
-    // fprintf(logout,"\n");
+   fprintf(logout,"\n");
 
 }
 
@@ -123,7 +124,7 @@ int ScopeTable::Insert(string name , string type )
 
 
    }
-   printHash();
+  // printHash();
 //    //cout<<index<<" "<<collision<<endl;
     return collision;
 }
@@ -250,6 +251,8 @@ void SymbolTable::EnterScope() {
   newScope = new ScopeTable(buckets , scopeNumber);
   CurrentScope = newScope;
   //cout<<"New ScopeTable with id "<<scopeNumber<<" created"<<endl;
+  fprintf(logout,"  New ScopeTable with id %d created\n\n",scopeNumber);
+
   struct ScopeNode * newNode ;
 	newNode = (struct ScopeNode*) malloc (sizeof(struct ScopeNode)) ;
 	newNode->CurrentNode = CurrentScope ;
@@ -280,6 +283,7 @@ void SymbolTable::ExitScope() {
     CurrentScope = NULL;
     return;
   }
+  fprintf(logout, "ScopeTable with id %d removed\n\n",scopeNumber);
       struct ScopeNode *temp, *pre ;
       temp = head ; //Delete First Element
       scopeNumber--;

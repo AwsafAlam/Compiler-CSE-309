@@ -19,7 +19,7 @@ vector<char *> vec;
 
  FILE * logout = fopen("log.txt","w");
  FILE *error= fopen("error.txt","w");
-
+SymbolTable * symboltable = new SymbolTable(30);
 //int line_count=0;
 
 void yyerror(char *s){
@@ -28,6 +28,8 @@ void yyerror(char *s){
 
 
 %}
+%nonassoc LOWER_THAN_ELSE
+%nonassoc ELSE
 
 %union { double dval;float fval; int ivar; char cvar; char *strval; int line_count; }
 %token <dval> DOUBLE
@@ -45,11 +47,9 @@ void yyerror(char *s){
 
 			start : program
 				{
-					//write your code in this block in all the similar blocks below
 					fprintf(logout,"At line no: %d start : program\n\n",line_count);
 					$$ = $1;
 					fprintf(logout,"%s\n\n",$1);
-
 				}
 				;
 
@@ -84,13 +84,22 @@ void yyerror(char *s){
 						fprintf(logout,"%s\n\n",$1);
 
 					 }
-			     | func_declaration		  {fprintf(logout,"At line no: %d unit : func_declaration\n\n",line_count);}
-			     | func_definition	{ fprintf(logout,"At line no: %d unit : func_definition\n\n",line_count);}
+			     | func_declaration		  {
+						 fprintf(logout,"At line no: %d unit : func_declaration\n\n",line_count);
+						 $$ = $1;
+						 fprintf(logout,"%s \n\n",$1);
+					 }
+			     | func_definition	{
+						 fprintf(logout,"At line no: %d unit : func_definition\n\n",line_count);
+						 $$ = $1;
+						 fprintf(logout,"%s \n\n",$1);
+
+					 }
 			     ;
 
 			 func_definition : type_specifier ID LPAREN RPAREN compound_statement {
 				 		 fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN  RPAREN compound_statement\n\n",line_count);
-						 char tmp[2];
+						char tmp[2];
  						tmp[0]='(';tmp[1]='\0';
 
  						char * tmp2 = (char *) malloc(1+strlen($1)+strlen($2)+2+strlen($5));
@@ -105,7 +114,7 @@ void yyerror(char *s){
  						vec.push_back(tmp2);
  						$$ = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
-
+						symboltable->Insert($2 , "ID");
 					 }
 					 |type_specifier ID LPAREN parameter_list RPAREN compound_statement{
 
@@ -126,22 +135,23 @@ void yyerror(char *s){
 						 vec.push_back(tmp2);
 						 $$ = tmp2;
 						 fprintf(logout,"%s \n\n",tmp2);
+						 symboltable->Insert($2 , "ID");
 
 			 		}
 					;
 
-			compound_statement : LCURL statements RCURL  {
+			compound_statement : LCURL {symboltable->EnterScope();} statements RCURL  {
 
 							fprintf(logout,"At line no: %d compound_statement : LCURL statements RCURL\n\n",line_count);
 							char tmp[2];
 							tmp[0]='{';tmp[1]='\0';
 
-							char * tmp2 = (char *) malloc(1+strlen($2)+2);
+							char * tmp2 = (char *) malloc(1+strlen($3)+2);
 
 							strcat(tmp2 , tmp);
 							tmp[0] = '\n';
 							strcat(tmp2 , tmp);
-							strcat(tmp2 , $2);
+							strcat(tmp2 , $3);
 							tmp[0] = '\n';
 							strcat(tmp2 , tmp);
 							tmp[0] = '}';
@@ -150,7 +160,8 @@ void yyerror(char *s){
 							vec.push_back(tmp2);
 							$$ = tmp2;
 							fprintf(logout,"%s \n\n",tmp2);
-
+							symboltable->PrintAllScopes();
+							symboltable->ExitScope();
 						}
 						| LCURL RCURL  {
 
@@ -219,7 +230,7 @@ void yyerror(char *s){
 						vec.push_back(tmp2);
 						$$ = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
-
+						symboltable->Insert($2 , "ID");
 					}
 					;
 
@@ -241,6 +252,7 @@ void yyerror(char *s){
 						vec.push_back(tmp2);
 						$$ = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
+						//symboltable->EnterScope();
 
 					}
 					| parameter_list COMMA type_specifier  {
@@ -299,9 +311,7 @@ void yyerror(char *s){
 
 				fprintf(logout,"%s\n\n",tmp);
 				$$ = tmp;
-				//vec.push_back($3);
-
-				cout<<vec.size()<<endl;
+				/* cout<<vec.size()<<endl; */
 
 			};
 
@@ -367,14 +377,34 @@ void yyerror(char *s){
 						fprintf(logout,"%s\n\n",tmp);
 						$$ = tmp;
 						vec.push_back($3);
+						symboltable->Insert($3 , "ID");
 
-						cout<<vec.size()<<endl;
+						/* cout<<vec.size()<<endl; */
 
 					}
 		 		  | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD {
 
 						fprintf(logout,"At line no: %d declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD\n\n",line_count);
-						/* fprintf(logout,"At line no: %d , %s[%c]",$3 , $5); */
+						char integer[2];
+						sprintf(integer, "%d", $5);
+
+						char * tmp = (char *) malloc(1 + strlen($1)+ 1+strlen($3)+3 );
+
+						strcpy(tmp, $1);
+						char tmp2[2];
+						tmp2[1] = '\0';
+						tmp2[0] = ',';
+			      strcat(tmp, tmp2);
+						strcat(tmp , $3);
+						tmp2[0] = '[';
+			      strcat(tmp, tmp2);
+						strcat(tmp, integer);
+						tmp2[0] = ']';
+			      strcat(tmp, tmp2);
+
+
+						fprintf(logout,"%s\n\n",tmp);
+						$$ = tmp;
 					}
 		 		  | ID {
 
@@ -382,6 +412,7 @@ void yyerror(char *s){
 						fprintf(logout,"%s\n\n",$1);
 						vec.push_back($1);
 						$$ = $1;
+						symboltable->Insert($$ , "ID");
 					}
 		 		  | ID LTHIRD CONST_INT RTHIRD {
 
@@ -404,6 +435,7 @@ void yyerror(char *s){
  						vec.push_back(tmp2);
  						$$ = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
+						symboltable->Insert($1 , "ID");
 
 					 }
 		 		  ;
@@ -451,21 +483,121 @@ void yyerror(char *s){
 				  | FOR LPAREN expression_statement expression_statement expression RPAREN statement	{
 
 						fprintf(logout,"At line no: %d statement :  FOR LPAREN expression_statement expression_statement expression RPAREN statement\n\n",line_count);
+
+						char tmp[4];
+ 						tmp[0]='f';tmp[1]='o';tmp[2]='r';tmp[3]='\0';
+
+ 						char * tmp2 = (char *) malloc(1+strlen(tmp)+1+strlen($3)+strlen($3)+strlen($3)+1+strlen($7));
+
+ 						strcpy(tmp2 , tmp);
+						tmp[0]='(';tmp[1]='\0';
+ 						strcat(tmp2 , tmp);
+ 						strcat(tmp2 , $3);
+						strcat(tmp2 , $4);
+						strcat(tmp2 , $5);
+
+ 						tmp[0] = ')';
+ 						strcat(tmp2 , tmp);
+ 						strcat(tmp2 , $7);
+
+ 						vec.push_back(tmp2);
+ 						$$ = tmp2;
+ 						fprintf(logout,"%s \n\n",tmp2);
+
 					}
 				  | IF LPAREN expression RPAREN statement ELSE statement	{
 
 						fprintf(logout,"At line no: %d statement : IF LPAREN expression RPAREN statement ELSE statement\n\n",line_count);
+
+						char tmp[5];
+ 						tmp[0]='i';tmp[1]='f';tmp[2]='\0';
+
+ 						char * tmp2 = (char *) malloc(1+strlen(tmp)+strlen(tmp)+strlen($3)+1+strlen($5)+strlen(tmp)+strlen($7));
+
+ 						strcpy(tmp2 , tmp);
+						tmp[0]='(';tmp[1]='\0';
+ 						strcat(tmp2 , tmp);
+ 						strcat(tmp2 , $3);
+						tmp[0] = ')';
+ 						strcat(tmp2 , tmp);
+
+						strcat(tmp2 , $5);
+						tmp[0]='e';tmp[1]='l';tmp[2]='s';tmp[3]='e';tmp[4]='\0';
+						strcat(tmp2 , tmp);
+
+ 						strcat(tmp2 , $7);
+
+ 						vec.push_back(tmp2);
+ 						$$ = tmp2;
+ 						fprintf(logout,"%s \n\n",tmp2);
+
 					}
-					| IF LPAREN expression RPAREN statement	{
+					| IF LPAREN expression RPAREN statement	%prec LOWER_THAN_ELSE{
 
 							fprintf(logout,"At line no: %d statement : IF LPAREN expression RPAREN statement\n\n",line_count);
+							char tmp[5];
+							tmp[0]='i';tmp[1]='f';tmp[2]='\0';
+
+							char * tmp2 = (char *) malloc(1+strlen(tmp)+2+strlen($3)+1+strlen($5));
+
+							strcpy(tmp2 , tmp);
+							tmp[0]='(';tmp[1]='\0';
+							strcat(tmp2 , tmp);
+							strcat(tmp2 , $3);
+							tmp[0] = ')';
+							strcat(tmp2 , tmp);
+
+							strcat(tmp2 , $5);
+
+							vec.push_back(tmp2);
+							$$ = tmp2;
+							fprintf(logout,"%s \n\n",tmp2);
+
 					}
 				  | WHILE LPAREN expression RPAREN statement	{
 
 						fprintf(logout,"At line no: %d statement : WHILE LPAREN expression RPAREN statement\n\n",line_count);
+						char tmp[6];
+						tmp[0]='w';tmp[1]='h';tmp[2]='i';tmp[3]='l';tmp[4]='e';tmp[5]='\0';
+
+ 						char * tmp2 = (char *) malloc(1+strlen(tmp)+1+strlen($3)+1+strlen($5));
+
+ 						strcpy(tmp2 , tmp);
+						tmp[0]='(';tmp[1]='\0';
+ 						strcat(tmp2 , tmp);
+ 						strcat(tmp2 , $3);
+						tmp[0] = ')';
+ 						strcat(tmp2 , tmp);
+						strcat(tmp2 , $5);
+
+ 						vec.push_back(tmp2);
+ 						$$ = tmp2;
+ 						fprintf(logout,"%s \n\n",tmp2);
+
 					}
 				  | PRINTLN LPAREN ID RPAREN SEMICOLON	{
 						fprintf(logout,"At line no: %d statement : PRINTLN LPAREN ID RPAREN SEMICOLON\n\n",line_count);
+
+						char tmp[8];
+						tmp[0]='p';tmp[1]='r';tmp[2]='i';tmp[3]='n';tmp[4]='t';tmp[5]='l';tmp[6]='n';tmp[7]='\0';
+
+ 						char * tmp2 = (char *) malloc(1+strlen(tmp)+1+strlen($3)+2);
+
+ 						strcpy(tmp2 , tmp);
+						tmp[0]='(';tmp[1]='\0';
+ 						strcat(tmp2 , tmp);
+ 						strcat(tmp2 , $3);
+						tmp[0] = ')';
+ 						strcat(tmp2 , tmp);
+						tmp[0] = ';';
+						strcat(tmp2 , tmp);
+						tmp[0] = '\n';
+ 						strcat(tmp2 , tmp);
+
+ 						vec.push_back(tmp2);
+ 						$$ = tmp2;
+ 						fprintf(logout,"%s \n\n",tmp2);
+
 					}
 				  | RETURN expression SEMICOLON	{
 
@@ -548,7 +680,7 @@ void yyerror(char *s){
 					;
 
 			variable : ID	{
-
+					symboltable->Insert($1 , "ID");
 					fprintf(logout,"At line no: %d variable : ID\n\n",line_count);
 					$$ = $1;
 					fprintf(logout,"%s\n\n",$1);
@@ -671,10 +803,32 @@ void yyerror(char *s){
 			unary_expression : ADDOP unary_expression	{
 
 							fprintf(logout,"At line no: %d unary_expression : ADDOP unary_expression\n\n",line_count);
+							char tmp[2];
+							tmp[0]=$1;tmp[1]='\0';
+
+							char * tmp2 = (char *) malloc(1+strlen($2));
+
+							strcat(tmp2 , tmp);
+							strcat(tmp2 , $2);
+
+							vec.push_back(tmp2);
+							$$ = tmp2;
+							fprintf(logout,"%s \n\n",tmp2);
 					}
 					 | NOT unary_expression	{
 
 						 fprintf(logout,"At line no: %d unary_expression : NOT unary_expression\n\n",line_count);
+						 char tmp[2];
+ 						 tmp[0]='!';tmp[1]='\0';
+
+ 						char * tmp2 = (char *) malloc(1+strlen($2)+1);
+
+ 						strcat(tmp2 , tmp);
+ 						strcat(tmp2 , $2);
+
+ 						vec.push_back(tmp2);
+ 						$$ = tmp2;
+ 						fprintf(logout,"%s \n\n",tmp2);
 					 }
 					 | factor	{
 						 fprintf(logout,"At line no: %d unary_expression : factor\n\n",line_count);
@@ -746,25 +900,47 @@ void yyerror(char *s){
 
 					fprintf(logout,"At line no: %d factor : CONST_FLOAT\n\n",line_count);
 
-					/* char * tmp2 = (char *) malloc(1+strlen($1)); */
-
-					/* strcat(tmp2 , $1); */
-
 					$$ = $1;
 					fprintf(logout,"%s \n\n",$1);
 				}
 				| variable INCOP	{
 
 					fprintf(logout,"At line no: %d factor : variable INCOP\n\n",line_count);
+					char tmp[3];
+					tmp[0] = '+';tmp[1]='+';tmp[2]='\0';
+					char * tmp2 = (char *) malloc(1+strlen($1)+1);
+
+					strcpy(tmp2 , $1);
+					strcat(tmp2 , tmp);
+
+					vec.push_back(tmp2);
+					$$ = tmp2;
+					fprintf(logout,"%s \n\n",tmp2);
+
 				}
 				| variable DECOP	{
 
 					fprintf(logout,"At line no: %d factor : variable DECOP\n\n",line_count);
+					char tmp[3];
+					tmp[0] = '-';tmp[1]='-';tmp[2]='\0';
+
+					char * tmp2 = (char *) malloc(1+strlen($1)+1);
+
+					strcpy(tmp2 , $1);
+					strcat(tmp2 , tmp);
+
+					vec.push_back(tmp2);
+					$$ = tmp2;
+					fprintf(logout,"%s \n\n",tmp2);
+
 				}
 				;
 
 			argument_list : arguments	{
 						fprintf(logout,"At line no: %d argument_list : arguments\n\n",line_count);
+						$$ = $1;
+						fprintf(logout,"%s \n\n",$1);
+
 					}
 				  |	{
 						fprintf(logout,"At line no: %d argument_list :\n\n",line_count);
@@ -774,9 +950,24 @@ void yyerror(char *s){
 			arguments : arguments COMMA logic_expression	{
 
 						fprintf(logout,"At line no: %d arguments : arguments COMMA logic_expression\n\n",line_count);
+						char tmp[2];
+						tmp[0] = ',';tmp[0] = '\0';
+						char * tmp2 = (char *) malloc(1+strlen($1)+1+strlen($3));
+
+						strcpy(tmp2 , $1);
+						strcat(tmp2 , tmp);
+						strcat(tmp2 , $3);
+
+						vec.push_back(tmp2);
+						$$ = tmp2;
+						fprintf(logout,"%s \n\n",tmp2);
+
 					}
 		      | logic_expression	{
 						fprintf(logout,"At line no: %d arguments : logic_expression\n\n",line_count);
+						$$ = $1;
+						fprintf(logout,"%s \n\n",$1);
+
 					}
 		      ;
 

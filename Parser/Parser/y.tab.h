@@ -45,103 +45,105 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    DOUBLE = 258,
-    CONST_FLOAT = 259,
-    ADDOP = 260,
-    MULOP = 261,
-    ID = 262,
-    LOGICOP = 263,
-    RELOP = 264,
-    CONST_CHAR = 265,
-    CONST_INT = 266,
-    NEWLINE = 267,
-    PLUS = 268,
-    MINUS = 269,
-    SLASH = 270,
-    ASTERISK = 271,
-    LPAREN = 272,
-    RPAREN = 273,
-    IF = 274,
-    ELSE = 275,
-    FOR = 276,
-    DO = 277,
-    INT = 278,
-    FLOAT = 279,
-    VOID = 280,
-    SWITCH = 281,
-    DEFAULT = 282,
-    WHILE = 283,
-    BREAK = 284,
-    CHAR = 285,
-    RETURN = 286,
-    CASE = 287,
-    CONTINUE = 288,
-    ASSIGNOP = 289,
-    COMMA = 290,
-    INCOP = 291,
-    DECOP = 292,
-    LCURL = 293,
-    RCURL = 294,
-    LTHIRD = 295,
-    RTHIRD = 296,
-    NOT = 297,
-    PRINTLN = 298,
-    SEMICOLON = 299
+    LOWER_THAN_ELSE = 258,
+    ELSE = 259,
+    DOUBLE = 260,
+    CONST_FLOAT = 261,
+    ADDOP = 262,
+    MULOP = 263,
+    ID = 264,
+    LOGICOP = 265,
+    RELOP = 266,
+    CONST_CHAR = 267,
+    CONST_INT = 268,
+    NEWLINE = 269,
+    PLUS = 270,
+    MINUS = 271,
+    SLASH = 272,
+    ASTERISK = 273,
+    LPAREN = 274,
+    RPAREN = 275,
+    IF = 276,
+    FOR = 277,
+    DO = 278,
+    INT = 279,
+    FLOAT = 280,
+    VOID = 281,
+    SWITCH = 282,
+    DEFAULT = 283,
+    WHILE = 284,
+    BREAK = 285,
+    CHAR = 286,
+    RETURN = 287,
+    CASE = 288,
+    CONTINUE = 289,
+    ASSIGNOP = 290,
+    COMMA = 291,
+    INCOP = 292,
+    DECOP = 293,
+    LCURL = 294,
+    RCURL = 295,
+    LTHIRD = 296,
+    RTHIRD = 297,
+    NOT = 298,
+    PRINTLN = 299,
+    SEMICOLON = 300
   };
 #endif
 /* Tokens.  */
-#define DOUBLE 258
-#define CONST_FLOAT 259
-#define ADDOP 260
-#define MULOP 261
-#define ID 262
-#define LOGICOP 263
-#define RELOP 264
-#define CONST_CHAR 265
-#define CONST_INT 266
-#define NEWLINE 267
-#define PLUS 268
-#define MINUS 269
-#define SLASH 270
-#define ASTERISK 271
-#define LPAREN 272
-#define RPAREN 273
-#define IF 274
-#define ELSE 275
-#define FOR 276
-#define DO 277
-#define INT 278
-#define FLOAT 279
-#define VOID 280
-#define SWITCH 281
-#define DEFAULT 282
-#define WHILE 283
-#define BREAK 284
-#define CHAR 285
-#define RETURN 286
-#define CASE 287
-#define CONTINUE 288
-#define ASSIGNOP 289
-#define COMMA 290
-#define INCOP 291
-#define DECOP 292
-#define LCURL 293
-#define RCURL 294
-#define LTHIRD 295
-#define RTHIRD 296
-#define NOT 297
-#define PRINTLN 298
-#define SEMICOLON 299
+#define LOWER_THAN_ELSE 258
+#define ELSE 259
+#define DOUBLE 260
+#define CONST_FLOAT 261
+#define ADDOP 262
+#define MULOP 263
+#define ID 264
+#define LOGICOP 265
+#define RELOP 266
+#define CONST_CHAR 267
+#define CONST_INT 268
+#define NEWLINE 269
+#define PLUS 270
+#define MINUS 271
+#define SLASH 272
+#define ASTERISK 273
+#define LPAREN 274
+#define RPAREN 275
+#define IF 276
+#define FOR 277
+#define DO 278
+#define INT 279
+#define FLOAT 280
+#define VOID 281
+#define SWITCH 282
+#define DEFAULT 283
+#define WHILE 284
+#define BREAK 285
+#define CHAR 286
+#define RETURN 287
+#define CASE 288
+#define CONTINUE 289
+#define ASSIGNOP 290
+#define COMMA 291
+#define INCOP 292
+#define DECOP 293
+#define LCURL 294
+#define RCURL 295
+#define LTHIRD 296
+#define RTHIRD 297
+#define NOT 298
+#define PRINTLN 299
+#define SEMICOLON 300
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 32 "parser.y" /* yacc.c:1909  */
+#line 34 "parser.y" /* yacc.c:1909  */
  double dval;float fval; int ivar; char cvar; char *strval; int line_count; 
 
-#line 145 "y.tab.h" /* yacc.c:1909  */
+#line 147 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

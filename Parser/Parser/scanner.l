@@ -60,7 +60,7 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 {NEWLINE} {
 						line_count++;
-						printf("\nNew Line %d\n", line_count);
+						//printf("\nNew Line %d\n", line_count);
 						//
 
 //            return NEWLINE;
@@ -232,53 +232,45 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 							}
 
 
-"if"	{
-				printf("At line no: %d ",line_count);
-				//
-				return IF;
-			}
+"if"	 {	return IF;}
 
 "else"	{
-				printf("At line no: %d ",line_count);
+			//	printf("At line no: %d ",line_count);
 				//
 				return ELSE;
         }
 "for"	{
-				printf("At line no: %d ",line_count);
+				//printf("At line no: %d ",line_count);
 				//
 				return FOR;
         }
 "do"	{
-				printf("At line no: %d ",line_count);
+				//printf("At line no: %d ",line_count);
 				//
 				return DO;
       }
 "int"	{
-				printf("At line no: %d ",line_count);
+				//printf("At line no: %d ",line_count);
 				//
 			 return INT;
        }
 "float"	{
-					printf("At line no: %d ",line_count);
+					//printf("At line no: %d ",line_count);
 					//
 					return FLOAT;
           }
 "void"	{
-					printf("At line no: %d ",line_count);
+					//printf("At line no: %d ",line_count);
 					//
 					return VOID;
         }
 "switch"	{
-						printf("At line no: %d ",line_count);
-						//
 						return SWITCH;
           }
 "default"	{
-						//
 						return DEFAULT;
           }
 "while"	{
-					//
 					return WHILE;
           }
 "break"	{
@@ -302,12 +294,12 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 							//
 							return CONTINUE;
             }
-
+"println"	{return PRINTLN;}
 
 "+"|"-"   {yylval.cvar = *yytext; return ADDOP;}
 
-"*"|"/" { yylval.cvar =*yytext;cout<<"MULOP"<<endl;return MULOP;}
-"%" 		{ yylval.cvar =*yytext;cout<<"MULOP"<<endl;return MULOP;}
+"*"|"/" { yylval.cvar =*yytext;return MULOP;}
+"%" 		{ yylval.cvar =*yytext;return MULOP;}
 
 "("       { //printf("\nLPAREN lex\n");
 						//
@@ -328,15 +320,15 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 ";"	      {	return SEMICOLON;}
 "="				{	return ASSIGNOP;}
 "++"			{
-						printf("Line no %d: TOKEN <DECOP> Lexeme %s found\n\n",line_count,yytext);
+						//printf("Line no %d: TOKEN <DECOP> Lexeme %s found\n\n",line_count,yytext);
 						yylval.strval =strdup(yytext);
-						return DECOP;
+						return INCOP;
 					}
 
 "--"		{
-					printf("Line no %d: TOKEN <INCOP> Lexeme %s found\n\n",line_count,yytext);
+					//printf("Line no %d: TOKEN <INCOP> Lexeme %s found\n\n",line_count,yytext);
 					yylval.strval =strdup(yytext);
-					return INCOP;
+					return DECOP;
 				}
 
 "<"		|
@@ -351,7 +343,7 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 "!="	{
 
-			printf("Line no %d: TOKEN <RELOP> Lexeme %s found\n\n",line_count,yytext);
+			//printf("Line no %d: TOKEN <RELOP> Lexeme %s found\n\n",line_count,yytext);
 			yylval.strval =strdup(yytext);
 			//
 			return RELOP;
@@ -360,7 +352,7 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 "&&"		|
 
 "||"		{
-					printf("Line no %d: TOKEN <LOGICOP> Lexeme %s found\n\n",line_count,yytext);
+					//printf("Line no %d: TOKEN <LOGICOP> Lexeme %s found\n\n",line_count,yytext);
 					yylval.strval =strdup(yytext);
 					//
 					return LOGICOP;
@@ -441,13 +433,13 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 {DIGIT}+  {
 						/* sscanf(yytext,"%lf", &yylval); */
-						printf("INT %s\n\n",yytext);
+						//printf("INT %s\n\n",yytext);
 						yylval.ivar = atoi(yytext);
 						return CONST_INT;
 	         }
 
 {FLOAT}	{
-					printf("<CONST_FLOAT,%s>\n\n",yytext);
+					//printf("<CONST_FLOAT,%s>\n\n",yytext);
 					/* fprintf(logout,"Line no %d: TOKEN <CONST_FLOAT> Lexeme %s found\n\n",line_count,yytext); */
 					yylval.strval = yytext;
 					return CONST_FLOAT;
@@ -470,7 +462,7 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 {ID}  {
 				/* printf("Line %d : - %s", line_count , yytext); */
-				printf("At line no: %d - id %s\n",line_count,yytext);
+				//printf("At line no: %d - id %s\n",line_count,yytext);
       	yylval.strval =strdup(yytext);
 				//
         return ID;
