@@ -10,6 +10,7 @@ class SymbolInfo{
   string name;
   string type;
 public:
+  char * mystr;
   SymbolInfo *next;
   SymbolInfo(char * n , char *t){
     name = n;

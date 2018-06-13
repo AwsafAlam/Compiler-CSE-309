@@ -11,6 +11,8 @@
 /* #include "SymbolTable.h" */
 #include "y.tab.h"
 extern YYSTYPE yylval;
+extern FILE * error;
+extern FILE * logout;
 
 using namespace std;
 
@@ -60,10 +62,6 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 {NEWLINE} {
 						line_count++;
-						//printf("\nNew Line %d\n", line_count);
-						//
-
-//            return NEWLINE;
 					}
 {WHITESPACE}	{
 								//do nothing
@@ -245,13 +243,9 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 				return FOR;
         }
 "do"	{
-				//printf("At line no: %d ",line_count);
-				//
 				return DO;
       }
 "int"	{
-				//printf("At line no: %d ",line_count);
-				//
 			 return INT;
        }
 "float"	{
@@ -273,61 +267,40 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 "while"	{
 					return WHILE;
           }
-"break"	{
-					//
-					return BREAK;
-          }
-"char"	{
-					//
-					return CHAR;
-        }
-"double"	{
-						//
-						return DOUBLE;
-          }
+"break"	{	return BREAK;}
+"char"	{return CHAR;}
+"double"	{	return DOUBLE;}
 "return"	{	return RETURN;}
-"case"	{
-					//
-					return CASE;
-        }
-"continue"	{
-							//
-							return CONTINUE;
-            }
-"println"	{return PRINTLN;}
+"case"			{return CASE;}
+"continue"	{	return CONTINUE;}
+"println"	  {return PRINTLN;}
 
-"+"|"-"   {yylval.cvar = *yytext; return ADDOP;}
+"+"|"-"   {yylval.args.charvalue = *yytext; return ADDOP;}
 
-"*"|"/" { yylval.cvar =*yytext;return MULOP;}
-"%" 		{ yylval.cvar =*yytext;return MULOP;}
+"*"|"/" { yylval.args.charvalue =*yytext;return MULOP;}
+"%" 		{ yylval.args.charvalue =*yytext;return MULOP;}
 
-"("       { //printf("\nLPAREN lex\n");
-						//
- 						return LPAREN;
+"("       { return LPAREN;
 					}
-")"       { //printf("\nRPAREN lex\n");
-						return RPAREN;
+")"       { return RPAREN;
 					}
 "!"       { return NOT;}
-"{"	      { //printf("\n\nLCURL lex\n\n");
-						//
-						return LCURL;}
-"}"	      { //printf("RCURL lex\n");
-						return RCURL;}
-"["	      { return LTHIRD;}
-"]"	      { return RTHIRD;}
+"{"	      { return LCURL;}
+"}"	      { return RCURL;}
+"["	      { //fprintf(logout,"Found [ \n");
+						return LTHIRD;}
+"]"	      { //fprintf(logout,"Found ] in scanner\n");
+						return RTHIRD;}
 ","	      {	return COMMA;}
 ";"	      {	return SEMICOLON;}
 "="				{	return ASSIGNOP;}
 "++"			{
-						//printf("Line no %d: TOKEN <DECOP> Lexeme %s found\n\n",line_count,yytext);
-						yylval.strval =strdup(yytext);
+						yylval.args.mystr =strdup(yytext);
 						return INCOP;
 					}
 
 "--"		{
-					//printf("Line no %d: TOKEN <INCOP> Lexeme %s found\n\n",line_count,yytext);
-					yylval.strval =strdup(yytext);
+					yylval.args.mystr =strdup(yytext);
 					return DECOP;
 				}
 
@@ -342,19 +315,14 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 "=="		|
 
 "!="	{
-
-			//printf("Line no %d: TOKEN <RELOP> Lexeme %s found\n\n",line_count,yytext);
-			yylval.strval =strdup(yytext);
-			//
-			return RELOP;
-		}
+				yylval.args.mystr =strdup(yytext);
+				return RELOP;
+		  }
 
 "&&"		|
 
 "||"		{
-					//printf("Line no %d: TOKEN <LOGICOP> Lexeme %s found\n\n",line_count,yytext);
-					yylval.strval =strdup(yytext);
-					//
+					yylval.args.mystr =strdup(yytext);
 					return LOGICOP;
 				}
 
@@ -414,41 +382,38 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
               /* SymbolInfo *s= new  SymbolInfo(tmp, (char *)"CONST_CHAR");
               yylval = (YYSTYPE)s; */
 
-							yylval.strval =strdup(tmp);
+							yylval.args.mystr =strdup(tmp);
 			        return CONST_CHAR;
 					}
 
 {ERR_MULT_CHAR_CONSTANT}	{
 														error_count++;
 														printf("Error at line %d: Multi character constant error %s\n\n", line_count , yytext);
-														/* fprintf(logout,"Error at line %d: Multi character constant error %s\n\n", line_count , yytext); */
+														fprintf(error,"Error at line %d: Multi character constant error %s\n\n", line_count , yytext);
 													}
 
 {ERR_CHAR}		{
 									error_count++;
 									printf("Error at line %d: Unterminated character %s\n\n", line_count , yytext);
-									/* fprintf(logout,"Error at line %d: Unterminated character %s\n\n", line_count , yytext); */
+									fprintf(error,"Error at line %d: Unterminated character %s\n\n", line_count , yytext);
 							}
 
 
 {DIGIT}+  {
-						/* sscanf(yytext,"%lf", &yylval); */
-						//printf("INT %s\n\n",yytext);
-						yylval.ivar = atoi(yytext);
+						yylval.args.intvalue = atoi(yytext);
 						return CONST_INT;
 	         }
 
 {FLOAT}	{
-					//printf("<CONST_FLOAT,%s>\n\n",yytext);
-					/* fprintf(logout,"Line no %d: TOKEN <CONST_FLOAT> Lexeme %s found\n\n",line_count,yytext); */
-					yylval.strval = yytext;
+					/* yylval.args.mystr = yytext; */
+					yylval.args.floatvalue = atof(yytext);
 					return CONST_FLOAT;
         }
 
 {ERR_TOO_MANY_DECIMAL_PTS}	{
 																error_count++;
 																printf("Error at line %d: Too many decimal point  %s\n\n",line_count , yytext );
-																/* fprintf(logout,"Error at line %d: Too many decimal point  %s\n\n",line_count,yytext); */
+																fprintf(error,"Error at line %d: Too many decimal point  %s\n\n",line_count,yytext);
 
 														}
 
@@ -456,21 +421,18 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 {ERR_ILL_FORMED_NUMBER}		{
 															error_count++;
 															printf("Error at Line: %d Ill formed number %s\n\n", line_count , yytext);
-															/* fprintf(logout,"Error at Line: %d  Ill formed number %s\n\n", line_count , yytext); */
+															fprintf(error,"Error at Line: %d  Ill formed number %s\n\n", line_count , yytext);
 													}
 
 
 {ID}  {
-				/* printf("Line %d : - %s", line_count , yytext); */
-				//printf("At line no: %d - id %s\n",line_count,yytext);
-      	yylval.strval =strdup(yytext);
-				//
-        return ID;
+				yylval.args.mystr =strdup(yytext);
+				return ID;
       }
 
 {ERR_INVALID_ID}	{
 											error_count++;
 											printf("Error at line %d: Invalid prefix on ID or invalid suffix on Number %s\n\n",line_count , yytext );
-											/* fprintf(logout,"Error at line %d: Invalid prefix on ID or invalid suffix on Number %s\n\n",line_count , yytext ); */
+											fprintf(error,"Error at line %d: Invalid prefix on ID or invalid suffix on Number %s\n\n",line_count , yytext );
 
 									}

@@ -7,6 +7,11 @@
 
 using namespace std;
 extern FILE *logout;
+extern FILE *error;
+
+extern int error_count;
+extern int line_count;
+
 
 class ScopeTable
 {
@@ -16,9 +21,9 @@ public:
 	ScopeTable(int length = 0 , int num = 1);
 	~ScopeTable();
 	int hash(string key);
-  int Insert(string name , string type);
+  bool Insert(string name , string type);
   SymbolInfo* Lookup(string name );
-  void Delete(string name );
+  bool Delete(string name );
 
   int getCollision(){return collision;}
   void printHash();
@@ -77,12 +82,11 @@ int ScopeTable::hash(string key){
 
 }
 
-int ScopeTable::Insert(string name , string type )
+bool ScopeTable::Insert(string name , string type )
 {
     int position = 0;
     int index;
     index = hash(name);
-    // //cout<<name<<" "<<type<<endl;
 
    SymbolInfo *item;
    item = new SymbolInfo;
@@ -105,28 +109,27 @@ int ScopeTable::Insert(string name , string type )
    //Discarding repeating values
    while(head->next != NULL){
      if( head->next->getName() ==  name && head->next->getType() == type){
-        // //cout<<"<"<<name<<","<<type<<"> already exists in current ScopeTable#"<<scope<<endl;
-        return NULL_VALUE;
+        //cout<<"<"<<name<<","<<type<<"> already exists in current ScopeTable#"<<scope<<endl;
+        error_count++;
+        fprintf(error, "Error %d at Line %d: Multiple Declaration of %s\n\n",error_count,line_count,head->next->getName().c_str());
+        return false;
       }
       head = head->next;
 
-    }
-    head = array[index];
-
-        collision++;
-        while(head->next != NULL){
-            head = head->next;
-            position++;
-        }
-        head->next = item;
-        // //cout<<"Inserted in ScopeTable# "<<scope<<" at position ";
-        // //cout<<index<<", "<<position<<endl;
-
-
+      }
+      head = array[index];
+      collision++;
+      while(head->next != NULL){
+          head = head->next;
+          position++;
+      }
+      head->next = item;
+      // //cout<<"Inserted in ScopeTable# "<<scope<<" at position ";
+      // //cout<<index<<", "<<position<<endl;
    }
-  // printHash();
-//    //cout<<index<<" "<<collision<<endl;
-    return collision;
+   // printHash();
+   //cout<<index<<" "<<collision<<endl;
+    return true;
 }
 
 SymbolInfo* ScopeTable::Lookup(string name)
@@ -152,7 +155,7 @@ SymbolInfo* ScopeTable::Lookup(string name)
 
 }
 
-void ScopeTable::Delete(string name)
+bool ScopeTable::Delete(string name)
 {
     int position =0 ;
     int index;
@@ -163,7 +166,7 @@ void ScopeTable::Delete(string name)
 
     if(head->next == NULL){
       // //cout<<name<<" Not found"<<endl;
-      return;
+      return false;
     }
 
     while(head->next != NULL){
@@ -173,7 +176,7 @@ void ScopeTable::Delete(string name)
            //cout<<"Deleted entry <"<<temp->getName()<<" "<<temp->getType()<<" > at position "<<index<<" , "<<position<<endl;
             head->next = temp->next;
             free(temp);
-            return;
+            return true;
         }
 
         head = head->next;
@@ -197,7 +200,7 @@ void ScopeTable::Delete(string name)
     //   return;
     // }
 
-
+    return false;
 }
 
 ScopeTable::~ScopeTable()
@@ -312,15 +315,13 @@ bool SymbolTable::Insert(string name , string type) {
     EnterScope();
   }
   // //cout<<"I "<<name<<" "<<type<<endl;
-
-  CurrentScope->Insert(name , type);
-
+  return CurrentScope->Insert(name , type);
 }
 
 bool SymbolTable::Remove(string name) {
   /* code */
-  // //cout<<"D "<<name<<endl;
-    CurrentScope->Delete(name);
+    // //cout<<"D "<<name<<endl;
+    return CurrentScope->Delete(name);
 
 }
 
