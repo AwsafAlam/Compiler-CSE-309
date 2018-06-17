@@ -191,7 +191,7 @@ void yyerror(const char *s){
               symboltable->Insert($2.mystr , "ID","FUNCTION");
               SymbolInfo *sym = symboltable->Lookup($2.mystr);
               //cout<<sym->getName();
-              /* sym->setDataType($1.mystr); */
+              sym->setDataType($1.mystr);
             }
 
 
@@ -227,11 +227,11 @@ void yyerror(const char *s){
              else{
                symboltable->Insert($2.mystr , "ID","FUNCTION");
                SymbolInfo *sym = symboltable->Lookup($2.mystr);
-               //cout<<sym->getName();
-               /* sym->setDataType($1.mystr); */
+               cout<<sym->getName();
+               sym->setDataType($1.mystr);
              }
 
-             /* struct node * head = $4.arg_list;
+             struct node * head = $4.arg_list;
 
               while(head!= NULL){
                 cout<<head->name<<" - "<<head->d_type<<endl;
@@ -243,7 +243,7 @@ void yyerror(const char *s){
                 }
 
                 head = head->arg_list;
-              } */
+              }
 			 		}
 					;
 
@@ -990,6 +990,8 @@ void yyerror(const char *s){
               fprintf(error, "Error %d at Line %d: Undefined function %s\n\n",error_count , line_count, $1.mystr);
           }
           while(head!= NULL){
+            //cout<<"HAVE A LOOK\n";
+
             SymbolInfo* s = sym->getArgument();
             cout<<s->getName()<<"-"<<s->getType()<<endl;
 
@@ -1144,18 +1146,32 @@ void yyerror(const char *s){
 					}
 		      | logic_expression	{
 						fprintf(logout,"At line no: %d arguments : logic_expression\n\n",line_count);
-						$$ = $1;
 
-            struct node * item = (struct node *) malloc(1+sizeof(struct node));
-            //HAVE A LOOK
-            item->name = $1.mystr;
-             if(symboltable->Lookup($1.mystr) != NULL){
-              item->d_type = (char *) symboltable->Lookup($1.mystr)->getDataType().c_str();
+            //struct node * item = (struct node *) malloc(1+sizeof(struct node));
+            $$.arg_list  = (struct node *) malloc(1+sizeof(struct node));
+
+            $$.arg_list->name = $1.mystr;
+
+            if(symboltable->Lookup($1.mystr) != NULL){
+              $$.arg_list->d_type = (char *) symboltable->Lookup($1.mystr)->getDataType().c_str();
               //cout<<item->d_type<<" datatype \n";
             }
-            /* cout<<symboltable->Lookup($1.mystr)->getDataType().c_str()<<" <ARGUMENT>\n\n"; */
-            item->arg_list = NULL;
-            /* $$.arg_list = item; */
+            else{
+              if($1.floatvalue != NULL){
+                $$.arg_list->d_type = "float";
+              }
+              else if($1.intvalue != NULL){
+                $$.arg_list->d_type = "int";
+                //cout<<item->d_type<<" datatype \n";
+              }
+            }
+            // cout<<symboltable->Lookup($1.mystr)->getDataType().c_str()<<" <ARGUMENT>\n\n";
+            $$.arg_list->arg_list = NULL;
+
+            $$.mystr = $1.mystr;
+            $$.intvalue = $1.intvalue;
+            $$.floatvalue = $1.floatvalue;
+            $$.charvalue = $1.charvalue;
 
 						fprintf(logout,"%s \n\n",$1.mystr);
 
