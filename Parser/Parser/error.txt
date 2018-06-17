@@ -1,2 +1,4 @@
-Total Errors: 0
+Error 1 at Line 12: Too many arguments
+
+Total Errors: 1
 

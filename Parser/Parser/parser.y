@@ -1006,9 +1006,13 @@ void yyerror(const char *s){
               fprintf(error, "Error %d at Line %d: Undefined function %s\n\n",error_count , line_count, $1.mystr);
           }
           int arg_no = sym->getArgNumber();
-          while(head!= NULL && arg_no!= 0){
+          while(head!= NULL){
             //cout<<"HAVE A LOOK\n";
-
+            if(arg_no==0){
+              error_count ++;
+              fprintf(error, "Error %d at Line %d: Too many arguments\n\n",error_count , line_count);
+              break;
+            }
             SymbolInfo* s = sym->getArgument();
             cout<<s->getName()<<"-"<<s->getType()<<endl;
 

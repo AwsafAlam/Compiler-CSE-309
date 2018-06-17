@@ -1,6 +1,6 @@
 float mult(float, float b);
 
-int func(int){
+int func(){
 	return 20;
 }
 
