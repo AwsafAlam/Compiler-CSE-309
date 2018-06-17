@@ -8,9 +8,11 @@ int
 
 At line no: 1 parameter_list : type_specifier ID
 
+  New ScopeTable with id 1 created
+
 int a 
 
-  New ScopeTable with id 1 created
+  New ScopeTable with id 2 created
 
 At line no: 2 variable : ID
 
@@ -61,10 +63,14 @@ return a;
 
 } 
 
-ScopeTable # 1
+ScopeTable # 2
 ----------------------
 
-ScopeTable with id 1 removed
+ScopeTable # 1
+----------------------
+14 -->  <a : ID> 
+
+ScopeTable with id 2 removed
 
 At line no: 3 func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
 
@@ -118,7 +124,7 @@ At line no: 6 type_specifier:INT
 
 int  
 
-  New ScopeTable with id 2 created
+  New ScopeTable with id 3 created
 
 At line no: 7 type_specifier:INT
 
@@ -307,13 +313,18 @@ return 0;
 
 } 
 
-ScopeTable # 2
+ScopeTable # 3
 ----------------------
 14 -->  <a : ID> 
 22 -->  <i : ID> <ab : ID> 
 23 -->  <j : ID> 
 
-ScopeTable with id 2 removed
+ScopeTable # 1
+----------------------
+14 -->  <a : ID> 
+15 -->  <func : ID> 
+
+ScopeTable with id 3 removed
 
 At line no: 12 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
 

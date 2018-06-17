@@ -194,6 +194,7 @@ void yyerror(const char *s){
               /* sym->setDataType($1.mystr); */
             }
 
+
 					 }
 					 |type_specifier ID LPAREN parameter_list RPAREN compound_statement{
 
@@ -215,7 +216,34 @@ void yyerror(const char *s){
 						 $$.mystr = tmp2;
 						 fprintf(logout,"%s \n\n",tmp2);
 						 symboltable->Insert($2.mystr , "ID","FUNCTION");
+             SymbolInfo *s = symboltable->Lookup($2.mystr);
+             if(s != NULL){
+                 if(s->getDataType() != $1.mystr){
+                   error_count++;
+                   fprintf(error,"Error %d at line %d: Conflicting return-type for %s\n\n",error_count,line_count,$2.mystr);
 
+                 }
+             }
+             else{
+               symboltable->Insert($2.mystr , "ID","FUNCTION");
+               SymbolInfo *sym = symboltable->Lookup($2.mystr);
+               //cout<<sym->getName();
+               /* sym->setDataType($1.mystr); */
+             }
+
+             /* struct node * head = $4.arg_list;
+
+              while(head!= NULL){
+                cout<<head->name<<" - "<<head->d_type<<endl;
+                if(head->name == NULL){
+                  s->addArgument("" , head->d_type , "");
+                }
+                else{
+                  s->addArgument(head->name , head->d_type , "");
+                }
+
+                head = head->arg_list;
+              } */
 			 		}
 					;
 
@@ -231,12 +259,19 @@ void yyerror(const char *s){
               strcat(tmp2 , $3.mystr);
               strcat(tmp2 , $4.mystr);
 
-
+              symboltable->Insert($4.mystr , "ID","PARAMETER");
+              SymbolInfo *s = symboltable->Lookup($4.mystr);
+              s->setDataType($3.mystr);
 
               $$.mystr = tmp2;
-              fprintf(logout,"%s \n\n",tmp2);
-              //symboltable->EnterScope();
+              struct node * item = (struct node *) malloc(1+sizeof(struct node));
+              item->name = $4.mystr;
+              item->d_type = $3.mystr;
+              item->arg_list = $1.arg_list;
 
+              $$.arg_list = item;
+
+              fprintf(logout,"%s \n\n",tmp2);
             }
             | parameter_list COMMA type_specifier  {
 
@@ -249,9 +284,14 @@ void yyerror(const char *s){
               strcpy(tmp2 , $1.mystr);
               strcat(tmp2 , tmp);
               strcat(tmp2 , $3.mystr);
-
-
               $$.mystr = tmp2;
+              struct node * item = (struct node *) malloc(1+sizeof(struct node));
+              item->name = "";
+              item->d_type = $3.mystr;
+              item->arg_list = $1.arg_list;
+
+              $$.arg_list = item;
+
               fprintf(logout,"%s \n\n",tmp2);
 
             }
@@ -262,18 +302,31 @@ void yyerror(const char *s){
 
               strcpy(tmp2 , $1.mystr);
               strcat(tmp2 , $2.mystr);
-
+              symboltable->Insert($2.mystr , "ID","PARAM");
+              SymbolInfo *s = symboltable->Lookup($2.mystr);
+              s->setDataType($1.mystr);
 
               $$.mystr = tmp2;
               fprintf(logout,"%s \n\n",tmp2);
 
-
+              struct node * item = (struct node *) malloc(1+sizeof(struct node));
+              item->name = $2.mystr;
+              item->d_type = $1.mystr;
+              item->arg_list = NULL;
+              $$.arg_list = item;
 
             }
             | type_specifier  {
               fprintf(logout,"At line no: %d parameter_list : type_specifier\n\n",line_count);
               fprintf(logout,"%s \n\n",$1.mystr);
-              $$ = $1;
+              $$.mystr = $1.mystr;
+
+              struct node * item = (struct node *) malloc(1+sizeof(struct node));
+              item->name = "";
+              item->d_type = $1.mystr;
+              item->arg_list = NULL;
+
+              $$.arg_list = item;
             }
             ;
 
@@ -337,10 +390,13 @@ void yyerror(const char *s){
 				tmp2[0] = '\n';
 				strcat(tmp , tmp2);
 
+        for(int i=0 ; i< vec.size() ; i++){
+            symboltable->Lookup(vec[i])->setDataType($1.mystr);
+        }
 				fprintf(logout,"%s\n\n",tmp);
 				$$.mystr = tmp;
-				/* cout<<vec.size()<<endl; */
-
+				//cout<<"--- > "<<vec.size()<<endl;
+        vec.clear();
 			};
 
 			type_specifier	: INT {
@@ -352,7 +408,6 @@ void yyerror(const char *s){
 
 				char * tmp2 = (char *) malloc(1+strlen(tmp));
 				strcat(tmp2 , tmp);
-
 
 				$$.mystr = tmp2;
 				fprintf(logout,"%s \n\n",tmp2);
@@ -402,10 +457,8 @@ void yyerror(const char *s){
 
 						fprintf(logout,"%s\n\n",tmp);
 						$$.mystr = tmp;
-
+            vec.push_back($3.mystr);
 						symboltable->Insert($3.mystr , "ID","");
-
-						/* cout<<vec.size()<<endl; */
 
 					}
 		 		  | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD {
@@ -432,6 +485,7 @@ void yyerror(const char *s){
 						fprintf(logout,"%s\n\n",tmp);
 						$$.mystr = tmp;
             symboltable->Insert($3.mystr , "ID","ARRAY");
+            vec.push_back($3.mystr);
 
 					}
 		 		  | ID {
@@ -440,7 +494,15 @@ void yyerror(const char *s){
 						fprintf(logout,"%s\n\n",$1.mystr);
 
 						$$ = $1;
-						symboltable->Insert($$.mystr , "ID","");
+            if(symboltable->Lookup($$.mystr) != NULL){
+              error_count++;
+              fprintf(error, "Error %d at Line %d: Multiple declarations of the same variable: %s\n\n",error_count , line_count,$1.mystr);
+            }
+            else{
+              symboltable->Insert($$.mystr , "ID","");
+              vec.push_back($1.mystr);
+
+            }
 					}
 		 		  | ID LTHIRD CONST_INT RTHIRD {
 
@@ -460,7 +522,7 @@ void yyerror(const char *s){
 						tmp[0]=']';
 						strcat(tmp2 , tmp);
 
-
+            vec.push_back($1.mystr);
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
 						symboltable->Insert($1.mystr , "ID","ARRAY");
@@ -482,7 +544,6 @@ void yyerror(const char *s){
 
  						strcpy(tmp2 , $1.mystr);
  						strcat(tmp2 , $2.mystr);
-
 
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
@@ -528,7 +589,6 @@ void yyerror(const char *s){
  						strcat(tmp2 , tmp);
  						strcat(tmp2 , $7.mystr);
 
-
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
 
@@ -554,7 +614,6 @@ void yyerror(const char *s){
 						strcat(tmp2 , tmp);
 
  						strcat(tmp2 , $7.mystr);
-
 
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
@@ -689,8 +748,19 @@ void yyerror(const char *s){
               fprintf(logout,"At line no: %d variable : ID\n\n",line_count);
               $$ = $1;
               fprintf(logout,"%s\n\n",$1.mystr);
+              if(symboltable->Lookup($1.mystr) == NULL){
+                error_count++;
+                fprintf(error, "Error %d at Line %d: Undeclared Variable: %s\n\n",error_count , line_count,$1.mystr);
 
+              }
+              else if(symboltable->Lookup($1.mystr)->getDataStructure() == "ARRAY"){
+                error_count++;
+                fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
 
+              }
+              else{
+                  cout<<"Data types  "<<symboltable->Lookup($1.mystr)->getDataType()<<endl;
+              }
 
             }
            | ID LTHIRD expression RTHIRD	{
@@ -711,7 +781,11 @@ void yyerror(const char *s){
                fprintf(error, "Error %d at Line %d: Non-integer Array Index \n\n",error_count , line_count);
 
              }
+             if(symboltable->Lookup($1.mystr)->getDataStructure() == ""){
+                error_count++;
+                fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
 
+              }
                $$.mystr = tmp2;
                fprintf(logout,"%s \n\n",tmp2);
 
@@ -736,9 +810,15 @@ void yyerror(const char *s){
 						strcpy(tmp2 , $1.mystr);
 						strcat(tmp2 , tmp);
 						strcat(tmp2 , $3.mystr);
+            if(symboltable->Lookup($1.mystr) != NULL){
+              //cout<<" <> "<<$1.mystr<<" "<<symboltable->Lookup($1.mystr)->getDataType()<<" "<<symboltable->Lookup($1.mystr)->getDataStructure()<<endl;
+              if($3.floatvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "float"){
+                error_count++;
+                fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
 
-
-						$$.mystr = tmp2;
+              }
+            }
+          	$$.mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
 					}
 					;
@@ -746,7 +826,7 @@ void yyerror(const char *s){
 			logic_expression : rel_expression	{
 				 			fprintf(logout,"At line no: %d logic_expression : rel_expression\n\n",line_count);
 							$$ = $1;
-              $$.floatvalue = $1.floatvalue;
+              //$$.floatvalue = $1.floatvalue;
 
  						 fprintf(logout,"%s \n\n",$1.mystr);
 						}
@@ -769,7 +849,7 @@ void yyerror(const char *s){
 			rel_expression	: simple_expression	{
 							fprintf(logout,"At line no: %d rel_expression	: simple_expression\n\n",line_count);
 							$$ = $1;
-              $$.floatvalue = $1.floatvalue;
+              //$$.floatvalue = $1.floatvalue;
 
  						 fprintf(logout,"%s \n\n",$1.mystr);
 					}
@@ -834,7 +914,12 @@ void yyerror(const char *s){
 					 strcpy(tmp2 , $1.mystr);
 					 strcat(tmp2 , tmp);
 					 strcat(tmp2 , $3.mystr);
+           //HAVE A LOOK
+           if(($1.intvalue != NULL && $3.intvalue == NULL) || ($1.intvalue == NULL && $3.intvalue != NULL)){
+            error_count++;
+            fprintf(error, "Error %d at Line %d: Invalid operands to %s\n\n",error_count , line_count,tmp);
 
+          }
 
 					 $$.mystr = tmp2;
 					 fprintf(logout,"%s \n\n",tmp2);
@@ -851,7 +936,6 @@ void yyerror(const char *s){
 
 							strcat(tmp2 , tmp);
 							strcat(tmp2 , $2.mystr);
-
 
 							$$.mystr = tmp2;
 							fprintf(logout,"%s \n\n",tmp2);
@@ -874,12 +958,7 @@ void yyerror(const char *s){
 					 | factor	{
 						 fprintf(logout,"At line no: %d unary_expression : factor\n\n",line_count);
 						 $$ = $1;
-             $$.floatvalue = $1.floatvalue;
-
-             //cout<<$1.floatvalue<<" ---\n";
-             //cout<<$1.mystr<<" ---\n";
-
-						 fprintf(logout,"%s \n\n",$1.mystr);
+             fprintf(logout,"%s \n\n",$1.mystr);
 
 					 }
 					 ;
@@ -903,8 +982,28 @@ void yyerror(const char *s){
 					strcat(tmp2 , $3.mystr);
 					tmp[0] = ')';
 					strcat(tmp2 , tmp);
+          SymbolInfo* sym = symboltable->Lookup($1.mystr);
 
+          struct node * head = $3.arg_list;
+          if(symboltable->Lookup($1.mystr) == NULL){
+              error_count ++;
+              fprintf(error, "Error %d at Line %d: Undefined function %s\n\n",error_count , line_count, $1.mystr);
+          }
+          while(head!= NULL){
+            SymbolInfo* s = sym->getArgument();
+            cout<<s->getName()<<"-"<<s->getType()<<endl;
 
+            if(symboltable->Lookup(head->name) != NULL){
+              if(symboltable->Lookup(head->name)->getDataType() != s->getType()){
+                error_count ++;
+                fprintf(error, "Error %d at Line %d: Wrong type of parameters\n\n",error_count , line_count);
+              }
+            }
+            /* cout<<head->d_type<<"-"<<symboltable->Lookup(head->name)->getDataType()<<" -- matches -- "; */
+
+          //  s->addArgument(head->name , head->d_type , "");
+            head = head->arg_list;
+          }
 					$$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
 
@@ -936,9 +1035,12 @@ void yyerror(const char *s){
 					char * tmp2 = (char *) malloc(1+strlen(tmp));
 
 					strcat(tmp2 , tmp);
-
-
-					$$.mystr = tmp2;
+          $$.floatvalue = NULL;
+          $$.intvalue = $1.intvalue;
+          $$.charvalue =  NULL;
+          $$.arg_list = NULL;
+	        $$.mystr = tmp2;
+          $$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
 
 				}
@@ -961,6 +1063,8 @@ void yyerror(const char *s){
 					strcpy(tmp2 , str);
 					/* $$ = $1; */
           $$.floatvalue = $1.floatvalue;
+          $$.intvalue = NULL;
+          $$.charvalue =  NULL;
           $$.mystr = tmp2;
           free(str);
 
@@ -1003,6 +1107,11 @@ void yyerror(const char *s){
 						$$ = $1;
 						fprintf(logout,"%s \n\n",$1.mystr);
 
+            /* struct node * head = $1.arg_list;
+            while(head!= NULL){
+              cout<<head->d_type<<"-"<<head->name<<" -- matches -- \n";
+              head = head->arg_list;
+            } */
 					}
 				  |	{
 						fprintf(logout,"At line no: %d argument_list :\n\n",line_count);
