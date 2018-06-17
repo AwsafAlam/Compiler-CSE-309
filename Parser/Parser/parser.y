@@ -10,7 +10,6 @@
 
 using namespace std;
 
-/* int yyparse(void); */
 int yylex(void);
 extern FILE *yyin;
 extern int line_count;
@@ -38,17 +37,12 @@ void yyerror(const char *s){
         char charvalue;
         int intvalue;
         float floatvalue;
-        double doublevalue;
-        struct node * next;
+        char * name;
+        char * d_type;
+        struct node * arg_list;
     };
 }
 %union {
-  double dval;
-  float fval;
-  int ivar;
-  char cvar;
-  char *strval;
-  int line_count;
   struct node args;
 }
 
@@ -69,7 +63,7 @@ void yyerror(const char *s){
 			start : program
 				{
 					fprintf(logout,"At line no: %d start : program\n\n",line_count);
-					$$.mystr = $1.mystr;
+					$$ = $1;
 					fprintf(logout,"%s\n\n",$1.mystr);
           fprintf(error,"Total Errors: %d\n\n",error_count);
 
@@ -87,7 +81,6 @@ void yyerror(const char *s){
 					strcat(tmp , tmp2);
 					strcat(tmp , $2.mystr);
 
-					vec.push_back(tmp);
 					$$.mystr = tmp;
 					fprintf(logout,"%s \n\n",tmp);
 
@@ -95,7 +88,7 @@ void yyerror(const char *s){
 				}
 				| unit	{
 					fprintf(logout,"At line no: %d program : | unit\n\n",line_count);
-					$$.mystr = $1.mystr;
+					$$ = $1;
 					fprintf(logout,"%s\n\n",$1.mystr);
 
 				}
@@ -103,18 +96,18 @@ void yyerror(const char *s){
 
 			unit : var_declaration	{
 						fprintf(logout,"At line no: %d unit : var_declaration\n\n",line_count);
-						$$.mystr = $1.mystr;
+						$$ = $1;
 						fprintf(logout,"%s\n\n",$1.mystr);
 
 					 }
 			     | func_declaration		  {
 						 fprintf(logout,"At line no: %d unit : func_declaration\n\n",line_count);
-						 $$.mystr = $1.mystr;
+						 $$ = $1;
 						 fprintf(logout,"%s \n\n",$1.mystr);
 					 }
 			     | func_definition	{
 						 fprintf(logout,"At line no: %d unit : func_definition\n\n",line_count);
-						 $$.mystr = $1.mystr;
+						 $$ = $1;
 						 fprintf(logout,"%s \n\n",$1.mystr);
 
 					 }
@@ -138,10 +131,11 @@ void yyerror(const char *s){
                tmp[0] = ';';
                strcat(tmp2 , tmp);
 
-
-               vec.push_back(tmp2);
                $$.mystr = tmp2;
                fprintf(logout,"%s \n\n",tmp2);
+               symboltable->Insert($2.mystr , "ID","FUNCTION");
+               SymbolInfo *s = symboltable->Lookup($2.mystr);
+               s->setDataType($1.mystr);
 
              }
              | type_specifier ID LPAREN RPAREN SEMICOLON	{
@@ -160,16 +154,16 @@ void yyerror(const char *s){
                tmp[0] = ';';
                strcat(tmp2 , tmp);
 
-
-               vec.push_back(tmp2);
                $$.mystr = tmp2;
                fprintf(logout,"%s \n\n",tmp2);
                symboltable->Insert($2.mystr , "ID", "FUNCTION");
+               SymbolInfo *s = symboltable->Lookup($2.mystr);
+               s->setDataType($1.mystr);
              }
              ;
 
 			 func_definition : type_specifier ID LPAREN RPAREN compound_statement {
-				 		 fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN  RPAREN compound_statement\n\n",line_count);
+				 		fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN  RPAREN compound_statement\n\n",line_count);
 						char tmp[2];
  						tmp[0]='(';tmp[1]='\0';
 
@@ -182,10 +176,24 @@ void yyerror(const char *s){
  						strcat(tmp2 , tmp);
  						strcat(tmp2 , $5.mystr);
 
- 						vec.push_back(tmp2);
+
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
-						symboltable->Insert($2.mystr , "ID","FUNCTION");
+            SymbolInfo *s = symboltable->Lookup($2.mystr);
+            if(s != NULL){
+                if(s->getDataType() != $1.mystr){
+                  error_count++;
+                  fprintf(error,"Error %d at line %d: Conflicting return-type for %s\n\n",error_count,line_count,$2.mystr);
+
+                }
+            }
+            else{
+              symboltable->Insert($2.mystr , "ID","FUNCTION");
+              SymbolInfo *sym = symboltable->Lookup($2.mystr);
+              //cout<<sym->getName();
+              /* sym->setDataType($1.mystr); */
+            }
+
 					 }
 					 |type_specifier ID LPAREN parameter_list RPAREN compound_statement{
 
@@ -203,7 +211,7 @@ void yyerror(const char *s){
 						 strcat(tmp2 , tmp);
 						 strcat(tmp2 , $6.mystr);
 
-						 vec.push_back(tmp2);
+
 						 $$.mystr = tmp2;
 						 fprintf(logout,"%s \n\n",tmp2);
 						 symboltable->Insert($2.mystr , "ID","FUNCTION");
@@ -224,7 +232,7 @@ void yyerror(const char *s){
               strcat(tmp2 , $4.mystr);
 
 
-              vec.push_back(tmp2);
+
               $$.mystr = tmp2;
               fprintf(logout,"%s \n\n",tmp2);
               //symboltable->EnterScope();
@@ -242,7 +250,7 @@ void yyerror(const char *s){
               strcat(tmp2 , tmp);
               strcat(tmp2 , $3.mystr);
 
-              vec.push_back(tmp2);
+
               $$.mystr = tmp2;
               fprintf(logout,"%s \n\n",tmp2);
 
@@ -255,17 +263,17 @@ void yyerror(const char *s){
               strcpy(tmp2 , $1.mystr);
               strcat(tmp2 , $2.mystr);
 
-              vec.push_back(tmp2);
+
               $$.mystr = tmp2;
               fprintf(logout,"%s \n\n",tmp2);
 
-              vec.push_back($2.mystr);
+
 
             }
             | type_specifier  {
               fprintf(logout,"At line no: %d parameter_list : type_specifier\n\n",line_count);
               fprintf(logout,"%s \n\n",$1.mystr);
-              $$.mystr = $1.mystr;
+              $$ = $1;
             }
             ;
 
@@ -286,7 +294,7 @@ void yyerror(const char *s){
 							tmp[0] = '}';
 							strcat(tmp2 , tmp);
 
-							vec.push_back(tmp2);
+
 							$$.mystr = tmp2;
 							fprintf(logout,"%s \n\n",tmp2);
 							symboltable->PrintAllScopes();
@@ -308,7 +316,7 @@ void yyerror(const char *s){
 							 tmp[0] = '}';
 							 strcat(tmp2 , tmp);
 
-							 vec.push_back(tmp2);
+
 							 $$.mystr = tmp2;
 							 fprintf(logout,"%s \n\n",tmp2);
                symboltable->PrintAllScopes();
@@ -345,7 +353,7 @@ void yyerror(const char *s){
 				char * tmp2 = (char *) malloc(1+strlen(tmp));
 				strcat(tmp2 , tmp);
 
-				vec.push_back(tmp2);
+
 				$$.mystr = tmp2;
 				fprintf(logout,"%s \n\n",tmp2);
 
@@ -360,7 +368,7 @@ void yyerror(const char *s){
 					char * tmp2 = (char *) malloc(1+strlen(tmp));
 					strcat(tmp2 , tmp);
 
-					vec.push_back(tmp2);
+
 					$$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
 
@@ -374,7 +382,7 @@ void yyerror(const char *s){
 					char * tmp2 = (char *) malloc(1+strlen(tmp));
 					strcat(tmp2 , tmp);
 
-					vec.push_back(tmp2);
+
 					$$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
 				}
@@ -394,7 +402,7 @@ void yyerror(const char *s){
 
 						fprintf(logout,"%s\n\n",tmp);
 						$$.mystr = tmp;
-						vec.push_back($3.mystr);
+
 						symboltable->Insert($3.mystr , "ID","");
 
 						/* cout<<vec.size()<<endl; */
@@ -430,8 +438,8 @@ void yyerror(const char *s){
 
 						fprintf(logout,"At line no: %d declaration_list : ID\n\n",line_count);
 						fprintf(logout,"%s\n\n",$1.mystr);
-						vec.push_back($1.mystr);
-						$$.mystr = $1.mystr;
+
+						$$ = $1;
 						symboltable->Insert($$.mystr , "ID","");
 					}
 		 		  | ID LTHIRD CONST_INT RTHIRD {
@@ -452,7 +460,7 @@ void yyerror(const char *s){
 						tmp[0]=']';
 						strcat(tmp2 , tmp);
 
- 						vec.push_back(tmp2);
+
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
 						symboltable->Insert($1.mystr , "ID","ARRAY");
@@ -463,7 +471,7 @@ void yyerror(const char *s){
 			statements : statement {
 						//
 						fprintf(logout,"At line no: %d statements : statement \n\n",line_count);
-						$$.mystr = $1.mystr;
+						$$ = $1;
 						fprintf(logout,"%s \n\n",$1.mystr);
 
 					 }
@@ -475,7 +483,7 @@ void yyerror(const char *s){
  						strcpy(tmp2 , $1.mystr);
  						strcat(tmp2 , $2.mystr);
 
- 						vec.push_back(tmp2);
+
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
 
@@ -484,19 +492,19 @@ void yyerror(const char *s){
 
 			statement : var_declaration	{
 					fprintf(logout,"At line no: %d statement : var_declaration\n\n",line_count);
-						$$.mystr = $1.mystr;
+						$$ = $1;
 						fprintf(logout,"%s \n\n",$1.mystr);
 
 					}
 					| expression_statement	{
 						 fprintf(logout,"At line no: %d statement : expression_statement\n\n",line_count);
-						 $$.mystr = $1.mystr;
+						 $$ = $1;
  						fprintf(logout,"%s \n\n",$1.mystr);
 
 					 }
 				  | compound_statement	{
 						fprintf(logout,"At line no: %d statement : compound_statement\n\n",line_count);
-						$$.mystr = $1.mystr;
+						$$ = $1;
 						fprintf(logout,"%s \n\n",$1.mystr);
 
 					}
@@ -520,7 +528,7 @@ void yyerror(const char *s){
  						strcat(tmp2 , tmp);
  						strcat(tmp2 , $7.mystr);
 
- 						vec.push_back(tmp2);
+
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
 
@@ -547,7 +555,7 @@ void yyerror(const char *s){
 
  						strcat(tmp2 , $7.mystr);
 
- 						vec.push_back(tmp2);
+
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
 
@@ -569,7 +577,7 @@ void yyerror(const char *s){
 
 							strcat(tmp2 , $5.mystr);
 
-							vec.push_back(tmp2);
+
 							$$.mystr = tmp2;
 							fprintf(logout,"%s \n\n",tmp2);
 
@@ -590,7 +598,7 @@ void yyerror(const char *s){
  						strcat(tmp2 , tmp);
 						strcat(tmp2 , $5.mystr);
 
- 						vec.push_back(tmp2);
+
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
 
@@ -614,7 +622,7 @@ void yyerror(const char *s){
 						tmp[0] = '\n';
  						strcat(tmp2 , tmp);
 
- 						vec.push_back(tmp2);
+
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
 
@@ -634,7 +642,7 @@ void yyerror(const char *s){
 						tmp[0]='\n';tmp[1]='\0';
 						strcat(tmp2 , tmp);
 
-						vec.push_back(tmp2);
+
 						$$.mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
 					}
@@ -651,7 +659,7 @@ void yyerror(const char *s){
               tmp[0]='\n';tmp[1]='\0';
               strcpy(tmp2 , tmp);
 
-              vec.push_back(tmp2);
+
               $$.mystr = tmp2;
               fprintf(logout,"%s \n\n",tmp2);
 
@@ -669,7 +677,7 @@ void yyerror(const char *s){
               tmp[0]='\n';tmp[1]='\0';
               strcat(tmp2 , tmp);
 
-              vec.push_back(tmp2);
+
               $$.mystr = tmp2;
               fprintf(logout,"%s \n\n",tmp2);
 
@@ -679,10 +687,10 @@ void yyerror(const char *s){
           variable : ID	{
               //symboltable->Insert($1.mystr , "ID");
               fprintf(logout,"At line no: %d variable : ID\n\n",line_count);
-              $$.mystr = $1.mystr;
+              $$ = $1;
               fprintf(logout,"%s\n\n",$1.mystr);
 
-              vec.push_back($1.mystr);
+
 
             }
            | ID LTHIRD expression RTHIRD	{
@@ -703,7 +711,7 @@ void yyerror(const char *s){
                fprintf(error, "Error %d at Line %d: Non-integer Array Index \n\n",error_count , line_count);
 
              }
-               vec.push_back(tmp2);
+
                $$.mystr = tmp2;
                fprintf(logout,"%s \n\n",tmp2);
 
@@ -712,7 +720,7 @@ void yyerror(const char *s){
 
 			expression : logic_expression	{
 						fprintf(logout,"At line no: %d expression : logic_expression\n\n",line_count);
-						$$.mystr = $1.mystr;
+						$$ = $1;
             $$.floatvalue = $1.floatvalue;
 
 						fprintf(logout,"%s \n\n",$1.mystr);
@@ -729,7 +737,7 @@ void yyerror(const char *s){
 						strcat(tmp2 , tmp);
 						strcat(tmp2 , $3.mystr);
 
-						vec.push_back(tmp2);
+
 						$$.mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
 					}
@@ -737,7 +745,7 @@ void yyerror(const char *s){
 
 			logic_expression : rel_expression	{
 				 			fprintf(logout,"At line no: %d logic_expression : rel_expression\n\n",line_count);
-							$$.mystr = $1.mystr;
+							$$ = $1;
               $$.floatvalue = $1.floatvalue;
 
  						 fprintf(logout,"%s \n\n",$1.mystr);
@@ -752,7 +760,7 @@ void yyerror(const char *s){
  						strcat(tmp2 , $2.mystr);
  						strcat(tmp2 , $3.mystr);
 
- 						vec.push_back(tmp2);
+
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
 					 }
@@ -760,7 +768,7 @@ void yyerror(const char *s){
 
 			rel_expression	: simple_expression	{
 							fprintf(logout,"At line no: %d rel_expression	: simple_expression\n\n",line_count);
-							$$.mystr = $1.mystr;
+							$$ = $1;
               $$.floatvalue = $1.floatvalue;
 
  						 fprintf(logout,"%s \n\n",$1.mystr);
@@ -775,7 +783,7 @@ void yyerror(const char *s){
 						strcat(tmp2 , $2.mystr);
 						strcat(tmp2 , $3.mystr);
 
-						vec.push_back(tmp2);
+
 						$$.mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
 
@@ -784,7 +792,7 @@ void yyerror(const char *s){
 
 			simple_expression : term {
 						fprintf(logout,"At line no: %d simple_expression : term\n\n",line_count);
-						$$.mystr = $1.mystr;
+						$$ = $1;
             $$.floatvalue = $1.floatvalue;
 
             fprintf(logout,"%s \n\n",$1.mystr);
@@ -802,7 +810,7 @@ void yyerror(const char *s){
 						strcat(tmp2 , tmp);
 						strcat(tmp2 , $3.mystr);
 
-						vec.push_back(tmp2);
+
 						$$.mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
 					}
@@ -810,7 +818,7 @@ void yyerror(const char *s){
 
 			term :	unary_expression	{
 						fprintf(logout,"At line no: %d term :	unary_expression\n\n",line_count);
-						$$.mystr = $1.mystr;
+						$$ = $1;
             $$.floatvalue = $1.floatvalue;
             fprintf(logout,"%s \n\n",$$.mystr);
 
@@ -827,7 +835,7 @@ void yyerror(const char *s){
 					 strcat(tmp2 , tmp);
 					 strcat(tmp2 , $3.mystr);
 
-					 vec.push_back(tmp2);
+
 					 $$.mystr = tmp2;
 					 fprintf(logout,"%s \n\n",tmp2);
 				 }
@@ -844,7 +852,7 @@ void yyerror(const char *s){
 							strcat(tmp2 , tmp);
 							strcat(tmp2 , $2.mystr);
 
-							vec.push_back(tmp2);
+
 							$$.mystr = tmp2;
 							fprintf(logout,"%s \n\n",tmp2);
 					}
@@ -859,13 +867,13 @@ void yyerror(const char *s){
  						strcat(tmp2 , tmp);
  						strcat(tmp2 , $2.mystr);
 
- 						vec.push_back(tmp2);
+
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
 					 }
 					 | factor	{
 						 fprintf(logout,"At line no: %d unary_expression : factor\n\n",line_count);
-						 $$.mystr = $1.mystr;
+						 $$ = $1;
              $$.floatvalue = $1.floatvalue;
 
              //cout<<$1.floatvalue<<" ---\n";
@@ -878,7 +886,7 @@ void yyerror(const char *s){
 
 			factor	: variable	{
 					fprintf(logout,"At line no: %d factor	: variable\n\n",line_count);
-					$$.mystr = $1.mystr;
+					$$ = $1;
 					fprintf(logout,"%s \n\n",$1.mystr);
 
 				}
@@ -896,7 +904,7 @@ void yyerror(const char *s){
 					tmp[0] = ')';
 					strcat(tmp2 , tmp);
 
-					vec.push_back(tmp2);
+
 					$$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
 
@@ -914,7 +922,7 @@ void yyerror(const char *s){
 					tmp[0] = ')';
 					strcat(tmp2 , tmp);
 
-					vec.push_back(tmp2);
+
 					$$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
 
@@ -929,7 +937,7 @@ void yyerror(const char *s){
 
 					strcat(tmp2 , tmp);
 
-					vec.push_back(tmp2);
+
 					$$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
 
@@ -951,7 +959,7 @@ void yyerror(const char *s){
           char * tmp2 = (char *) malloc(1+strlen(str));
 
 					strcpy(tmp2 , str);
-					/* $$.mystr = $1.mystr; */
+					/* $$ = $1; */
           $$.floatvalue = $1.floatvalue;
           $$.mystr = tmp2;
           free(str);
@@ -967,7 +975,7 @@ void yyerror(const char *s){
 					strcpy(tmp2 , $1.mystr);
 					strcat(tmp2 , tmp);
 
-					vec.push_back(tmp2);
+
 					$$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
 
@@ -983,7 +991,7 @@ void yyerror(const char *s){
 					strcpy(tmp2 , $1.mystr);
 					strcat(tmp2 , tmp);
 
-					vec.push_back(tmp2);
+
 					$$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
 
@@ -992,7 +1000,7 @@ void yyerror(const char *s){
 
 			argument_list : arguments	{
 						fprintf(logout,"At line no: %d argument_list : arguments\n\n",line_count);
-						$$.mystr = $1.mystr;
+						$$ = $1;
 						fprintf(logout,"%s \n\n",$1.mystr);
 
 					}
@@ -1012,14 +1020,14 @@ void yyerror(const char *s){
 						strcat(tmp2 , tmp);
 						strcat(tmp2 , $3.mystr);
 
-						vec.push_back(tmp2);
+
 						$$.mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
 
 					}
 		      | logic_expression	{
 						fprintf(logout,"At line no: %d arguments : logic_expression\n\n",line_count);
-						$$.mystr = $1.mystr;
+						$$ = $1;
 						fprintf(logout,"%s \n\n",$1.mystr);
 
 					}

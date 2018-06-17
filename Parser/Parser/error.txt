@@ -1,6 +1,2 @@
-Error 1 at Line 6: Multiple Declaration of c
-
-Error 2 at Line 7: Non-integer Array Index 
-
-Total Errors: 2
+Total Errors: 0
 
