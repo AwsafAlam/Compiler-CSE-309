@@ -21,7 +21,7 @@ public:
 	ScopeTable(int length = 0 , int num = 1);
 	~ScopeTable();
 	int hash(string key);
-  bool Insert(string name , string type);
+  bool Insert(string name , string type,string datastructure);
   SymbolInfo* Lookup(string name );
   bool Delete(string name );
 
@@ -39,6 +39,9 @@ ScopeTable::ScopeTable(int len , int num)
         array[i] = new SymbolInfo;
         array[i]->setName("");
         array[i]->setType("");
+        array[i]->setDataType("");
+        array[i]->setDataStructure("");
+
         // array[i]->index = 0;
         array[i]->next = NULL;
     }
@@ -82,7 +85,7 @@ int ScopeTable::hash(string key){
 
 }
 
-bool ScopeTable::Insert(string name , string type )
+bool ScopeTable::Insert(string name , string type ,string datastructure)
 {
     int position = 0;
     int index;
@@ -92,6 +95,7 @@ bool ScopeTable::Insert(string name , string type )
    item = new SymbolInfo;
    item->setName(name);
    item->setType(type);
+   item->setDataStructure(datastructure);
    // item->index = index;
    item->next = NULL;
 
@@ -228,7 +232,7 @@ public:
 	~SymbolTable();
   void EnterScope();
   void ExitScope();
-  bool Insert(string name ,string type);
+  bool Insert(string name ,string type,string datastructure);
   bool Remove(string name);
   SymbolInfo * Lookup(string name);
   void PrintCurrentScope();
@@ -289,7 +293,7 @@ void SymbolTable::ExitScope() {
   fprintf(logout, "ScopeTable with id %d removed\n\n",scopeNumber);
       struct ScopeNode *temp, *pre ;
       temp = head ; //Delete First Element
-      scopeNumber--;
+      //scopeNumber--;
 
     if (temp == tail) //has only one node
   	{
@@ -309,13 +313,13 @@ void SymbolTable::ExitScope() {
 
 }
 
-bool SymbolTable::Insert(string name , string type) {
+bool SymbolTable::Insert(string name , string type, string datastructure) {
   /* code */
   if(CurrentScope == NULL ){
     EnterScope();
   }
   // //cout<<"I "<<name<<" "<<type<<endl;
-  return CurrentScope->Insert(name , type);
+  return CurrentScope->Insert(name , type , datastructure);
 }
 
 bool SymbolTable::Remove(string name) {
@@ -344,7 +348,7 @@ SymbolInfo * SymbolTable::Lookup(string name) {
   }
 
   //cout<<"  Not found"<<endl;
-
+  return NULL;
 }
 
 void SymbolTable::PrintCurrentScope() {

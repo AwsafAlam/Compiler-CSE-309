@@ -40,7 +40,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 37 "parser.y" /* yacc.c:1909  */
+#line 35 "parser.y" /* yacc.c:1909  */
 
     struct node {
         char * mystr;
@@ -153,7 +153,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 47 "parser.y" /* yacc.c:1909  */
+#line 45 "parser.y" /* yacc.c:1909  */
 
   double dval;
   float fval;

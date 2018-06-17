@@ -1,4 +1,4 @@
-int func(int a){
+int func(int){
 	return a;
 }
 

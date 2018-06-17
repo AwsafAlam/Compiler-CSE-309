@@ -8,7 +8,6 @@
 #include<stdlib.h>
 #include <stdio.h>
 #include <string.h>
-/* #include "SymbolTable.h" */
 #include "y.tab.h"
 extern YYSTYPE yylval;
 extern FILE * error;
@@ -16,7 +15,6 @@ extern FILE * logout;
 
 using namespace std;
 
-/* extern SymbolTable *symboltable; */
 void yyerror(char *);
 
 int line_count=1;
@@ -24,15 +22,14 @@ int error_count=0;
 char chr[1000];
 int chr_COUNT  = 0;
 
-/* FILE *log; */
-
 %}
 
 
 
-WHITESPACE [ \t\f\r\v]+
 LETTER [a-zA-Z]
+WHITESPACE [ \t\f\r\v]+
 DIGIT [0-9]
+
 NUMBER [-]?{DIGIT}+(\.{DIGIT}+)?
 
 ID [a-zA-Z_][a-zA-Z0-9_]*
@@ -69,11 +66,10 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 \" {
 		BEGIN STR;
-		printf("STR started at --\n %s",yytext);
+		//printf("STR started at -- %s\n",yytext);
 	}
 
 <STR>.	{
-			printf("%s", yytext);
 			chr[chr_COUNT] = yytext[0];
 
 			int j = chr_COUNT-1;
@@ -104,16 +100,14 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 				chr_COUNT++;
 
-			// printf("<STRING,%s>",tmp);
-
 	}
 
 <STR>\n	{
-					printf("Terminate\n");
+					//printf("Terminate\n");
 					line_count++;
 					error_count++;
-					printf("Error at line %d: Unterminated string ", line_count );
-					printf("Error at line %d: Unterminated string ", line_count );
+					fprintf(error ,"Error %d at line %d: Unterminated string ",error_count, line_count );
+					//printf("Error at line %d: Unterminated string ", line_count );
 					chr[chr_COUNT] = '\0';
 
 					int j =0 ;
@@ -123,20 +117,17 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 						j++;
 					}
 					chr_COUNT = 0;
-					printf("\n\n");
-					printf("\n\n");
 
 					BEGIN INITIAL;
 				}
-<STR>\\\n	{
+<STR>\\\n		{
 										BEGIN STR;
-										printf("%s <--> ", yytext);
-								}
+						}
 
 <STR>[^\\\n]\"	{
-										printf("%s --Ending\n",yytext);
+										//printf("%s --Ending\n",yytext);
 										printf("Line No. %d: Token <STRING> Lexeme ",line_count);
-										printf("Line No. %d: Token <STRING> Lexeme ",line_count);
+										//printf("Line No. %d: Token <STRING> Lexeme ",line_count);
 										chr[chr_COUNT] = '\0';
 										int j =0 ;
 										while(chr[j]!= '\0'){
@@ -145,9 +136,7 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 											j++;
 										}
 										chr_COUNT = 0;
-										printf("\n\n");
-										printf("\n\n");
-										printf("<STRING,%s>",chr);
+										printf("<STRING,%s>\n",chr);
 										BEGIN INITIAL;
 									}
 
@@ -167,7 +156,6 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 								chr[chr_COUNT] = '/';
 								chr[chr_COUNT+1] = '\0';
 								chr_COUNT= 0;
-								printf("Line %d: Token <COMMENT> Lexeme ",line_count );
 								printf("Line %d: Token <COMMENT> Lexeme ",line_count);
 
 								int j =0 ;
@@ -177,9 +165,6 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 									j++;
 								}
 								chr_COUNT = 0;
-								printf("\n\n");
-								printf("\n\n");
-
 
 								BEGIN INITIAL;
 							}
@@ -201,8 +186,7 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 <MYSTATE><<EOF>>	{
 										error_count++;
 										chr[chr_COUNT] = '\0';
-										printf("Error at line %d: Unterminated chr ",line_count );
-										printf("Error at line %d: Unterminated chr ",line_count);
+										fprintf(error , "Error %d at line %d: Unterminated character ",error_count,line_count);
 										int j =0 ;
 										while(chr[j]!= '\0'){
 											printf("%c", chr[j]);
@@ -210,87 +194,51 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 											j++;
 										}
 										chr_COUNT = 0;
-										printf("\n\n");
-										printf("\n\n");
-
 										BEGIN INITIAL;
 
 									}
 
 {SINGLE_MULTI_COMMENT}		{
-															// printf("SIngle--Muiltiline--Comment in line %s\n", yytext);
 															printf("Line no %d: TOKEN <COMMENT> Lexeme %s found\n\n",line_count,yytext);
 
 													}
 
 {SINGLE_COMMENT}		{
-									// printf("Comment in line %s\n", yytext);
 									printf("Line no %d: TOKEN <COMMENT> Lexeme %s found\n\n",line_count,yytext);
 
 							}
 
 
-"if"	 {	return IF;}
-
-"else"	{
-			//	printf("At line no: %d ",line_count);
-				//
-				return ELSE;
-        }
-"for"	{
-				//printf("At line no: %d ",line_count);
-				//
-				return FOR;
-        }
-"do"	{
-				return DO;
-      }
-"int"	{
-			 return INT;
-       }
-"float"	{
-					//printf("At line no: %d ",line_count);
-					//
-					return FLOAT;
-          }
-"void"	{
-					//printf("At line no: %d ",line_count);
-					//
-					return VOID;
-        }
-"switch"	{
-						return SWITCH;
-          }
-"default"	{
-						return DEFAULT;
-          }
-"while"	{
-					return WHILE;
-          }
+"if"	 {return IF;}
+"else"	{return ELSE;}
+"for"	{return FOR;}
+"do"	{return DO;}
+"int"	{return INT;}
+"float"	{	return FLOAT;}
+"void"	{return VOID;}
+"switch"	{	return SWITCH;}
+"default"	{return DEFAULT;}
+"while"	{	return WHILE;}
 "break"	{	return BREAK;}
 "char"	{return CHAR;}
 "double"	{	return DOUBLE;}
 "return"	{	return RETURN;}
-"case"			{return CASE;}
+"case"		{return CASE;}
 "continue"	{	return CONTINUE;}
 "println"	  {return PRINTLN;}
 
 "+"|"-"   {yylval.args.charvalue = *yytext; return ADDOP;}
 
-"*"|"/" { yylval.args.charvalue =*yytext;return MULOP;}
-"%" 		{ yylval.args.charvalue =*yytext;return MULOP;}
+"*"|"/"   {yylval.args.charvalue =*yytext;return MULOP;}
+"%" 		  {yylval.args.charvalue =*yytext;return MULOP;}
 
-"("       { return LPAREN;
-					}
-")"       { return RPAREN;
-					}
+"("       { return LPAREN;}
+")"       { return RPAREN;}
 "!"       { return NOT;}
 "{"	      { return LCURL;}
 "}"	      { return RCURL;}
-"["	      { //fprintf(logout,"Found [ \n");
-						return LTHIRD;}
-"]"	      { //fprintf(logout,"Found ] in scanner\n");
-						return RTHIRD;}
+"["	      { return LTHIRD;}
+"]"	      { return RTHIRD;}
 ","	      {	return COMMA;}
 ";"	      {	return SEMICOLON;}
 "="				{	return ASSIGNOP;}
@@ -306,39 +254,32 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 "<"		|
 
-"<="		|
+"<="	|
 
 ">"		|
 
-">="		|
+">="	|
 
-"=="		|
+"=="	|
 
 "!="	{
 				yylval.args.mystr =strdup(yytext);
 				return RELOP;
 		  }
 
-"&&"		|
+"&&"	|
 
-"||"		{
-					yylval.args.mystr =strdup(yytext);
-					return LOGICOP;
-				}
-
+"||"	{
+				yylval.args.mystr =strdup(yytext);
+				return LOGICOP;
+			}
 
 {ERR_EMPTY_CHAR}	{
 										error_count++;
-										printf("Error at line %d: Empty character constant error %s\n\n", line_count , yytext);
-										/* fprintf(logout,"Error at line %d: Empty character constant error %s\n\n", line_count , yytext); */
-
+										fprintf(error ,"Error %d at line %d: Empty character constant error %s\n\n",error_count, line_count , yytext);
 										}
 
 {CHAR}		{
-							// printf("CharACTER found %s\n",yytext );
-							/* fprintf(logout,"Line no %d: TOKEN <CONST_CHAR> Lexeme %s found\n\n",line_count,yytext); */
-							/* symboltable.Insert(yytext , "CONST_CHAR"); */
-
 							char tmp[2];
 							if (yytext[3] != '\0') {
 								if(yytext[2]=='n'){
@@ -378,10 +319,6 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 							else{
 								tmp[0] = yytext[1];
 							}
-							/* fprintf(tokenout,"<CONST_CHAR,%s>",tmp); */
-              /* SymbolInfo *s= new  SymbolInfo(tmp, (char *)"CONST_CHAR");
-              yylval = (YYSTYPE)s; */
-
 							yylval.args.mystr =strdup(tmp);
 			        return CONST_CHAR;
 					}

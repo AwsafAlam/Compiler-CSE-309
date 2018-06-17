@@ -6,7 +6,6 @@
 #include<cmath>
 #include<vector>
 #include "SymbolTable.h"
-/* #include "SymbolInfo.h" */
 /* #define YYSTYPE double      /* yyparse() stack type */
 
 using namespace std;
@@ -21,7 +20,6 @@ vector<char *> vec;
  FILE * logout = fopen("log.txt","w");
  FILE *error= fopen("error.txt","w");
 SymbolTable * symboltable = new SymbolTable(30);
-//int line_count=0;
 
 void yyerror(const char *s){
 	fprintf(logout,"At line no: %d  %s\n",line_count,s);
@@ -166,7 +164,7 @@ void yyerror(const char *s){
                vec.push_back(tmp2);
                $$.mystr = tmp2;
                fprintf(logout,"%s \n\n",tmp2);
-               symboltable->Insert($2.mystr , "ID");
+               symboltable->Insert($2.mystr , "ID", "FUNCTION");
              }
              ;
 
@@ -187,7 +185,7 @@ void yyerror(const char *s){
  						vec.push_back(tmp2);
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
-						symboltable->Insert($2.mystr , "ID");
+						symboltable->Insert($2.mystr , "ID","FUNCTION");
 					 }
 					 |type_specifier ID LPAREN parameter_list RPAREN compound_statement{
 
@@ -208,7 +206,7 @@ void yyerror(const char *s){
 						 vec.push_back(tmp2);
 						 $$.mystr = tmp2;
 						 fprintf(logout,"%s \n\n",tmp2);
-						 symboltable->Insert($2.mystr , "ID");
+						 symboltable->Insert($2.mystr , "ID","FUNCTION");
 
 			 		}
 					;
@@ -397,7 +395,7 @@ void yyerror(const char *s){
 						fprintf(logout,"%s\n\n",tmp);
 						$$.mystr = tmp;
 						vec.push_back($3.mystr);
-						symboltable->Insert($3.mystr , "ID");
+						symboltable->Insert($3.mystr , "ID","");
 
 						/* cout<<vec.size()<<endl; */
 
@@ -425,7 +423,7 @@ void yyerror(const char *s){
 
 						fprintf(logout,"%s\n\n",tmp);
 						$$.mystr = tmp;
-            symboltable->Insert($3.mystr , "ID");
+            symboltable->Insert($3.mystr , "ID","ARRAY");
 
 					}
 		 		  | ID {
@@ -434,7 +432,7 @@ void yyerror(const char *s){
 						fprintf(logout,"%s\n\n",$1.mystr);
 						vec.push_back($1.mystr);
 						$$.mystr = $1.mystr;
-						symboltable->Insert($$.mystr , "ID");
+						symboltable->Insert($$.mystr , "ID","");
 					}
 		 		  | ID LTHIRD CONST_INT RTHIRD {
 
@@ -457,7 +455,7 @@ void yyerror(const char *s){
  						vec.push_back(tmp2);
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
-						symboltable->Insert($1.mystr , "ID");
+						symboltable->Insert($1.mystr , "ID","ARRAY");
 
 					 }
 		 		  ;

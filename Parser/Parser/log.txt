@@ -6,9 +6,9 @@ At line no: 1 type_specifier:INT
 
 int  
 
-At line no: 1 parameter_list : type_specifier ID
+At line no: 1 parameter_list : type_specifier
 
-int a 
+int  
 
   New ScopeTable with id 1 created
 
@@ -68,21 +68,21 @@ ScopeTable with id 1 removed
 
 At line no: 3 func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
 
-int func(int a){
+int func(int ){
 return a;
 
 } 
 
 At line no: 3 unit : func_definition
 
-int func(int a){
+int func(int ){
 return a;
 
 } 
 
 At line no: 3 program : | unit
 
-int func(int a){
+int func(int ){
 return a;
 
 }
@@ -91,7 +91,7 @@ At line no: 5 type_specifier:INT
 
 int  
 
-  New ScopeTable with id 1 created
+  New ScopeTable with id 2 created
 
 At line no: 6 type_specifier:INT
 
@@ -594,14 +594,14 @@ return 0;
 
 } 
 
-ScopeTable # 1
+ScopeTable # 2
 ----------------------
 14 -->  <a : ID> 
 16 -->  <c : ID> 
 22 -->  <i : ID> 
 23 -->  <j : ID> 
 
-ScopeTable with id 1 removed
+ScopeTable with id 2 removed
 
 At line no: 14 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
 
@@ -635,7 +635,7 @@ return 0;
 
 At line no: 14 program : program unit
 
-int func(int a){
+int func(int ){
 return a;
 
 }
@@ -654,7 +654,7 @@ return 0;
 
 At line no: 15 start : program
 
-int func(int a){
+int func(int ){
 return a;
 
 }

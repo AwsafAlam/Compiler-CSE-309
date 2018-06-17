@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fstream>
+#include <vector>
 #define NULL_VALUE -999999
 #define LEN 10000
 
@@ -9,8 +10,11 @@ using namespace std;
 class SymbolInfo{
   string name;
   string type;
+  string datatype;
+  string datastructure;
+  vector<SymbolInfo *> argument_list;
 public:
-  char * mystr;
+  //char * mystr;
   SymbolInfo *next;
   SymbolInfo(char * n , char *t){
     name = n;
@@ -19,6 +23,27 @@ public:
   SymbolInfo(){};
   void setName(string n){name = n;}
   void setType(string t){type = t;}
+  void setDataType(string d){datatype = d;}
+  void setDataStructure(string ds){datastructure = ds;}
+  void addArgument(string name, string type, string datastructure){
+    SymbolInfo *item;
+    item = new SymbolInfo;
+    item->setName(name);
+    item->setType(type);
+    item->setDataStructure(datastructure);
+    // item->index = index;
+    item->next = NULL;
+
+    argument_list.push_back(item);
+  }
+
   string getName(){return name;}
   string getType(){return type;}
+  string getDataType(){return datatype;}
+  string getDataStructure(){return datastructure;}
+  SymbolInfo * getArgument(){
+    SymbolInfo * tmp = argument_list.front();
+    argument_list.erase(argument_list.begin());
+    return tmp;
+  }
 };
