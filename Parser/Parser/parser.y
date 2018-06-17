@@ -137,6 +137,20 @@ void yyerror(const char *s){
                SymbolInfo *s = symboltable->Lookup($2.mystr);
                s->setDataType($1.mystr);
 
+               struct node * head = $4.arg_list;
+
+                while(head!= NULL){
+                  if(head->name == NULL){
+                    s->addArgument("" , head->d_type , "");
+                  }
+                  else{
+                    cout<<head->name<<" - "<<head->d_type<<endl;
+                    s->addArgument(head->name , head->d_type , "");
+                  }
+
+                  head = head->arg_list;
+                }
+
              }
              | type_specifier ID LPAREN RPAREN SEMICOLON	{
 
@@ -179,9 +193,9 @@ void yyerror(const char *s){
 
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
-            SymbolInfo *s = symboltable->Lookup($2.mystr);
-            if(s != NULL){
-                if(s->getDataType() != $1.mystr){
+            SymbolInfo *s;
+            if(symboltable->Lookup($2.mystr) != NULL){
+                if(symboltable->Lookup($2.mystr)->getDataType() != $1.mystr){
                   error_count++;
                   fprintf(error,"Error %d at line %d: Conflicting return-type for %s\n\n",error_count,line_count,$2.mystr);
 
@@ -189,9 +203,9 @@ void yyerror(const char *s){
             }
             else{
               symboltable->Insert($2.mystr , "ID","FUNCTION");
-              SymbolInfo *sym = symboltable->Lookup($2.mystr);
-              //cout<<sym->getName();
-              sym->setDataType($1.mystr);
+              s = symboltable->Lookup($2.mystr);
+              cout<<s->getName();
+              s->setDataType($1.mystr);
             }
 
 
@@ -236,7 +250,7 @@ void yyerror(const char *s){
              struct node * head = $4.arg_list;
 
               while(head!= NULL){
-                cout<<head->name<<" - "<<head->d_type<<endl;
+                //cout<<head->name<<" - "<<head->d_type<<endl;
                 if(head->name == NULL){
                   s->addArgument("" , head->d_type , "");
                 }
@@ -761,7 +775,7 @@ void yyerror(const char *s){
 
               }
               else{
-                  cout<<"Data types  "<<symboltable->Lookup($1.mystr)->getDataType()<<endl;
+                  cout<<"\n-->"<<symboltable->Lookup($1.mystr)->getName()<<" Data types  "<<symboltable->Lookup($1.mystr)->getDataType()<<endl;
               }
 
             }
@@ -991,7 +1005,8 @@ void yyerror(const char *s){
               error_count ++;
               fprintf(error, "Error %d at Line %d: Undefined function %s\n\n",error_count , line_count, $1.mystr);
           }
-          while(head!= NULL){
+          int arg_no = sym->getArgNumber();
+          while(head!= NULL && arg_no!= 0){
             //cout<<"HAVE A LOOK\n";
 
             SymbolInfo* s = sym->getArgument();
@@ -1004,9 +1019,8 @@ void yyerror(const char *s){
               }
             }
             /* cout<<head->d_type<<"-"<<symboltable->Lookup(head->name)->getDataType()<<" -- matches -- "; */
-
-          //  s->addArgument(head->name , head->d_type , "");
             head = head->arg_list;
+            arg_no--;
           }
 					$$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);

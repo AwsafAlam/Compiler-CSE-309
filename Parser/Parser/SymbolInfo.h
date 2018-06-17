@@ -44,6 +44,8 @@ public:
   SymbolInfo * getArgument(){
     SymbolInfo * tmp = argument_list.front();
     argument_list.erase(argument_list.begin());
+    argument_list.push_back(tmp);
     return tmp;
   }
+  int getArgNumber(){return argument_list.size();}
 };

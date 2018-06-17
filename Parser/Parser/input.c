@@ -1,5 +1,7 @@
-int func(int a){
-	return a;
+float mult(float, float b);
+
+int func(int){
+	return 20;
 }
 
 float a;
