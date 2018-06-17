@@ -1129,6 +1129,14 @@ void yyerror(const char *s){
 						strcat(tmp2 , tmp);
 						strcat(tmp2 , $3.mystr);
 
+            struct node * item = (struct node *) malloc(1+sizeof(struct node));
+            item->name = $3.mystr;
+            if(symboltable->Lookup($3.mystr) != NULL){
+              item->d_type = (char *) symboltable->Lookup($3.mystr)->getDataType().c_str();
+            }
+            item->arg_list = $1.arg_list;
+            /* cout<<symboltable->Lookup($1.mystr)->getDataType().c_str()<<" <ARGUMENT>\n\n"; */
+            $$.arg_list = item;
 
 						$$.mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
@@ -1137,6 +1145,18 @@ void yyerror(const char *s){
 		      | logic_expression	{
 						fprintf(logout,"At line no: %d arguments : logic_expression\n\n",line_count);
 						$$ = $1;
+
+            struct node * item = (struct node *) malloc(1+sizeof(struct node));
+            //HAVE A LOOK
+            item->name = $1.mystr;
+             if(symboltable->Lookup($1.mystr) != NULL){
+              item->d_type = (char *) symboltable->Lookup($1.mystr)->getDataType().c_str();
+              //cout<<item->d_type<<" datatype \n";
+            }
+            /* cout<<symboltable->Lookup($1.mystr)->getDataType().c_str()<<" <ARGUMENT>\n\n"; */
+            item->arg_list = NULL;
+            /* $$.arg_list = item; */
+
 						fprintf(logout,"%s \n\n",$1.mystr);
 
 					}

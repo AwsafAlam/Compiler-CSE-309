@@ -566,7 +566,7 @@ static const yytype_uint16 yyrline[] =
      554,   560,   566,   572,   596,   622,   644,   665,   689,   710,
      726,   746,   766,   795,   802,   826,   833,   849,   856,   873,
      881,   899,   906,   929,   943,   958,   966,   972,  1011,  1029,
-    1047,  1072,  1087,  1105,  1116,  1121,  1137
+    1047,  1072,  1087,  1105,  1116,  1121,  1145
 };
 #endif
 
@@ -2767,27 +2767,47 @@ yyreduce:
 						strcat(tmp2 , tmp);
 						strcat(tmp2 , (yyvsp[0].args).mystr);
 
+            struct node * item = (struct node *) malloc(1+sizeof(struct node));
+            item->name = (yyvsp[0].args).mystr;
+            if(symboltable->Lookup((yyvsp[0].args).mystr) != NULL){
+              item->d_type = (char *) symboltable->Lookup((yyvsp[0].args).mystr)->getDataType().c_str();
+            }
+            item->arg_list = (yyvsp[-2].args).arg_list;
+            /* cout<<symboltable->Lookup($1.mystr)->getDataType().c_str()<<" <ARGUMENT>\n\n"; */
+            (yyval.args).arg_list = item;
 
 						(yyval.args).mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
 
 					}
-#line 2776 "y.tab.c" /* yacc.c:1646  */
+#line 2784 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 1137 "parser.y" /* yacc.c:1646  */
+#line 1145 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d arguments : logic_expression\n\n",line_count);
 						(yyval.args) = (yyvsp[0].args);
+
+            struct node * item = (struct node *) malloc(1+sizeof(struct node));
+            //HAVE A LOOK
+            item->name = (yyvsp[0].args).mystr;
+             if(symboltable->Lookup((yyvsp[0].args).mystr) != NULL){
+              item->d_type = (char *) symboltable->Lookup((yyvsp[0].args).mystr)->getDataType().c_str();
+              //cout<<item->d_type<<" datatype \n";
+            }
+            /* cout<<symboltable->Lookup($1.mystr)->getDataType().c_str()<<" <ARGUMENT>\n\n"; */
+            item->arg_list = NULL;
+            /* $$.arg_list = item; */
+
 						fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 
 					}
-#line 2787 "y.tab.c" /* yacc.c:1646  */
+#line 2807 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2791 "y.tab.c" /* yacc.c:1646  */
+#line 2811 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -3015,7 +3035,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 1145 "parser.y" /* yacc.c:1906  */
+#line 1165 "parser.y" /* yacc.c:1906  */
 
 int main(int argc,char *argv[])
 {

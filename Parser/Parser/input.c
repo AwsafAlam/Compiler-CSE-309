@@ -7,6 +7,6 @@ int main(){
 	int a[2],i,j ;
 	float ab;
 
-	ab = func(9);
+	ab = func(j);
 	return 0;
 }

@@ -185,81 +185,85 @@ At line no: 10 variable : ID
 
 ab
 
-At line no: 10 factor : CONST_INT
+At line no: 10 variable : ID
 
-9 
+j
+
+At line no: 10 factor	: variable
+
+j 
 
 At line no: 10 unary_expression : factor
 
-9 
+j 
 
 At line no: 10 term :	unary_expression
 
-9 
+j 
 
 At line no: 10 simple_expression : term
 
-9 
+j 
 
 At line no: 10 rel_expression	: simple_expression
 
-9 
+j 
 
 At line no: 10 logic_expression : rel_expression
 
-9 
+j 
 
 At line no: 10 arguments : logic_expression
 
-9 
+j 
 
 At line no: 10 argument_list : arguments
 
-9 
+j 
 
 At line no: 10 factor	: ID LPAREN argument_list RPAREN
 
-func(9) 
+func(j) 
 
 At line no: 10 unary_expression : factor
 
-func(9) 
+func(j) 
 
 At line no: 10 term :	unary_expression
 
-func(9) 
+func(j) 
 
 At line no: 10 simple_expression : term
 
-func(9) 
+func(j) 
 
 At line no: 10 rel_expression	: simple_expression
 
-func(9) 
+func(j) 
 
 At line no: 10 logic_expression : rel_expression
 
-func(9) 
+func(j) 
 
 At line no: 10 expression : variable ASSIGNOP logic_expression
 
-ab=func(9) 
+ab=func(j) 
 
 At line no: 10 expression_statement 	: expression SEMICOLON
 
-ab=func(9);
+ab=func(j);
  
 
 At line no: 10 statement : expression_statement
 
-ab=func(9);
+ab=func(j);
  
 
 At line no: 10 statements :| statements statement 
 
 int a[2],i,j;
 float ab;
-ab=func(9);
+ab=func(j);
  
 
 At line no: 11 factor : CONST_INT
@@ -299,7 +303,7 @@ At line no: 11 statements :| statements statement
 
 int a[2],i,j;
 float ab;
-ab=func(9);
+ab=func(j);
 return 0;
  
 
@@ -308,7 +312,7 @@ At line no: 12 compound_statement : LCURL statements RCURL
 {
 int a[2],i,j;
 float ab;
-ab=func(9);
+ab=func(j);
 return 0;
 
 } 
@@ -331,7 +335,7 @@ At line no: 12 func_definition : type_specifier ID LPAREN  RPAREN compound_state
 int main(){
 int a[2],i,j;
 float ab;
-ab=func(9);
+ab=func(j);
 return 0;
 
 } 
@@ -341,7 +345,7 @@ At line no: 12 unit : func_definition
 int main(){
 int a[2],i,j;
 float ab;
-ab=func(9);
+ab=func(j);
 return 0;
 
 } 
@@ -357,7 +361,7 @@ float a;
 int main(){
 int a[2],i,j;
 float ab;
-ab=func(9);
+ab=func(j);
 return 0;
 
 } 
@@ -373,7 +377,7 @@ float a;
 int main(){
 int a[2],i,j;
 float ab;
-ab=func(9);
+ab=func(j);
 return 0;
 
 }
