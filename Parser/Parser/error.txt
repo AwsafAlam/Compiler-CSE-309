@@ -1,6 +1,4 @@
-Error 1 at line 3: Conflicting return-type for func
+Error 1 at Line 5: Multiple declarations of the same variable: a
 
-Error 2 at Line 5: Multiple declarations of the same variable: a
-
-Total Errors: 2
+Total Errors: 1
 

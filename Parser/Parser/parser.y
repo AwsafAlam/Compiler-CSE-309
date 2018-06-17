@@ -215,10 +215,10 @@ void yyerror(const char *s){
 
 						 $$.mystr = tmp2;
 						 fprintf(logout,"%s \n\n",tmp2);
-						 symboltable->Insert($2.mystr , "ID","FUNCTION");
-             SymbolInfo *s = symboltable->Lookup($2.mystr);
-             if(s != NULL){
-                 if(s->getDataType() != $1.mystr){
+             //SymbolInfo *s = symboltable->Lookup($2.mystr);
+             SymbolInfo *s;
+             if(symboltable->Lookup($2.mystr)!= NULL){
+                 if(symboltable->Lookup($2.mystr)->getDataType() != $1.mystr){
                    error_count++;
                    fprintf(error,"Error %d at line %d: Conflicting return-type for %s\n\n",error_count,line_count,$2.mystr);
 
@@ -226,9 +226,11 @@ void yyerror(const char *s){
              }
              else{
                symboltable->Insert($2.mystr , "ID","FUNCTION");
-               SymbolInfo *sym = symboltable->Lookup($2.mystr);
-               cout<<sym->getName();
-               sym->setDataType($1.mystr);
+               //SymbolInfo *sym = symboltable->Lookup($2.mystr);
+               s = symboltable->Lookup($2.mystr);
+
+               cout<<s->getName();
+               s->setDataType($1.mystr);
              }
 
              struct node * head = $4.arg_list;
