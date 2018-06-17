@@ -275,7 +275,7 @@ void yyerror(const char *s){
               strcat(tmp2 , $3.mystr);
               strcat(tmp2 , $4.mystr);
 
-              symboltable->Insert($4.mystr , "ID","PARAMETER");
+              symboltable->Insert($4.mystr , "ID","PARAM");
               SymbolInfo *s = symboltable->Lookup($4.mystr);
               s->setDataType($3.mystr);
 
@@ -510,8 +510,11 @@ void yyerror(const char *s){
 						fprintf(logout,"%s\n\n",$1.mystr);
 
 						$$ = $1;
-            if(symboltable->Lookup($$.mystr) != NULL){
+            SymbolInfo *s = symboltable->Lookup($1.mystr);
+            //HAVE A LOOK
+            if(s != NULL && s->getDataStructure().c_str() != "PARAM"){
               error_count++;
+              cout<<endl<<s->getDataStructure().c_str();
               fprintf(error, "Error %d at Line %d: Multiple declarations of the same variable: %s\n\n",error_count , line_count,$1.mystr);
             }
             else{

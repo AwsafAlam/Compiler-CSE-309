@@ -1,10 +1,11 @@
 float mult(float, float b);
 
-int func(){
+int func(float aff){
 	return 20;
 }
 
-float a;
+float aff;
+
 int main(){
 	int a[2],i,j ;
 	float ab;
