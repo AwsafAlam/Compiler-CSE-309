@@ -15,6 +15,7 @@ extern FILE *yyin;
 extern int line_count;
 extern int error_count;
 vector<char *> vec;
+string storedatatype;
 
  FILE * logout = fopen("log.txt","w");
  FILE *error= fopen("error.txt","w");
@@ -257,7 +258,10 @@ void yyerror(const char *s){
 						 $$.mystr = tmp2;
 						 fprintf(logout,"%s \n\n",tmp2);
              //SymbolInfo *s = symboltable->Lookup($2.mystr);
-
+             if(storedatatype != "" && storedatatype != $1.mystr){
+               fprintf(error,"Warning at line %d: Return type does not match\n\n",line_count);
+               storedatatype = "";
+             }
              int flag = 1;
              SymbolInfo *s;
              if(symboltable->Lookup($2.mystr)!= NULL){
@@ -789,9 +793,52 @@ void yyerror(const char *s){
 						tmp[0]='\n';tmp[1]='\0';
 						strcat(tmp2 , tmp);
 
-
 						$$.mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
+
+            int flag = 1;
+
+            if(symboltable->Lookup($2.mystr) == NULL){
+              if(strchr($2.mystr, '[')!= NULL){
+                char *tmp = $2.mystr;
+                int i = 0;
+                while(tmp[i] != '['){
+                  //cout<<tmp[i]<<endl;
+                  i++;
+                }
+                $2.mystr[i] = '\0';
+                if(symboltable->Lookup($2.mystr) == NULL){
+                  ////cout<<endl<<i<<" -- HELOE\n";
+                  flag = 0;
+                }
+
+              }
+              else if(strchr($2.mystr, '(')!= NULL){
+                char *tmp = $2.mystr;
+                int i = 0;
+                while(tmp[i] != '('){
+                  //cout<<tmp[i]<<endl;
+                  i++;
+                }
+                $2.mystr[i] = '\0';
+                if(symboltable->Lookup($2.mystr) == NULL){
+                  ////cout<<endl<<i<<" -- HELOE\n";
+                  flag = 0;
+                }
+
+              }
+              else{
+                flag = 0;
+              }
+            }
+
+
+            if(flag==1){
+              SymbolInfo *s = symboltable->Lookup($2.mystr);
+              storedatatype = s->getDataType();
+              //cout<<"\n stored -"<<storedatatype<<endl;
+            }
+
 					}
 				  ;
 
@@ -870,8 +917,52 @@ void yyerror(const char *s){
              if($3.floatvalue != NULL){
                error_count++;
                fprintf(error, "Error %d at Line %d: Non-integer Array Index \n\n",error_count , line_count);
-
              }
+             int flag = 1;
+             if(symboltable->Lookup($3.mystr) == NULL){
+               if(strchr($3.mystr, '[')!= NULL){
+                 char *tmp = $3.mystr;
+                 int i = 0;
+                 while(tmp[i] != '['){
+                   //cout<<tmp[i]<<endl;
+                   i++;
+                 }
+                 $3.mystr[i] = '\0';
+                 if(symboltable->Lookup($3.mystr) == NULL){
+                   ////cout<<endl<<i<<" -- HELOE\n";
+                   flag = 0;
+                 }
+
+               }
+               else if(strchr($3.mystr, '(')!= NULL){
+                 char *tmp = $3.mystr;
+                 int i = 0;
+                 while(tmp[i] != '('){
+                   //cout<<tmp[i]<<endl;
+                   i++;
+                 }
+                 $3.mystr[i] = '\0';
+                 if(symboltable->Lookup($3.mystr) == NULL){
+                   ////cout<<endl<<i<<" -- HELOE\n";
+                   flag = 0;
+                 }
+
+               }
+               else{
+                 flag = 0;
+               }
+             }
+             if(flag == 1){
+               SymbolInfo *s= symboltable->Lookup($3.mystr);
+               if(s!=NULL ){
+                 //cout<<s->getDataType()<<"-- <>\n";
+                 if(s->getDataType() != "int "){
+                   error_count++;
+                   fprintf(error, "Error %d at Line %d: Non-integer Array Index \n\n",error_count , line_count);
+                 }
+               }
+             }
+
              if(symboltable->Lookup($1.mystr)->getDataStructure() == ""){
                 error_count++;
                 fprintf(error, "Error %d at Line %d: %s value is not an array\n\n",error_count , line_count,$1.mystr);
@@ -961,14 +1052,18 @@ void yyerror(const char *s){
 
               SymbolInfo *sym = symboltable->Lookup($1.mystr);
               SymbolInfo *sym2 = symboltable->Lookup($3.mystr);
-
-              if($3.intvalue == NULL && $3.floatvalue == NULL){
+              //cout<<"\n func datatype -> "<<sym2->getDataType().c_str()<<"--";
+              if(!strcmp(sym2->getDataType().c_str(), "void ")){
+                error_count++;
+                fprintf(error, "Error %d at Line %d: void cannot be part of an expression\n\n",error_count , line_count);
+              }
+              else if($3.intvalue == NULL && $3.floatvalue == NULL){
                 if(sym->getDataType() != sym2->getDataType()){
                   error_count++;
                   fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
-
                 }
               }
+            }
               ////cout<<"\n  -- sth"<<$3.floatvalue<<endl;
               if($3.floatvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "float"){
                 error_count++;
@@ -980,12 +1075,8 @@ void yyerror(const char *s){
                 fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
 
               }
-            }
-            else{
-                //cout<<"Flag set to 0\n";
-            }
 
-          	$$.mystr = tmp2;
+            $$.mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
 
 					}
@@ -1085,7 +1176,7 @@ void yyerror(const char *s){
            //HAVE A LOOK
            if(($1.intvalue != NULL && $3.intvalue == NULL) || ($1.intvalue == NULL && $3.intvalue != NULL)){
             error_count++;
-            fprintf(error, "Error %d at Line %d: Invalid operands to %s\n\n",error_count , line_count,tmp);
+            fprintf(error, "Error %d at Line %d: Invalid operands to %s both should be integer\n\n",error_count , line_count,tmp);
 
           }
 

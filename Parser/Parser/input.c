@@ -1,20 +1,19 @@
 int func(int aff);
-int func(int aff);
 
-int func(int a,int b){
+int func(int a){
 	a=2;
+	float abx;
+	return abx;
 }
 
-int func(float a){
-	a=2;
-}
 
 float aff;
 
 int main(){
 	int a[25],i,j ;
 	float ab;
-	func(9);
- 	a[i] = ab;
+	j = 3.5;
+	ab = func(9);
+ 	//a[ab] = i;
 	return 0;
 }
