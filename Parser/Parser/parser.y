@@ -134,23 +134,31 @@ void yyerror(const char *s){
 
                $$.mystr = tmp2;
                fprintf(logout,"%s \n\n",tmp2);
-               symboltable->Insert($2.mystr , "ID","FUNCTION");
-               SymbolInfo *s = symboltable->Lookup($2.mystr);
-               s->setDataType($1.mystr);
+               if(symboltable->Lookup($2.mystr) != NULL){
+                  error_count++;
+                 fprintf(error,"Error %d at line %d: Multiple declaration of %s\n\n",error_count,line_count,$2.mystr);
 
-               struct node * head = $4.arg_list;
+               }
+               else{
+                 symboltable->Insert($2.mystr , "ID","FUNCTION.DEC");
+                 SymbolInfo *s = symboltable->Lookup($2.mystr);
+                 s->setDataType($1.mystr);
 
-                while(head!= NULL){
-                  if(head->name == NULL){
-                    s->addArgument("" , head->d_type , "");
+                 struct node * head = $4.arg_list;
+
+                  while(head!= NULL){
+                    if(head->name == NULL){
+                      s->addArgument("" , head->d_type , "");
+                    }
+                    else{
+                      ////cout<<head->name<<" - "<<head->d_type<<endl;
+                      s->addArgument(head->name , head->d_type , "");
+                    }
+
+                    head = head->arg_list;
                   }
-                  else{
-                    ////cout<<head->name<<" - "<<head->d_type<<endl;
-                    s->addArgument(head->name , head->d_type , "");
-                  }
 
-                  head = head->arg_list;
-                }
+               }
 
              }
              | type_specifier ID LPAREN RPAREN SEMICOLON	{
@@ -171,9 +179,16 @@ void yyerror(const char *s){
 
                $$.mystr = tmp2;
                fprintf(logout,"%s \n\n",tmp2);
-               symboltable->Insert($2.mystr , "ID", "FUNCTION");
-               SymbolInfo *s = symboltable->Lookup($2.mystr);
-               s->setDataType($1.mystr);
+               if(symboltable->Lookup($2.mystr) != NULL){
+                  error_count++;
+                 fprintf(error,"Error %d at line %d: Multiple declaration of %s\n\n",error_count,line_count,$2.mystr);
+               }
+               else{
+                 symboltable->Insert($2.mystr , "ID", "FUNCTION.DEC");
+                 SymbolInfo *s = symboltable->Lookup($2.mystr);
+                 s->setDataType($1.mystr);
+               }
+
              }
              ;
 
@@ -196,17 +211,26 @@ void yyerror(const char *s){
  						$$.mystr = tmp2;
 
  						fprintf(logout,"%s \n\n",tmp2);
+            int flag = 1;
 
             if(symboltable->Lookup($2.mystr) != NULL){
-                if(symboltable->Lookup($2.mystr)->getDataType() != $1.mystr){
+              if(symboltable->Lookup($2.mystr)->getDataStructure()=="FUNCTION.DEC"){
+                SymbolInfo *s = symboltable->Lookup($2.mystr);
+                s->setDataStructure("FUNCTION.DEF");
+              }
+              else if(symboltable->Lookup($2.mystr)->getDataStructure()=="FUNCTION.DEF"){
+                flag = 0;
+                error_count++;
+                fprintf(error,"Error %d at line %d: Redefinition of  %s\n\n",error_count,line_count,$2.mystr);
+              }
+              if(symboltable->Lookup($2.mystr)->getDataType() != $1.mystr){
                   error_count++;
                   fprintf(error,"Error %d at line %d: Conflicting return-type for %s\n\n",error_count,line_count,$2.mystr);
-
                 }
             }
             else{
 
-              symboltable->Insert($2.mystr , "ID","FUNCTION");
+              symboltable->Insert($2.mystr , "ID","FUNCTION.DEF");
 
               symboltable->Lookup($2.mystr)->setDataType($1.mystr);
             }
@@ -233,36 +257,76 @@ void yyerror(const char *s){
 						 $$.mystr = tmp2;
 						 fprintf(logout,"%s \n\n",tmp2);
              //SymbolInfo *s = symboltable->Lookup($2.mystr);
+
+             int flag = 1;
              SymbolInfo *s;
              if(symboltable->Lookup($2.mystr)!= NULL){
+
+                 if(symboltable->Lookup($2.mystr)->getDataStructure()=="FUNCTION.DEC"){
+                   flag = 0;
+                   s = symboltable->Lookup($2.mystr);
+                   s->setDataStructure("FUNCTION.DEF");
+                   //checking parameters
+                   struct node * head = $4.arg_list;
+                   int arg_no = s->getArgNumber();
+
+                   while(head!= NULL){
+                     if(arg_no == 0){
+                       flag = 0;
+                       error_count++;
+                       fprintf(error,"Error %d at line %d: Conflicting arguments  %s\n\n",error_count,line_count,$2.mystr);
+                       break;
+                     }
+                     SymbolInfo *sym = s->getArgument();
+
+                     //cout<<head->name<<" - "<<head->d_type<<endl;
+                     if(head->d_type != sym->getType()){
+                       flag = 0;
+                       error_count++;
+                       fprintf(error,"Error %d at line %d: Conflicting arguments  %s\n\n",error_count,line_count,$2.mystr);
+                       break;
+                    }
+                      //cout<<"Ekbar\n\n";
+                     arg_no--;
+                     head = head->arg_list;
+                   }
+
+                 }
+                 else if(symboltable->Lookup($2.mystr)->getDataStructure()=="FUNCTION.DEF"){
+                   flag = 0;
+                   error_count++;
+                   fprintf(error,"Error %d at line %d: Redefinition of  %s\n\n",error_count,line_count,$2.mystr);
+                 }
                  if(symboltable->Lookup($2.mystr)->getDataType() != $1.mystr){
                    error_count++;
                    fprintf(error,"Error %d at line %d: Conflicting return-type for %s\n\n",error_count,line_count,$2.mystr);
-
+                   //yyerror("Conflicting return-type for");
                  }
              }
              else{
-               symboltable->Insert($2.mystr , "ID","FUNCTION");
+               symboltable->Insert($2.mystr , "ID","FUNCTION.DEF");
                //SymbolInfo *sym = symboltable->Lookup($2.mystr);
                s = symboltable->Lookup($2.mystr);
 
                ////cout<<s->getName();
                s->setDataType($1.mystr);
              }
+             if(flag == 1){
+               struct node * head = $4.arg_list;
 
-             struct node * head = $4.arg_list;
+               while(head!= NULL){
+                 ////cout<<head->name<<" - "<<head->d_type<<endl;
+                 if(head->name == NULL){
+                   s->addArgument("" , head->d_type , "");
+                 }
+                 else{
+                   s->addArgument(head->name , head->d_type , "");
+                 }
 
-              while(head!= NULL){
-                ////cout<<head->name<<" - "<<head->d_type<<endl;
-                if(head->name == NULL){
-                  s->addArgument("" , head->d_type , "");
-                }
-                else{
-                  s->addArgument(head->name , head->d_type , "");
-                }
+                 head = head->arg_list;
+               }
+             }
 
-                head = head->arg_list;
-              }
 			 		}
 					;
 
@@ -1086,6 +1150,7 @@ void yyerror(const char *s){
 					strcat(tmp2 , $3.mystr);
 					tmp[0] = ')';
 					strcat(tmp2 , tmp);
+
           SymbolInfo* sym = symboltable->Lookup($1.mystr);
 
           struct node * head = $3.arg_list;
@@ -1094,8 +1159,8 @@ void yyerror(const char *s){
               fprintf(error, "Error %d at Line %d: Undefined function %s\n\n",error_count , line_count, $1.mystr);
           }
           int arg_no = sym->getArgNumber();
+          cout<<endl<<arg_no<<" -- argno \n\n";
           while(head!= NULL){
-            ////cout<<"HAVE A LOOK\n";
             if(arg_no==0){
               error_count ++;
               fprintf(error, "Error %d at Line %d: Too many arguments\n\n",error_count , line_count);
@@ -1103,14 +1168,14 @@ void yyerror(const char *s){
             }
             SymbolInfo* s = sym->getArgument();
             //cout<<s->getName()<<"-"<<s->getType()<<endl;
-
+            cout<<head->name<<"  - name - "<<head->d_type<<endl;
             if(symboltable->Lookup(head->name) != NULL){
               if(symboltable->Lookup(head->name)->getDataType() != s->getType()){
                 error_count ++;
                 fprintf(error, "Error %d at Line %d: Wrong type of parameters\n\n",error_count , line_count);
               }
             }
-            cout<<head->d_type<<"-"<<symboltable->Lookup(head->name)->getDataType()<<" -- matches -- ";
+            //cout<<head->d_type<<"-"<<symboltable->Lookup(head->name)->getDataType()<<" -- matches -- ";
             head = head->arg_list;
             arg_no--;
           }

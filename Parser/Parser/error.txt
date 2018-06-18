@@ -1,6 +1,10 @@
-Error 1 at Line 16: ab value is not an array
+Error 1 at line 2: Multiple declaration of func
 
-Error 2 at Line 16: Type Mismatch
+Error 2 at line 6: Conflicting arguments  func
 
-Total Errors: 2
+Error 3 at line 10: Redefinition of  func
+
+Error 4 at Line 18: Type Mismatch
+
+Total Errors: 4
 
