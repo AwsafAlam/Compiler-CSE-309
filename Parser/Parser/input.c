@@ -1,9 +1,9 @@
-float mult(float, float b);
-void foo11() {
-return 100;
-}
-int func(float aff){
+int func(int aff){
 	return 20;
+}
+
+int func(float a){
+	a=2;
 }
 
 float aff;
@@ -12,6 +12,7 @@ int main(){
 	int a[25],i,j ;
 	float ab;
 
-	a[9] = func(9);
+	func(9, 10);
+ 	a[i] = ab[0];
 	return 0;
 }

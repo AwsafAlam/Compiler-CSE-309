@@ -1,2 +1,6 @@
-Total Errors: 0
+Error 1 at Line 16: ab value is not an array
+
+Error 2 at Line 16: Type Mismatch
+
+Total Errors: 2
 
