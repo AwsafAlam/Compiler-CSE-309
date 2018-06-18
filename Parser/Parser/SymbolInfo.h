@@ -31,7 +31,6 @@ public:
     item->setName(name);
     item->setType(type);
     item->setDataStructure(datastructure);
-    // item->index = index;
     item->next = NULL;
 
     argument_list.push_back(item);
@@ -48,4 +47,5 @@ public:
     return tmp;
   }
   int getArgNumber(){return argument_list.size();}
+
 };

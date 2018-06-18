@@ -32,62 +32,54 @@ At line no: 1 program : | unit
 
 float mult(float ,float b);
 
-At line no: 3 type_specifier:INT
+At line no: 2 type_specifier : VOID
 
-int  
-
-At line no: 3 type_specifier : FLOAT
-
-float  
-
-At line no: 3 parameter_list : type_specifier ID
-
-float aff 
+void  
 
   New ScopeTable with id 2 created
 
-At line no: 4 factor : CONST_INT
+At line no: 3 factor : CONST_INT
 
-20 
+100 
 
-At line no: 4 unary_expression : factor
+At line no: 3 unary_expression : factor
 
-20 
+100 
 
-At line no: 4 term :	unary_expression
+At line no: 3 term :	unary_expression
 
-20 
+100 
 
-At line no: 4 simple_expression : term
+At line no: 3 simple_expression : term
 
-20 
+100 
 
-At line no: 4 rel_expression	: simple_expression
+At line no: 3 rel_expression	: simple_expression
 
-20 
+100 
 
-At line no: 4 logic_expression : rel_expression
+At line no: 3 logic_expression : rel_expression
 
-20 
+100 
 
-At line no: 4 expression : logic_expression
+At line no: 3 expression : logic_expression
 
-20 
+100 
 
-At line no: 4 statement : RETURN expression SEMICOLON
+At line no: 3 statement : RETURN expression SEMICOLON
 
-return 20;
+return 100;
  
 
-At line no: 4 statements : statement 
+At line no: 3 statements : statement 
 
-return 20;
+return 100;
  
 
-At line no: 5 compound_statement : LCURL statements RCURL
+At line no: 4 compound_statement : LCURL statements RCURL
 
 {
-return 20;
+return 100;
 
 } 
 
@@ -97,285 +89,383 @@ ScopeTable # 2
 ScopeTable # 1
 ----------------------
 7 -->  <mult : ID> 
-8 -->  <aff : ID> 
 15 -->  <b : ID> 
 
 ScopeTable with id 2 removed
 
-At line no: 5 func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
+At line no: 4 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
 
-int func(float aff){
-return 20;
-
-} 
-
-At line no: 5 unit : func_definition
-
-int func(float aff){
-return 20;
+void foo11(){
+return 100;
 
 } 
 
-At line no: 5 program : program unit
+At line no: 4 unit : func_definition
+
+void foo11(){
+return 100;
+
+} 
+
+At line no: 4 program : program unit
 
 float mult(float ,float b);
-int func(float aff){
-return 20;
+void foo11(){
+return 100;
 
 } 
 
-At line no: 7 type_specifier : FLOAT
+At line no: 5 type_specifier:INT
+
+int  
+
+At line no: 5 type_specifier : FLOAT
 
 float  
 
-At line no: 7 declaration_list : ID
+At line no: 5 parameter_list : type_specifier ID
 
-aff
+float aff 
 
-At line no: 7 var_declaration : type_specifier declaration_list SEMICOLON
+  New ScopeTable with id 3 created
 
-float aff;
+At line no: 6 factor : CONST_INT
 
+20 
 
-At line no: 7 unit : var_declaration
+At line no: 6 unary_expression : factor
 
-float aff;
+20 
 
+At line no: 6 term :	unary_expression
+
+20 
+
+At line no: 6 simple_expression : term
+
+20 
+
+At line no: 6 rel_expression	: simple_expression
+
+20 
+
+At line no: 6 logic_expression : rel_expression
+
+20 
+
+At line no: 6 expression : logic_expression
+
+20 
+
+At line no: 6 statement : RETURN expression SEMICOLON
+
+return 20;
+ 
+
+At line no: 6 statements : statement 
+
+return 20;
+ 
+
+At line no: 7 compound_statement : LCURL statements RCURL
+
+{
+return 20;
+
+} 
+
+ScopeTable # 3
+----------------------
+
+ScopeTable # 1
+----------------------
+7 -->  <mult : ID> 
+8 -->  <aff : ID> 
+9 -->  <foo11 : ID> 
+15 -->  <b : ID> 
+
+ScopeTable with id 3 removed
+
+At line no: 7 func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
+
+int func(float aff){
+return 20;
+
+} 
+
+At line no: 7 unit : func_definition
+
+int func(float aff){
+return 20;
+
+} 
 
 At line no: 7 program : program unit
 
 float mult(float ,float b);
+void foo11(){
+return 100;
+
+}!
 int func(float aff){
 return 20;
 
-}
-float aff;
- 
+} 
 
-At line no: 8 type_specifier:INT
+At line no: 9 type_specifier : FLOAT
 
-int  
+float  
 
-At line no: 8 declaration_list : ID
+At line no: 9 declaration_list : ID
 
 aff
 
-At line no: 8 var_declaration : type_specifier declaration_list SEMICOLON
+At line no: 9 var_declaration : type_specifier declaration_list SEMICOLON
 
-int aff;
-
-
-At line no: 8 unit : var_declaration
-
-int aff;
+float aff;
 
 
-At line no: 8 program : program unit
+At line no: 9 unit : var_declaration
+
+float aff;
+
+
+At line no: 9 program : program unit
 
 float mult(float ,float b);
+void foo11(){
+return 100;
+
+}!
 int func(float aff){
 return 20;
 
 }
 float aff;
-
-int aff;
  
-
-At line no: 10 type_specifier:INT
-
-int  
-
-  New ScopeTable with id 3 created
 
 At line no: 11 type_specifier:INT
 
 int  
 
-At line no: 11 declaration_list : ID LTHIRD CONST_INT RTHIRD
+  New ScopeTable with id 4 created
 
-a[2] 
+At line no: 12 type_specifier:INT
 
-At line no: 11 declaration_list : declaration_list COMMA ID
+int  
 
-a[2],i
+At line no: 12 declaration_list : ID LTHIRD CONST_INT RTHIRD
 
-At line no: 11 declaration_list : declaration_list COMMA ID
+a[25] 
 
-a[2],i,j
+At line no: 12 declaration_list : declaration_list COMMA ID
 
-At line no: 11 var_declaration : type_specifier declaration_list SEMICOLON
+a[25],i
 
-int a[2],i,j;
+At line no: 12 declaration_list : declaration_list COMMA ID
 
-
-At line no: 11 statement : var_declaration
-
-int a[2],i,j;
- 
-
-At line no: 11 statements : statement 
-
-int a[2],i,j;
- 
-
-At line no: 12 type_specifier : FLOAT
-
-float  
-
-At line no: 12 declaration_list : ID
-
-ab
+a[25],i,j
 
 At line no: 12 var_declaration : type_specifier declaration_list SEMICOLON
 
-float ab;
+int a[25],i,j;
 
 
 At line no: 12 statement : var_declaration
 
-float ab;
+int a[25],i,j;
  
 
-At line no: 12 statements :| statements statement 
+At line no: 12 statements : statement 
 
-int a[2],i,j;
-float ab;
+int a[25],i,j;
  
 
-At line no: 14 variable : ID
+At line no: 13 type_specifier : FLOAT
+
+float  
+
+At line no: 13 declaration_list : ID
 
 ab
 
-At line no: 14 factor : CONST_INT
+At line no: 13 var_declaration : type_specifier declaration_list SEMICOLON
 
-9 
-
-At line no: 14 unary_expression : factor
-
-9 
-
-At line no: 14 term :	unary_expression
-
-9 
-
-At line no: 14 simple_expression : term
-
-9 
-
-At line no: 14 rel_expression	: simple_expression
-
-9 
-
-At line no: 14 logic_expression : rel_expression
-
-9 
-
-At line no: 14 arguments : logic_expression
-
-9 
-
-At line no: 14 argument_list : arguments
-
-9 
-
-At line no: 14 factor	: ID LPAREN argument_list RPAREN
-
-func(9) 
-
-At line no: 14 unary_expression : factor
-
-func(9) 
-
-At line no: 14 term :	unary_expression
-
-func(9) 
-
-At line no: 14 simple_expression : term
-
-func(9) 
-
-At line no: 14 rel_expression	: simple_expression
-
-func(9) 
-
-At line no: 14 logic_expression : rel_expression
-
-func(9) 
-
-At line no: 14 expression : variable ASSIGNOP logic_expression
-
-ab=func(9) 
-
-At line no: 14 expression_statement 	: expression SEMICOLON
-
-ab=func(9);
- 
-
-At line no: 14 statement : expression_statement
-
-ab=func(9);
- 
-
-At line no: 14 statements :| statements statement 
-
-int a[2],i,j;
 float ab;
-ab=func(9);
+
+
+At line no: 13 statement : var_declaration
+
+float ab;
+ 
+
+At line no: 13 statements :| statements statement 
+
+int a[25],i,j;
+float ab;
  
 
 At line no: 15 factor : CONST_INT
 
-0 
+9 
 
 At line no: 15 unary_expression : factor
 
-0 
+9 
 
 At line no: 15 term :	unary_expression
 
-0 
+9 
 
 At line no: 15 simple_expression : term
 
-0 
+9 
 
 At line no: 15 rel_expression	: simple_expression
 
-0 
+9 
 
 At line no: 15 logic_expression : rel_expression
 
-0 
+9 
 
 At line no: 15 expression : logic_expression
 
-0 
+9 
 
-At line no: 15 statement : RETURN expression SEMICOLON
+At line no: 15 variable : ID LTHIRD expression RTHIRD
 
-return 0;
+a[9] 
+
+At line no: 15 factor : CONST_INT
+
+9 
+
+At line no: 15 unary_expression : factor
+
+9 
+
+At line no: 15 term :	unary_expression
+
+9 
+
+At line no: 15 simple_expression : term
+
+9 
+
+At line no: 15 rel_expression	: simple_expression
+
+9 
+
+At line no: 15 logic_expression : rel_expression
+
+9 
+
+At line no: 15 arguments : logic_expression
+
+9 
+
+At line no: 15 argument_list : arguments
+
+9 
+
+At line no: 15 factor	: ID LPAREN argument_list RPAREN
+
+func(9) 
+
+At line no: 15 unary_expression : factor
+
+func(9) 
+
+At line no: 15 term :	unary_expression
+
+func(9) 
+
+At line no: 15 simple_expression : term
+
+func(9) 
+
+At line no: 15 rel_expression	: simple_expression
+
+func(9) 
+
+At line no: 15 logic_expression : rel_expression
+
+func(9) 
+
+At line no: 15 expression : variable ASSIGNOP logic_expression
+
+a[9]=func(9) 
+
+At line no: 15 expression_statement 	: expression SEMICOLON
+
+a[9]=func(9);
+ 
+
+At line no: 15 statement : expression_statement
+
+a[9]=func(9);
  
 
 At line no: 15 statements :| statements statement 
 
-int a[2],i,j;
+int a[25],i,j;
 float ab;
-ab=func(9);
+a[9]=func(9);
+ 
+
+At line no: 16 factor : CONST_INT
+
+0 
+
+At line no: 16 unary_expression : factor
+
+0 
+
+At line no: 16 term :	unary_expression
+
+0 
+
+At line no: 16 simple_expression : term
+
+0 
+
+At line no: 16 rel_expression	: simple_expression
+
+0 
+
+At line no: 16 logic_expression : rel_expression
+
+0 
+
+At line no: 16 expression : logic_expression
+
+0 
+
+At line no: 16 statement : RETURN expression SEMICOLON
+
 return 0;
  
 
-At line no: 16 compound_statement : LCURL statements RCURL
+At line no: 16 statements :| statements statement 
+
+int a[25],i,j;
+float ab;
+a[9]=func(9);
+return 0;
+ 
+
+At line no: 17 compound_statement : LCURL statements RCURL
 
 {
-int a[2],i,j;
+int a[25],i,j;
 float ab;
-ab=func(9);
+a[9]=func(9);
 return 0;
 
 } 
 
-ScopeTable # 3
+ScopeTable # 4
 ----------------------
 14 -->  <a : ID> 
 22 -->  <i : ID> <ab : ID> 
@@ -385,64 +475,69 @@ ScopeTable # 1
 ----------------------
 7 -->  <mult : ID> 
 8 -->  <aff : ID> <aff : ID> 
+9 -->  <foo11 : ID> 
 15 -->  <b : ID> <func : ID> 
 
-ScopeTable with id 3 removed
+ScopeTable with id 4 removed
 
-At line no: 16 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
+At line no: 17 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
 
 int main(){
-int a[2],i,j;
+int a[25],i,j;
 float ab;
-ab=func(9);
+a[9]=func(9);
 return 0;
 
 } 
 
-At line no: 16 unit : func_definition
+At line no: 17 unit : func_definition
 
 int main(){
-int a[2],i,j;
+int a[25],i,j;
 float ab;
-ab=func(9);
+a[9]=func(9);
 return 0;
 
 } 
 
-At line no: 16 program : program unit
+At line no: 17 program : program unit
 
 float mult(float ,float b);
+void foo11(){
+return 100;
+
+}!
 int func(float aff){
 return 20;
 
 }
 float aff;
-
-int aff;
-
+!
 int main(){
-int a[2],i,j;
+int a[25],i,j;
 float ab;
-ab=func(9);
+a[9]=func(9);
 return 0;
 
 } 
 
-At line no: 17 start : program
+At line no: 18 start : program
 
 float mult(float ,float b);
+void foo11(){
+return 100;
+
+}!
 int func(float aff){
 return 20;
 
 }
 float aff;
-
-int aff;
-
+!
 int main(){
-int a[2],i,j;
+int a[25],i,j;
 float ab;
-ab=func(9);
+a[9]=func(9);
 return 0;
 
 }

@@ -18,6 +18,7 @@ vector<char *> vec;
 
  FILE * logout = fopen("log.txt","w");
  FILE *error= fopen("error.txt","w");
+ char * temp;
 SymbolTable * symboltable = new SymbolTable(30);
 
 void yyerror(const char *s){
@@ -828,14 +829,87 @@ void yyerror(const char *s){
 						strcpy(tmp2 , $1.mystr);
 						strcat(tmp2 , tmp);
 						strcat(tmp2 , $3.mystr);
-            if(symboltable->Lookup($1.mystr) != NULL){
-              //cout<<" <> "<<$1.mystr<<" "<<symboltable->Lookup($1.mystr)->getDataType()<<" "<<symboltable->Lookup($1.mystr)->getDataStructure()<<endl;
+            int flag = 1;
+            if(symboltable->Lookup($1.mystr) == NULL){
+              if(strchr($1.mystr, '[')!= NULL){
+                char *tmp = $1.mystr;
+                int i = 0;
+                while(tmp[i] != '['){
+                  cout<<tmp[i]<<endl;
+                  i++;
+                }
+                $1.mystr[i] = '\0';
+                if(symboltable->Lookup($1.mystr) == NULL){
+                  //cout<<endl<<i<<" -- HELOE\n";
+                  flag = 0;
+                }
+
+              }
+              else{
+                flag = 0;
+              }
+            }
+
+            if(symboltable->Lookup($3.mystr) == NULL){
+              if(strchr($3.mystr, '(')!= NULL){
+                char *tmp = $3.mystr;
+                int i = 0;
+                while(tmp[i] != '('){
+                  cout<<tmp[i]<<endl;
+                  i++;
+                }
+                $3.mystr[i] = '\0';
+                if(symboltable->Lookup($3.mystr) == NULL){
+                  //cout<<endl<<i<<" -- HELOE\n";
+                  flag = 0;
+                }
+
+              }
+              else if(strchr($3.mystr, '[')!= NULL){
+                char *tmp = $3.mystr;
+                int i = 0;
+                while(tmp[i] != '['){
+                  cout<<tmp[i]<<endl;
+                  i++;
+                }
+                $3.mystr[i] = '\0';
+                if(symboltable->Lookup($3.mystr) == NULL){
+                  //cout<<endl<<i<<" -- HELOE\n";
+                  flag = 0;
+                }
+
+              }
+              else{
+                flag = 0;
+              }
+            }
+
+            if(flag == 1){
+
+              SymbolInfo *sym = symboltable->Lookup($1.mystr);
+              SymbolInfo *sym2 = symboltable->Lookup($3.mystr);
+
+              if($3.intvalue == NULL && $3.floatvalue == NULL){
+                if(sym->getDataType() != sym2->getDataType()){
+                  error_count++;
+                  fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
+                }
+              }
+              //cout<<"\n  -- sth"<<$3.floatvalue<<endl;
               if($3.floatvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "float"){
                 error_count++;
                 fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
 
               }
+              if($3.intvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "int"){
+                error_count++;
+                fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
+              }
             }
+            else{
+                cout<<"Flag set to 0\n";
+            }
+
           	$$.mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
 					}
@@ -1029,8 +1103,10 @@ void yyerror(const char *s){
             arg_no--;
           }
 					$$.mystr = tmp2;
+          $$.intvalue = NULL;
+          $$.floatvalue = NULL;
 					fprintf(logout,"%s \n\n",tmp2);
-
+          temp = $1.mystr;
 				}
 				| LPAREN expression RPAREN	{
 
