@@ -1110,7 +1110,7 @@ void yyerror(const char *s){
                 fprintf(error, "Error %d at Line %d: Wrong type of parameters\n\n",error_count , line_count);
               }
             }
-            /* //cout<<head->d_type<<"-"<<symboltable->Lookup(head->name)->getDataType()<<" -- matches -- "; */
+            cout<<head->d_type<<"-"<<symboltable->Lookup(head->name)->getDataType()<<" -- matches -- ";
             head = head->arg_list;
             arg_no--;
           }
