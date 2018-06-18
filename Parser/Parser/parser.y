@@ -511,8 +511,7 @@ void yyerror(const char *s){
 
 						$$ = $1;
             SymbolInfo *s = symboltable->Lookup($1.mystr);
-            //HAVE A LOOK
-            if(s != NULL && s->getDataStructure().c_str() != "PARAM"){
+            if(s != NULL && strcmp(s->getDataStructure().c_str() , "PARAM")){
               error_count++;
               cout<<endl<<s->getDataStructure().c_str();
               fprintf(error, "Error %d at Line %d: Multiple declarations of the same variable: %s\n\n",error_count , line_count,$1.mystr);

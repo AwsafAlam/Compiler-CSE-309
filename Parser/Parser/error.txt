@@ -1,4 +1,4 @@
-Error 1 at Line 7: Multiple declarations of the same variable: aff
+Error 1 at Line 8: Multiple Declaration of aff
 
 Total Errors: 1
 

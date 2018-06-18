@@ -152,179 +152,169 @@ return 20;
 float aff;
  
 
-At line no: 9 type_specifier:INT
+At line no: 8 type_specifier:INT
 
 int  
 
-  New ScopeTable with id 3 created
+At line no: 8 declaration_list : ID
+
+aff
+
+At line no: 8 var_declaration : type_specifier declaration_list SEMICOLON
+
+int aff;
+
+
+At line no: 8 unit : var_declaration
+
+int aff;
+
+
+At line no: 8 program : program unit
+
+float mult(float ,float b);
+int func(float aff){
+return 20;
+
+}
+float aff;
+
+int aff;
+ 
 
 At line no: 10 type_specifier:INT
 
 int  
 
-At line no: 10 declaration_list : ID LTHIRD CONST_INT RTHIRD
+  New ScopeTable with id 3 created
+
+At line no: 11 type_specifier:INT
+
+int  
+
+At line no: 11 declaration_list : ID LTHIRD CONST_INT RTHIRD
 
 a[2] 
 
-At line no: 10 declaration_list : declaration_list COMMA ID
+At line no: 11 declaration_list : declaration_list COMMA ID
 
 a[2],i
 
-At line no: 10 declaration_list : declaration_list COMMA ID
+At line no: 11 declaration_list : declaration_list COMMA ID
 
 a[2],i,j
 
-At line no: 10 var_declaration : type_specifier declaration_list SEMICOLON
-
-int a[2],i,j;
-
-
-At line no: 10 statement : var_declaration
-
-int a[2],i,j;
- 
-
-At line no: 10 statements : statement 
-
-int a[2],i,j;
- 
-
-At line no: 11 type_specifier : FLOAT
-
-float  
-
-At line no: 11 declaration_list : ID
-
-ab
-
 At line no: 11 var_declaration : type_specifier declaration_list SEMICOLON
 
-float ab;
+int a[2],i,j;
 
 
 At line no: 11 statement : var_declaration
 
-float ab;
+int a[2],i,j;
  
 
-At line no: 11 statements :| statements statement 
+At line no: 11 statements : statement 
 
 int a[2],i,j;
-float ab;
  
 
-At line no: 13 variable : ID
+At line no: 12 type_specifier : FLOAT
+
+float  
+
+At line no: 12 declaration_list : ID
 
 ab
 
-At line no: 13 factor : CONST_INT
+At line no: 12 var_declaration : type_specifier declaration_list SEMICOLON
 
-9 
+float ab;
 
-At line no: 13 unary_expression : factor
 
-9 
+At line no: 12 statement : var_declaration
 
-At line no: 13 term :	unary_expression
-
-9 
-
-At line no: 13 simple_expression : term
-
-9 
-
-At line no: 13 rel_expression	: simple_expression
-
-9 
-
-At line no: 13 logic_expression : rel_expression
-
-9 
-
-At line no: 13 arguments : logic_expression
-
-9 
-
-At line no: 13 argument_list : arguments
-
-9 
-
-At line no: 13 factor	: ID LPAREN argument_list RPAREN
-
-func(9) 
-
-At line no: 13 unary_expression : factor
-
-func(9) 
-
-At line no: 13 term :	unary_expression
-
-func(9) 
-
-At line no: 13 simple_expression : term
-
-func(9) 
-
-At line no: 13 rel_expression	: simple_expression
-
-func(9) 
-
-At line no: 13 logic_expression : rel_expression
-
-func(9) 
-
-At line no: 13 expression : variable ASSIGNOP logic_expression
-
-ab=func(9) 
-
-At line no: 13 expression_statement 	: expression SEMICOLON
-
-ab=func(9);
+float ab;
  
 
-At line no: 13 statement : expression_statement
-
-ab=func(9);
- 
-
-At line no: 13 statements :| statements statement 
+At line no: 12 statements :| statements statement 
 
 int a[2],i,j;
 float ab;
-ab=func(9);
  
+
+At line no: 14 variable : ID
+
+ab
 
 At line no: 14 factor : CONST_INT
 
-0 
+9 
 
 At line no: 14 unary_expression : factor
 
-0 
+9 
 
 At line no: 14 term :	unary_expression
 
-0 
+9 
 
 At line no: 14 simple_expression : term
 
-0 
+9 
 
 At line no: 14 rel_expression	: simple_expression
 
-0 
+9 
 
 At line no: 14 logic_expression : rel_expression
 
-0 
+9 
 
-At line no: 14 expression : logic_expression
+At line no: 14 arguments : logic_expression
 
-0 
+9 
 
-At line no: 14 statement : RETURN expression SEMICOLON
+At line no: 14 argument_list : arguments
 
-return 0;
+9 
+
+At line no: 14 factor	: ID LPAREN argument_list RPAREN
+
+func(9) 
+
+At line no: 14 unary_expression : factor
+
+func(9) 
+
+At line no: 14 term :	unary_expression
+
+func(9) 
+
+At line no: 14 simple_expression : term
+
+func(9) 
+
+At line no: 14 rel_expression	: simple_expression
+
+func(9) 
+
+At line no: 14 logic_expression : rel_expression
+
+func(9) 
+
+At line no: 14 expression : variable ASSIGNOP logic_expression
+
+ab=func(9) 
+
+At line no: 14 expression_statement 	: expression SEMICOLON
+
+ab=func(9);
+ 
+
+At line no: 14 statement : expression_statement
+
+ab=func(9);
  
 
 At line no: 14 statements :| statements statement 
@@ -332,10 +322,50 @@ At line no: 14 statements :| statements statement
 int a[2],i,j;
 float ab;
 ab=func(9);
+ 
+
+At line no: 15 factor : CONST_INT
+
+0 
+
+At line no: 15 unary_expression : factor
+
+0 
+
+At line no: 15 term :	unary_expression
+
+0 
+
+At line no: 15 simple_expression : term
+
+0 
+
+At line no: 15 rel_expression	: simple_expression
+
+0 
+
+At line no: 15 logic_expression : rel_expression
+
+0 
+
+At line no: 15 expression : logic_expression
+
+0 
+
+At line no: 15 statement : RETURN expression SEMICOLON
+
 return 0;
  
 
-At line no: 15 compound_statement : LCURL statements RCURL
+At line no: 15 statements :| statements statement 
+
+int a[2],i,j;
+float ab;
+ab=func(9);
+return 0;
+ 
+
+At line no: 16 compound_statement : LCURL statements RCURL
 
 {
 int a[2],i,j;
@@ -354,12 +384,12 @@ ScopeTable # 3
 ScopeTable # 1
 ----------------------
 7 -->  <mult : ID> 
-8 -->  <aff : ID> 
+8 -->  <aff : ID> <aff : ID> 
 15 -->  <b : ID> <func : ID> 
 
 ScopeTable with id 3 removed
 
-At line no: 15 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
+At line no: 16 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
 
 int main(){
 int a[2],i,j;
@@ -369,7 +399,7 @@ return 0;
 
 } 
 
-At line no: 15 unit : func_definition
+At line no: 16 unit : func_definition
 
 int main(){
 int a[2],i,j;
@@ -379,7 +409,7 @@ return 0;
 
 } 
 
-At line no: 15 program : program unit
+At line no: 16 program : program unit
 
 float mult(float ,float b);
 int func(float aff){
@@ -388,6 +418,8 @@ return 20;
 }
 float aff;
 
+int aff;
+
 int main(){
 int a[2],i,j;
 float ab;
@@ -396,7 +428,7 @@ return 0;
 
 } 
 
-At line no: 16 start : program
+At line no: 17 start : program
 
 float mult(float ,float b);
 int func(float aff){
@@ -404,6 +436,8 @@ return 20;
 
 }
 float aff;
+
+int aff;
 
 int main(){
 int a[2],i,j;
