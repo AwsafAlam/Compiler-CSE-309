@@ -235,6 +235,8 @@ public:
   bool Insert(string name ,string type,string datastructure);
   bool Remove(string name);
   SymbolInfo * Lookup(string name);
+  SymbolInfo * LookupCurrentScope(string name);
+
   void PrintCurrentScope();
   void PrintAllScopes();
 
@@ -349,6 +351,13 @@ SymbolInfo * SymbolTable::Lookup(string name) {
 
   //cout<<"  Not found"<<endl;
   return NULL;
+}
+
+SymbolInfo * SymbolTable::LookupCurrentScope(string name) {
+  if(CurrentScope == NULL ){
+    EnterScope();
+  }
+  return CurrentScope->Lookup(name);
 }
 
 void SymbolTable::PrintCurrentScope() {

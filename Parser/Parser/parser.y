@@ -15,6 +15,7 @@ extern FILE *yyin;
 extern int line_count;
 extern int error_count;
 vector<char *> vec;
+SymbolInfo param;
 string storedatatype;
 
  FILE * logout = fopen("log.txt","w");
@@ -417,7 +418,7 @@ void yyerror(const char *s){
             }
             ;
 
-			compound_statement : LCURL {symboltable->EnterScope();} statements RCURL  {
+			compound_statement : LCURL {symboltable->EnterScope();cout<<"symboltable->EnterScope()\n";} statements RCURL  {
 
 							fprintf(logout,"At line no: %d compound_statement : LCURL statements RCURL\n\n",line_count);
 							char tmp[2];
@@ -532,8 +533,7 @@ void yyerror(const char *s){
 		 		;
 
 			declaration_list : declaration_list COMMA ID {
-
-						fprintf(logout,"At line no: %d declaration_list : declaration_list COMMA ID\n\n",line_count);
+            fprintf(logout,"At line no: %d declaration_list : declaration_list COMMA ID\n\n",line_count);
 
 						char * tmp = (char *) malloc(1 + strlen($1.mystr)+ 1+strlen($3.mystr) );
 			      strcpy(tmp, $1.mystr);
@@ -545,8 +545,18 @@ void yyerror(const char *s){
 
 						fprintf(logout,"%s\n\n",tmp);
 						$$.mystr = tmp;
-            vec.push_back($3.mystr);
-						symboltable->Insert($3.mystr , "ID","");
+
+            SymbolInfo *s = symboltable->LookupCurrentScope($3.mystr);
+            if(s != NULL && strcmp(s->getDataStructure().c_str() , "PARAM")){
+              error_count++;
+              ////cout<<endl<<s->getDataStructure().c_str();
+              fprintf(error, "Error %d at Line %d: Multiple declarations of the same variable: %s\n\n",error_count , line_count,$3.mystr);
+            }
+            else{
+              symboltable->Insert($3.mystr , "ID","");
+              vec.push_back($3.mystr);
+
+            }
 
 					}
 		 		  | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD {
@@ -569,11 +579,20 @@ void yyerror(const char *s){
 						tmp2[0] = ']';
 			      strcat(tmp, tmp2);
 
-
 						fprintf(logout,"%s\n\n",tmp);
 						$$.mystr = tmp;
-            symboltable->Insert($3.mystr , "ID","ARRAY");
-            vec.push_back($3.mystr);
+
+            SymbolInfo *s = symboltable->LookupCurrentScope($3.mystr);
+            if(s != NULL && strcmp(s->getDataStructure().c_str() , "PARAM")){
+              error_count++;
+              ////cout<<endl<<s->getDataStructure().c_str();
+              fprintf(error, "Error %d at Line %d: Multiple declarations of the same variable: %s\n\n",error_count , line_count,$3.mystr);
+            }
+            else{
+              symboltable->Insert($3.mystr , "ID","ARRAY");
+              vec.push_back($3.mystr);
+
+            }
 
 					}
 		 		  | ID {
@@ -582,7 +601,7 @@ void yyerror(const char *s){
 						fprintf(logout,"%s\n\n",$1.mystr);
 
 						$$ = $1;
-            SymbolInfo *s = symboltable->Lookup($1.mystr);
+            SymbolInfo *s = symboltable->LookupCurrentScope($1.mystr);
             if(s != NULL && strcmp(s->getDataStructure().c_str() , "PARAM")){
               error_count++;
               ////cout<<endl<<s->getDataStructure().c_str();
@@ -591,7 +610,7 @@ void yyerror(const char *s){
             else{
               symboltable->Insert($$.mystr , "ID","");
               vec.push_back($1.mystr);
-
+              //cout<<"\n -- DEBUG--\n";
             }
 					}
 		 		  | ID LTHIRD CONST_INT RTHIRD {
@@ -612,12 +631,22 @@ void yyerror(const char *s){
 						tmp[0]=']';
 						strcat(tmp2 , tmp);
 
-            vec.push_back($1.mystr);
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
-						symboltable->Insert($1.mystr , "ID","ARRAY");
 
-					 }
+            SymbolInfo *s = symboltable->LookupCurrentScope($1.mystr);
+            if(s != NULL && strcmp(s->getDataStructure().c_str() , "PARAM")){
+              error_count++;
+              ////cout<<endl<<s->getDataStructure().c_str();
+              fprintf(error, "Error %d at Line %d: Multiple declarations of the same variable: %s\n\n",error_count , line_count,$1.mystr);
+            }
+            else{
+              symboltable->Insert($1.mystr , "ID","ARRAY");
+              vec.push_back($1.mystr);
+
+            }
+
+					}
 		 		  ;
 
 			statements : statement {
@@ -1045,6 +1074,7 @@ void yyerror(const char *s){
               }
               else{
                 flag = 0;
+                //cout<<"\n\n--DEBUG-- "<<$1.mystr;
               }
             }
 
@@ -1065,14 +1095,14 @@ void yyerror(const char *s){
               }
             }
               ////cout<<"\n  -- sth"<<$3.floatvalue<<endl;
-              if($3.floatvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "float"){
+              if($3.floatvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "float "){
                 error_count++;
-                fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
+                fprintf(error, "Error %d at Line %d: Type Mismatch cannot assign float value to non-float variable\n\n",error_count , line_count);
 
               }
-              if($3.intvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "int"){
+          if($3.intvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "int "){
                 error_count++;
-                fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
+                fprintf(error, "Error %d at Line %d: Type Mismatch cannot assign integer value to non-integer variable\n\n",error_count , line_count);
 
               }
 
@@ -1085,7 +1115,7 @@ void yyerror(const char *s){
 			logic_expression : rel_expression	{
 				 			fprintf(logout,"At line no: %d logic_expression : rel_expression\n\n",line_count);
 							$$ = $1;
-              cout<<" \n\n-- "<<$1.mystr;
+              //cout<<" \n\n-- "<<$1.mystr;
               //$$.floatvalue = $1.floatvalue;
  						 fprintf(logout,"%s \n\n",$1.mystr);
 						}
@@ -1250,7 +1280,7 @@ void yyerror(const char *s){
               fprintf(error, "Error %d at Line %d: Undefined function %s\n\n",error_count , line_count, $1.mystr);
           }
           int arg_no = sym->getArgNumber();
-          cout<<endl<<arg_no<<" -- argno \n\n";
+          //cout<<endl<<arg_no<<" -- argno \n\n";
           while(head!= NULL){
             if(arg_no==0){
               error_count ++;
@@ -1259,7 +1289,7 @@ void yyerror(const char *s){
             }
             SymbolInfo* s = sym->getArgument();
             //cout<<s->getName()<<"-"<<s->getType()<<endl;
-            cout<<head->name<<"  - name - "<<head->d_type<<endl;
+            //cout<<head->name<<"  - name - "<<head->d_type<<endl;
             if(symboltable->Lookup(head->name) != NULL){
               if(symboltable->Lookup(head->name)->getDataType() != s->getType()){
                 error_count ++;

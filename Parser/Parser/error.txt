@@ -1,18 +1,8 @@
-Error 1 at Line 5: Multiple Declaration of a
+Error 1 at Line 6: Multiple Declaration of a
 
-Error 2 at Line 10: Type Mismatch
+Error 2 at Line 23: Invalid operands to * both should be integer
 
-Error 3 at Line 16: Type Mismatch
+Error 3 at Line 23: Type Mismatch
 
-Error 4 at Line 17: Type Mismatch
-
-Error 5 at Line 18: Type Mismatch
-
-Error 6 at Line 19: Type Mismatch
-
-Error 7 at Line 20: Invalid operands to * both should be integer
-
-Error 8 at Line 20: Type Mismatch
-
-Total Errors: 8
+Total Errors: 3
 
