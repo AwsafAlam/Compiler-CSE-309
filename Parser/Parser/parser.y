@@ -15,7 +15,7 @@ extern FILE *yyin;
 extern int line_count;
 extern int error_count;
 vector<char *> vec;
-SymbolInfo param;
+SymbolInfo *param;
 string storedatatype;
 
  FILE * logout = fopen("log.txt","w");
@@ -352,12 +352,15 @@ void yyerror(const char *s){
               s->setDataType($3.mystr);
 
               $$.mystr = tmp2;
+              param->addArgument($4.mystr , $3.mystr, "");
+
               struct node * item = (struct node *) malloc(1+sizeof(struct node));
               item->name = $4.mystr;
               item->d_type = $3.mystr;
               item->arg_list = $1.arg_list;
 
               $$.arg_list = item;
+
 
               fprintf(logout,"%s \n\n",tmp2);
             }
@@ -373,6 +376,8 @@ void yyerror(const char *s){
               strcat(tmp2 , tmp);
               strcat(tmp2 , $3.mystr);
               $$.mystr = tmp2;
+              param->addArgument("" , $3.mystr, "");
+
               struct node * item = (struct node *) malloc(1+sizeof(struct node));
               item->name = "";
               item->d_type = $3.mystr;
@@ -390,13 +395,16 @@ void yyerror(const char *s){
 
               strcpy(tmp2 , $1.mystr);
               strcat(tmp2 , $2.mystr);
+
               symboltable->Insert($2.mystr , "ID","PARAM");
               SymbolInfo *s = symboltable->Lookup($2.mystr);
               s->setDataType($1.mystr);
 
               $$.mystr = tmp2;
               fprintf(logout,"%s \n\n",tmp2);
-
+              if(param == NULL)
+                param = new SymbolInfo;
+              param->addArgument($2.mystr , $1.mystr, "");
               struct node * item = (struct node *) malloc(1+sizeof(struct node));
               item->name = $2.mystr;
               item->d_type = $1.mystr;
@@ -410,6 +418,11 @@ void yyerror(const char *s){
               $$.mystr = $1.mystr;
 
               struct node * item = (struct node *) malloc(1+sizeof(struct node));
+              if(param == NULL)
+                param = new SymbolInfo;
+
+              param->addArgument("" , $1.mystr, "");
+
               item->name = "";
               item->d_type = $1.mystr;
               item->arg_list = NULL;
@@ -418,7 +431,20 @@ void yyerror(const char *s){
             }
             ;
 
-			compound_statement : LCURL {symboltable->EnterScope();cout<<"symboltable->EnterScope()\n";} statements RCURL  {
+			compound_statement : LCURL {
+        symboltable->EnterScope();
+        if(param != NULL){
+          int arg_no = param->getArgNumber();
+          cout<<"symboltable->EnterScope()  - "<<arg_no<<endl;
+          for(int i=0 ; i< arg_no; i++){
+            SymbolInfo * sym = param->getArgument();
+            symboltable->Insert(sym->getName(), sym->getType(), "");
+            cout<<sym->getName()<<endl;  
+          }
+
+        }
+        param = NULL;
+        } statements RCURL  {
 
 							fprintf(logout,"At line no: %d compound_statement : LCURL statements RCURL\n\n",line_count);
 							char tmp[2];
@@ -486,7 +512,14 @@ void yyerror(const char *s){
 				$$.mystr = tmp;
 				////cout<<"--- > "<<vec.size()<<endl;
         vec.clear();
-			};
+			}
+      |error {
+        //cout<<" err\n";
+        //yyclearin;
+        yyerrok;
+
+      }
+      ;
 
 			type_specifier	: INT {
 
@@ -1089,21 +1122,22 @@ void yyerror(const char *s){
               }
               else if($3.intvalue == NULL && $3.floatvalue == NULL){
                 if(sym->getDataType() != sym2->getDataType()){
-                  error_count++;
-                  fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
+                  /* error_count++; */
+                  /* fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count); */
+                  cout<<"Type conversion";
                 }
               }
             }
               ////cout<<"\n  -- sth"<<$3.floatvalue<<endl;
-              if($3.floatvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "float "){
-                error_count++;
-                fprintf(error, "Error %d at Line %d: Type Mismatch cannot assign float value to non-float variable\n\n",error_count , line_count);
-
+          if($3.floatvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "float "){
+                /* error_count++;
+                fprintf(error, "Error %d at Line %d: Type Mismatch cannot assign float value to non-float variable\n\n",error_count , line_count); */
+                $$.intvalue = $3.floatvalue;
               }
           if($3.intvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "int "){
-                error_count++;
-                fprintf(error, "Error %d at Line %d: Type Mismatch cannot assign integer value to non-integer variable\n\n",error_count , line_count);
-
+                /* error_count++;
+                fprintf(error, "Error %d at Line %d: Type Mismatch cannot assign integer value to non-integer variable\n\n",error_count , line_count); */
+                $$.floatvalue = $3.intvalue;
               }
 
             $$.mystr = tmp2;
@@ -1189,6 +1223,7 @@ void yyerror(const char *s){
 						fprintf(logout,"At line no: %d term :	unary_expression\n\n",line_count);
 						$$ = $1;
             $$.floatvalue = $1.floatvalue;
+            $$.intvalue = $1.intvalue;
             fprintf(logout,"%s \n\n",$$.mystr);
 
           }
@@ -1203,12 +1238,43 @@ void yyerror(const char *s){
 					 strcpy(tmp2 , $1.mystr);
 					 strcat(tmp2 , tmp);
 					 strcat(tmp2 , $3.mystr);
-           //HAVE A LOOK
-           if(($1.intvalue != NULL && $3.intvalue == NULL) || ($1.intvalue == NULL && $3.intvalue != NULL)){
-            error_count++;
-            fprintf(error, "Error %d at Line %d: Invalid operands to %s both should be integer\n\n",error_count , line_count,tmp);
 
+           if($2.charvalue == '%'){
+             if(($1.intvalue != NULL && $3.intvalue == NULL) || ($1.intvalue == NULL && $3.intvalue != NULL)){
+              error_count++;
+              fprintf(error, "Error %d at Line %d: Integer operands on modulus operator\n\n",error_count , line_count);
+
+             }
           }
+          else if($2.charvalue == '*'){
+              if($1.intvalue !=NULL && $3.intvalue != NULL){
+                $$.intvalue = $1.intvalue *$3.intvalue;
+              }
+              else if($1.floatvalue !=NULL && $3.floatvalue != NULL){
+                $$.floatvalue = $1.floatvalue *$3.floatvalue;
+              }
+              else if($1.intvalue !=NULL && $3.intvalue == NULL){
+                $$.floatvalue = $1.intvalue * $3.floatvalue;
+              }
+              else{
+                $$.floatvalue = $1.floatvalue * $3.floatvalue;
+              }
+          }
+          else if($2.charvalue == '/'){
+              if($1.intvalue !=NULL && $3.intvalue != NULL){
+                $$.intvalue = $1.intvalue / $3.intvalue;
+              }
+              else if($1.floatvalue !=NULL && $3.floatvalue != NULL){
+                $$.floatvalue = $1.floatvalue / $3.floatvalue;
+              }
+              else if($1.intvalue !=NULL && $3.intvalue == NULL){
+                $$.floatvalue = $1.intvalue / $3.floatvalue;
+              }
+              else{
+                $$.floatvalue = $1.floatvalue / $3.floatvalue;
+              }
+          }
+
 
 					 $$.mystr = tmp2;
 					 fprintf(logout,"%s \n\n",tmp2);
