@@ -352,7 +352,7 @@ void yyerror(const char *s){
               s->setDataType($3.mystr);
 
               $$.mystr = tmp2;
-              param->addArgument($4.mystr , $3.mystr, "");
+              param->addArgument($4.mystr , $3.mystr, "PARAM");
 
               struct node * item = (struct node *) malloc(1+sizeof(struct node));
               item->name = $4.mystr;
@@ -376,7 +376,7 @@ void yyerror(const char *s){
               strcat(tmp2 , tmp);
               strcat(tmp2 , $3.mystr);
               $$.mystr = tmp2;
-              param->addArgument("" , $3.mystr, "");
+              param->addArgument("" , $3.mystr, "PARAM");
 
               struct node * item = (struct node *) malloc(1+sizeof(struct node));
               item->name = "";
@@ -404,7 +404,7 @@ void yyerror(const char *s){
               fprintf(logout,"%s \n\n",tmp2);
               if(param == NULL)
                 param = new SymbolInfo;
-              param->addArgument($2.mystr , $1.mystr, "");
+              param->addArgument($2.mystr , $1.mystr, "PARAM");
               struct node * item = (struct node *) malloc(1+sizeof(struct node));
               item->name = $2.mystr;
               item->d_type = $1.mystr;
@@ -421,7 +421,7 @@ void yyerror(const char *s){
               if(param == NULL)
                 param = new SymbolInfo;
 
-              param->addArgument("" , $1.mystr, "");
+              param->addArgument("" , $1.mystr, "PARAM");
 
               item->name = "";
               item->d_type = $1.mystr;
@@ -439,9 +439,8 @@ void yyerror(const char *s){
           for(int i=0 ; i< arg_no; i++){
             SymbolInfo * sym = param->getArgument();
             symboltable->Insert(sym->getName(), sym->getType(), "");
-            cout<<sym->getName()<<endl;  
+            cout<<sym->getName()<<endl;
           }
-
         }
         param = NULL;
         } statements RCURL  {
