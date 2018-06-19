@@ -396,9 +396,9 @@ void yyerror(const char *s){
               strcpy(tmp2 , $1.mystr);
               strcat(tmp2 , $2.mystr);
 
-              symboltable->Insert($2.mystr , "ID","PARAM");
-              SymbolInfo *s = symboltable->Lookup($2.mystr);
-              s->setDataType($1.mystr);
+              //symboltable->Insert($2.mystr , "ID","PARAM");
+              //SymbolInfo *s = symboltable->Lookup($2.mystr);
+              //s->setDataType($1.mystr);
 
               $$.mystr = tmp2;
               fprintf(logout,"%s \n\n",tmp2);
