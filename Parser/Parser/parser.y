@@ -6,8 +6,7 @@
 #include<cmath>
 #include<vector>
 #include "SymbolTable.h"
-/* #define YYSTYPE double
-/* yyparse() stack type */
+/* #define YYSTYPE double      /* yyparse() stack type */
 
 using namespace std;
 int yylex(void);
@@ -47,7 +46,6 @@ void yyerror(const char *s){
 %union {
   struct node args;
 }
-
 %token <args> DOUBLE
 %token <args> CONST_FLOAT
 %token <args> ADDOP MULOP
@@ -231,7 +229,7 @@ void yyerror(const char *s){
              int flag = 1;
              SymbolInfo *s;
              if(symboltable->Lookup($2.mystr)!= NULL){
-               //cout<<return_Type<<"- FUNC-RET--"<<symboltable->Lookup($2.mystr)->getDataType()<<"--\n\n";
+               cout<<return_Type<<"- FUNC-RET--"<<symboltable->Lookup($2.mystr)->getDataType()<<"--\n\n";
                if(symboltable->Lookup($2.mystr)->getDataType() != return_Type && return_Type != "" && returnFlag){
                  error_count++;
                  fprintf(error,"Error %d at line %d: Return Type does not match\n\n",error_count,line_count,$2.mystr);
@@ -772,9 +770,6 @@ void yyerror(const char *s){
               strcat(tmp2 , tmp);
               $$.mystr = tmp2;
               fprintf(logout,"%s \n\n",tmp2);
-            }
-            | error{
-              yyerrok;
             }
             ;
           variable : ID	{
