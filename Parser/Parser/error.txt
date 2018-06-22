@@ -1,4 +1,14 @@
-Error 1 at Line 6: Multiple Declaration of a
+Error 1 at Line 6: Multiple declarations of the same variable: c
 
-Total Errors: 1
+Error 2 at Line 7: Non-integer Array Index 
+
+Error 3 at Line 9: Integer operands on modulus operator
+
+Error 4 at Line 10: Expected [ after Array type
+
+Error 5 at Line 11: Expected [ after Array type
+
+Error 6 at Line 12: Undeclared Variable: b
+
+Total Errors: 6
 

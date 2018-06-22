@@ -40,7 +40,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 37 "parser.y" /* yacc.c:1909  */
+#line 33 "parser.y" /* yacc.c:1909  */
 
     struct node {
         char * mystr;
@@ -50,9 +50,11 @@ extern int yydebug;
         char * name;
         char * d_type;
         struct node * arg_list;
+        char *VAR_NAME;
+        char *DATA_TYPE;
     };
 
-#line 56 "y.tab.h" /* yacc.c:1909  */
+#line 58 "y.tab.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -154,11 +156,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 48 "parser.y" /* yacc.c:1909  */
+#line 46 "parser.y" /* yacc.c:1909  */
 
   struct node args;
 
-#line 162 "y.tab.h" /* yacc.c:1909  */
+#line 164 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

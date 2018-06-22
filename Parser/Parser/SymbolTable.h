@@ -113,7 +113,7 @@ bool ScopeTable::Insert(string name , string type ,string datastructure)
    //Discarding repeating values
    while(head->next != NULL){
      if( head->next->getName() ==  name && head->next->getType() == type && head->next->getDataStructure() != "PARAM"){
-        //cout<<"<"<<name<<","<<type<<"> already exists in current ScopeTable#"<<scope<<endl;
+        cout<<"<"<<name<<","<<type<<"> already exists in current ScopeTable#"<<scope<<endl;
         error_count++;
         fprintf(error, "Error %d at Line %d: Multiple Declaration of %s\n\n",error_count,line_count,head->next->getName().c_str());
         return false;

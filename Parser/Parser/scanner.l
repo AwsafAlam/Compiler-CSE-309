@@ -112,8 +112,8 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 					int j =0 ;
 					while(chr[j]!= '\0'){
-						printf("%c", chr[j]);
-						printf("%c", chr[j]);
+						//printf("%c", chr[j]);
+						//printf("%c", chr[j]);
 						j++;
 					}
 					chr_COUNT = 0;
@@ -126,17 +126,17 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 
 <STR>[^\\\n]\"	{
 										//printf("%s --Ending\n",yytext);
-										printf("Line No. %d: Token <STRING> Lexeme ",line_count);
+										//printf("Line No. %d: Token <STRING> Lexeme ",line_count);
 										//printf("Line No. %d: Token <STRING> Lexeme ",line_count);
 										chr[chr_COUNT] = '\0';
 										int j =0 ;
 										while(chr[j]!= '\0'){
-											printf("%c", chr[j]);
-											printf("%c", chr[j]);
+											//printf("%c", chr[j]);
+											//printf("%c", chr[j]);
 											j++;
 										}
 										chr_COUNT = 0;
-										printf("<STRING,%s>\n",chr);
+										//printf("<STRING,%s>\n",chr);
 										BEGIN INITIAL;
 									}
 
@@ -156,7 +156,7 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 								chr[chr_COUNT] = '/';
 								chr[chr_COUNT+1] = '\0';
 								chr_COUNT= 0;
-								printf("Line %d: Token <COMMENT> Lexeme ",line_count);
+								//printf("Line %d: Token <COMMENT> Lexeme ",line_count);
 
 								int j =0 ;
 								while(chr[j]!= '\0'){
@@ -189,8 +189,8 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 										fprintf(error , "Error %d at line %d: Unterminated character ",error_count,line_count);
 										int j =0 ;
 										while(chr[j]!= '\0'){
-											printf("%c", chr[j]);
-											printf("%c", chr[j]);
+											//printf("%c", chr[j]);
+											//printf("%c", chr[j]);
 											j++;
 										}
 										chr_COUNT = 0;
@@ -199,12 +199,12 @@ MULTI_MULTI_COMMENT (\/\*)([^"*/"]*[^.])*(\*\/)
 									}
 
 {SINGLE_MULTI_COMMENT}		{
-															printf("Line no %d: TOKEN <COMMENT> Lexeme %s found\n\n",line_count,yytext);
+															//printf("Line no %d: TOKEN <COMMENT> Lexeme %s found\n\n",line_count,yytext);
 
 													}
 
 {SINGLE_COMMENT}		{
-									printf("Line no %d: TOKEN <COMMENT> Lexeme %s found\n\n",line_count,yytext);
+									//printf("Line no %d: TOKEN <COMMENT> Lexeme %s found\n\n",line_count,yytext);
 
 							}
 
