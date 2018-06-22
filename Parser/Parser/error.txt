@@ -1,14 +1,12 @@
-Error 1 at Line 6: Multiple declarations of the same variable: c
+Error 1 at line 7: Return Type does not match
 
-Error 2 at Line 7: Non-integer Array Index 
+Error 2 at line 9: Multiple declaration of hello
 
-Error 3 at Line 9: Integer operands on modulus operator
+Error 3 at Line 14: Undeclared Variable: b
 
-Error 4 at Line 10: Expected [ after Array type
+Error 4 at line 16: Return Type does not match
 
-Error 5 at Line 11: Expected [ after Array type
+Error 5 at line 16: Conflicting return-type for foo1
 
-Error 6 at Line 12: Undeclared Variable: b
-
-Total Errors: 6
+Error 6 at Line 27: Expected [ after Array type
 

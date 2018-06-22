@@ -6,7 +6,8 @@
 #include<cmath>
 #include<vector>
 #include "SymbolTable.h"
-/* #define YYSTYPE double      /* yyparse() stack type */
+/* #define YYSTYPE double
+/* yyparse() stack type */
 
 using namespace std;
 int yylex(void);
@@ -46,6 +47,7 @@ void yyerror(const char *s){
 %union {
   struct node args;
 }
+
 %token <args> DOUBLE
 %token <args> CONST_FLOAT
 %token <args> ADDOP MULOP
@@ -201,7 +203,7 @@ void yyerror(const char *s){
               symboltable->Insert($2.mystr , "ID","FUNCTION.DEF");
               symboltable->Lookup($2.mystr)->setDataType($1.mystr);
 
-              cout<<return_Type<<" FUNC-RET--"<<symboltable->Lookup($2.mystr)->getDataType()<<"--\n\n";
+              //cout<<return_Type<<" FUNC-RET--"<<symboltable->Lookup($2.mystr)->getDataType()<<"--\n\n";
               if(symboltable->Lookup($2.mystr)->getDataType() != return_Type && return_Type != "" && returnFlag){
                 error_count++;
                 fprintf(error,"Error %d at line %d: Return Type does not match\n\n",error_count,line_count,$2.mystr);
@@ -229,7 +231,7 @@ void yyerror(const char *s){
              int flag = 1;
              SymbolInfo *s;
              if(symboltable->Lookup($2.mystr)!= NULL){
-               cout<<return_Type<<"- FUNC-RET--"<<symboltable->Lookup($2.mystr)->getDataType()<<"--\n\n";
+               //cout<<return_Type<<"- FUNC-RET--"<<symboltable->Lookup($2.mystr)->getDataType()<<"--\n\n";
                if(symboltable->Lookup($2.mystr)->getDataType() != return_Type && return_Type != "" && returnFlag){
                  error_count++;
                  fprintf(error,"Error %d at line %d: Return Type does not match\n\n",error_count,line_count,$2.mystr);
@@ -277,7 +279,7 @@ void yyerror(const char *s){
                s = symboltable->Lookup($2.mystr);
                s->setDataType($1.mystr);
 
-               cout<<"\n\nHERE-"<<return_Type<<"--FUNC-RET--"<<symboltable->Lookup($2.mystr)->getDataType()<<"--\n\n";
+               //cout<<"\n\nHERE-"<<return_Type<<"--FUNC-RET--"<<symboltable->Lookup($2.mystr)->getDataType()<<"--\n\n";
                if(symboltable->Lookup($2.mystr)->getDataType() != return_Type&& return_Type != "" && returnFlag){
                  error_count++;
                  fprintf(error,"Error %d at line %d: Return Type does not match\n\n",error_count,line_count,$2.mystr);
@@ -771,6 +773,9 @@ void yyerror(const char *s){
               $$.mystr = tmp2;
               fprintf(logout,"%s \n\n",tmp2);
             }
+            | error{
+              yyerrok;
+            }
             ;
           variable : ID	{
               //symboltable->Insert($1.mystr , "ID");
@@ -788,7 +793,7 @@ void yyerror(const char *s){
                 fprintf(error, "Error %d at Line %d: Expected [ after Array type\n\n",error_count , line_count);
               }
               else{
-                  cout<<"\n-->"<<symboltable->Lookup($1.mystr)->getName()<<" Data types  "<<symboltable->Lookup($1.mystr)->getDataType()<<endl;
+                  //cout<<"\n-->"<<symboltable->Lookup($1.mystr)->getName()<<" Data types  "<<symboltable->Lookup($1.mystr)->getDataType()<<endl;
                   if(symboltable->Lookup($1.mystr)->getDataType() == "int"){
                     $$.d_type = "int";
                   }
@@ -808,6 +813,7 @@ void yyerror(const char *s){
              strcat(tmp2 , $3.mystr);
              tmp[0]=']';
              strcat(tmp2 , tmp);
+
              if($3.floatvalue != NULL){
                error_count++;
                fprintf(error, "Error %d at Line %d: Non-integer Array Index \n\n",error_count , line_count);
@@ -816,6 +822,64 @@ void yyerror(const char *s){
                 error_count++;
                 fprintf(error, "Error %d at Line %d: %s value is not an array\n\n",error_count , line_count,$1.mystr);
               }
+              int flag = 1;
+              if(symboltable->Lookup($3.mystr) == NULL){
+                if(strchr($3.mystr, '[')!= NULL){
+                  char *tmp = $3.mystr;
+                  int i = 0;
+                  while(tmp[i] != '['){
+                    //cout<<tmp[i]<<endl;
+                    i++;
+                  }
+                  $3.mystr[i] = '\0';
+                  if(symboltable->Lookup($3.mystr) == NULL){
+                    ////cout<<endl<<i<<" -- HELOE\n";
+                    flag = 0;
+                  }
+                  else{
+                    if(symboltable->Lookup($3.mystr)->getDataType() != "int "){
+                      error_count++;
+                      fprintf(error, "Error %d at Line %d: Non-integer Array Index \n\n",error_count , line_count);
+                     }
+                  }
+                }
+                else{
+                  flag = 0;
+                }
+              }
+              if(symboltable->Lookup($3.mystr) == NULL){
+                if(strchr($3.mystr, '(')!= NULL){
+                  char *tmp = $3.mystr;
+                  int i = 0;
+                  while(tmp[i] != '('){
+                    //cout<<tmp[i]<<endl;
+                    i++;
+                  }
+                  $3.mystr[i] = '\0';
+                  if(symboltable->Lookup($3.mystr) == NULL){
+                    ////cout<<endl<<i<<" -- HELOE\n";
+                    flag = 0;
+                  }
+                  else{
+                    if(symboltable->Lookup($3.mystr)->getDataType() == "void "){
+                      error_count++;
+                      fprintf(error, "Error %d at Line %d: Cannot call void function \n\n",error_count , line_count);
+                     }
+                    else if(symboltable->Lookup($3.mystr)->getDataType() != "int "){
+                      error_count++;
+                      fprintf(error, "Error %d at Line %d: Non-integer Array Index \n\n",error_count , line_count);
+                     }
+                  }
+                }
+              }
+              else{
+                if(symboltable->Lookup($3.mystr)->getDataType() != "int "){
+                  error_count++;
+                  fprintf(error, "Error %d at Line %d: Non-integer Array Index \n\n",error_count , line_count);
+                 }
+              }
+
+
                $$.mystr = tmp2;
                fprintf(logout,"%s \n\n",tmp2);
            }
@@ -834,6 +898,7 @@ void yyerror(const char *s){
 						strcat(tmp2 , tmp);
 						strcat(tmp2 , $3.mystr);
             int flag = 1;
+
             if(symboltable->Lookup($1.mystr) == NULL){
               if(strchr($1.mystr, '[')!= NULL){
                 char *tmp = $1.mystr;
@@ -862,8 +927,15 @@ void yyerror(const char *s){
                 }
                 $3.mystr[i] = '\0';
                 if(symboltable->Lookup($3.mystr) == NULL){
-                  ////cout<<endl<<i<<" -- HELOE\n";
+                  //cout<<endl<<i<<" -- HELOE\n";
                   flag = 0;
+                }
+                else{
+                  //cout<<"\n FOUND VOID FUNC -"<<symboltable->Lookup($3.mystr)->getDataType()<<"\n\n";
+                  if(symboltable->Lookup($3.mystr)->getDataType() == "void "){
+                    error_count++;
+                    fprintf(error, "Error %d at Line %d: Cannot Call void Function for assignment\n\n",error_count , line_count);
+                   }
                 }
               }
               else if(strchr($3.mystr, '[')!= NULL){
@@ -887,7 +959,7 @@ void yyerror(const char *s){
               SymbolInfo *sym = symboltable->Lookup($1.mystr);
               SymbolInfo *sym2 = symboltable->Lookup($3.mystr);
               if($3.intvalue == NULL && $3.floatvalue == NULL){
-                if(sym->getDataType()== "int " && sym2->getDataType() != "float "){
+                if(sym->getDataType()== "int " && sym2->getDataType() == "float "){
                   error_count++;
                   fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
                 }
@@ -904,6 +976,10 @@ void yyerror(const char *s){
             }
             else{
                 //cout<<"Flag set to 0\n";
+                if($3.floatvalue != NULL && symboltable->Lookup($1.mystr)!= NULL && symboltable->Lookup($1.mystr)->getDataType() != "int"){
+                  error_count++;
+                  fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
+                }
             }
           	$$.mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
@@ -1220,6 +1296,7 @@ void yyerror(const char *s){
 					}
 				  |	{
 						fprintf(logout,"At line no: %d argument_list :\n\n",line_count);
+            $$.mystr = "";
 					}
 				  ;
 			arguments : arguments COMMA logic_expression	{
