@@ -1,0 +1,26 @@
+Error 1 at line 7: Return Type does not match
+
+Error 2 at Line 17: Multiple declarations of the same variable: c
+
+Error 3 at Line 18: Type Mismatch
+
+Error 4 at Line 19: Non-integer Array Index 
+
+Error 5 at Line 20: Integer operands on modulus operator
+
+Error 6 at Line 21: Integer operands on modulus operator
+
+Error 7 at Line 22: Expected [ after Array type
+
+Error 8 at Line 23: Cannot Call void Function for assignment
+
+Error 9 at Line 25: Undeclared Variable: b
+
+Error 10 at Line 26: Expected [ after Array type
+
+Error 11 at Line 27: i value is not an array
+
+Error 12 at line 35: Conflicting arguments  h
+
+Total Errors: 12
+

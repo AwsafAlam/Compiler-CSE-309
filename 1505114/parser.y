@@ -747,6 +747,9 @@ void yyerror(const char *s){
 
 
 					}
+          |error{
+            yyerrok;
+          }
 				  ;
         expression_statement 	: SEMICOLON	{
               fprintf(logout,"At line no: %d expression_statement 	: SEMICOLON\n\n",line_count);
