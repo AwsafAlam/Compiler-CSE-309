@@ -1,0 +1,6 @@
+Error 1 at Line 4: Undeclared Variable: i
+
+Error 2 at Line 5: Undeclared Variable: i
+
+Total Errors: 2
+
