@@ -12,15 +12,17 @@ Error 6 at Line 21: Integer operands on modulus operator
 
 Error 7 at Line 22: Expected [ after Array type
 
-Error 8 at Line 23: Cannot Call void Function for assignment
+Error 8 at Line 22: Wrong type of parameters
 
-Error 9 at Line 25: Undeclared Variable: b
+Error 9 at Line 23: Cannot Call void Function for assignment
 
-Error 10 at Line 26: Expected [ after Array type
+Error 10 at Line 25: Undeclared Variable: b
 
-Error 11 at Line 27: i value is not an array
+Error 11 at Line 26: Expected [ after Array type
 
-Error 12 at line 35: Conflicting arguments  h
+Error 12 at Line 27: i value is not an array
 
-Total Errors: 12
+Error 13 at line 35: Conflicting arguments  h
+
+Total Errors: 13
 

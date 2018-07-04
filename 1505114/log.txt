@@ -326,24 +326,14 @@ At line no: 16 declaration_list : declaration_list COMMA ID
 
 a[2],c,i
 
-At line no: 16 declaration_list : declaration_list COMMA ID
+At line no: 17 declaration_list : declaration_list COMMA ID
 
 a[2],c,i,j
 
-At line no: 16 var_declaration : type_specifier declaration_list SEMICOLON
+At line no: 17  syntax error, unexpected FLOAT, expecting COMMA or SEMICOLON
+At line no: 17 statements : statement 
 
-int a[2],c,i,j;
-
-
-At line no: 16 statement : var_declaration
-
-int a[2],c,i,j;
- 
-
-At line no: 16 statements : statement 
-
-int a[2],c,i,j;
- 
+j 
 
 At line no: 17 type_specifier : FLOAT
 
@@ -365,8 +355,7 @@ float c;
 
 At line no: 17 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
  
 
 At line no: 18 variable : ID
@@ -413,8 +402,7 @@ i=2.3;
 
 At line no: 18 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
  
 
@@ -490,8 +478,7 @@ a[2.5]=1;
 
 At line no: 19 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
  
@@ -552,8 +539,7 @@ j=2%3.7;
 
 At line no: 20 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -617,8 +603,7 @@ j=2%f();
 
 At line no: 21 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -701,8 +686,7 @@ func(a);
 
 At line no: 22 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -756,8 +740,7 @@ j=g();
 
 At line no: 23 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -866,8 +849,7 @@ j=2%(3.5<4);
 
 At line no: 24 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -921,8 +903,7 @@ b=8;
 
 At line no: 25 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -977,8 +958,7 @@ a=4;
 
 At line no: 26 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -1062,8 +1042,7 @@ i[3]=1;
 
 At line no: 27 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -1118,8 +1097,7 @@ func();
 
 At line no: 28 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -1175,8 +1153,7 @@ i();
 
 At line no: 29 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -1226,8 +1203,7 @@ return 0;
 
 At line no: 30 statements :| statements statement 
 
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -1246,8 +1222,7 @@ return 0;
 At line no: 31 compound_statement : LCURL statements RCURL
 
 {
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -1283,8 +1258,7 @@ ScopeTable with id 5 removed
 At line no: 31 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
 
 int main(){
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -1304,8 +1278,7 @@ return 0;
 At line no: 31 unit : func_definition
 
 int main(){
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -1338,8 +1311,7 @@ return 0;
 }
 int h(int a);
 int main(){
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -1459,8 +1431,7 @@ return 0;
 }
 int h(int a);
 int main(){
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
@@ -1497,8 +1468,7 @@ return 0;
 }
 int h(int a);
 int main(){
-int a[2],c,i,j;
-float c;
+jfloat c;
 i=2.3;
 a[2.5]=1;
 j=2%3.7;
