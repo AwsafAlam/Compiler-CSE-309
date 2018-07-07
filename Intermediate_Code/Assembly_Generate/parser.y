@@ -95,7 +95,7 @@ void yyerror(const char *s){
 					fprintf(logout,"At line no: %d start : program\n\n",line_count);
 					$$ = $1;
 					fprintf(logout,"%s\n\n",$1.mystr);
-          char * init = ".MODEL SMALL\n.STACK 100H";
+          char * init = ".MODEL SMALL\n.STACK 100H\n.DATA";
           fprintf(code,"%s\n",init);
           fprintf(code,"%s\n\n",$1.mystr);
 
@@ -816,6 +816,8 @@ void yyerror(const char *s){
               //symboltable->Insert($1.mystr , "ID");
               fprintf(logout,"At line no: %d variable : ID\n\n",line_count);
               $$ = $1;
+              $$.code = "";
+
               $$.intvalue = NULL;
               $$.floatvalue = NULL;
               fprintf(logout,"%s\n\n",$1.mystr);
@@ -926,7 +928,9 @@ void yyerror(const char *s){
 					}
 					| variable ASSIGNOP logic_expression	{
 						fprintf(logout,"At line no: %d expression : variable ASSIGNOP logic_expression\n\n",line_count);
-						char tmp[2];
+            $$.code  = $3.code;
+            //$$.code += "MOV AX , "+$3.mystr+"\n";
+            char tmp[2];
 						tmp[0]='=';tmp[1]='\0';
 						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($3.mystr)+1);
 						strcpy(tmp2 , $1.mystr);
@@ -1275,7 +1279,7 @@ void yyerror(const char *s){
           $$.charvalue =  NULL;
           $$.arg_list = NULL;
 	        $$.mystr = tmp2;
-          $$.mystr = tmp2;
+          $$.code = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
 				}
 				| CONST_FLOAT	{
@@ -1296,6 +1300,7 @@ void yyerror(const char *s){
           $$.intvalue = NULL;
           $$.charvalue =  NULL;
           $$.mystr = tmp2;
+          $$.code = tmp2;
           free(str);
 				}
 				| variable INCOP	{
