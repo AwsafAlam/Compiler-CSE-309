@@ -98,11 +98,11 @@ void yyerror(const char *s){
 					fprintf(logout,"%s\n\n",$1.mystr);
           char * init = ".MODEL SMALL\n.STACK 100H\n.DATA";
           fprintf(code,"%s\n",init);
-          //fprintf(code,"%s\n\n",$1.mystr);
-          fprintf(code,"%s",$1.code);
+          fprintf(code,"%s\n\n",$1.mystr);
 
-          init = "END MAIN";
+          init = "\nEND MAIN";
           fprintf(code,"%s\n",init);
+
           fprintf(error,"Total Errors: %d\n\n",error_count);
 				}
 				;
@@ -115,22 +115,11 @@ void yyerror(const char *s){
 					strcat(tmp , tmp2);
 					strcat(tmp , $2.mystr);
 					$$.mystr = tmp;
-
-          char * ctmp = (char *) malloc(1+strlen($1.code)+strlen($2.code));
-          char ctmp2[2];
-          ctmp2[0]='\n';ctmp2[1]='\0';
-          strcpy(ctmp , $1.code);
-          strcat(ctmp , ctmp2);
-          strcat(ctmp , $2.code);
-
-          $$.code = ctmp;
-          free(ctmp);
 					fprintf(logout,"%s \n\n",tmp);
 				}
 				| unit	{
 					fprintf(logout,"At line no: %d program : | unit\n\n",line_count);
 					$$ = $1;
-
 					fprintf(logout,"%s\n\n",$1.mystr);
 				}
 				;
@@ -147,7 +136,6 @@ void yyerror(const char *s){
 			     | func_definition	{
 						 fprintf(logout,"At line no: %d unit : func_definition\n\n",line_count);
 						 $$ = $1;
-
 						 fprintf(logout,"%s \n\n",$1.mystr);
 					 }
 			     ;
@@ -218,45 +206,18 @@ void yyerror(const char *s){
                }
              }
              ;
-			 func_definition : type_specifier ID LPAREN RPAREN {
-         cout<<"NEED TO INS FUNC NAME FOR RECURSION "<<$2.mystr<<endl;
-
-         //$<args>$.code += " PROC\n";
-       } compound_statement {
+			 func_definition : type_specifier ID LPAREN RPAREN compound_statement {
 				 		fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN  RPAREN compound_statement\n\n",line_count);
 						char tmp[2];
  						tmp[0]='(';tmp[1]='\0';
- 						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr)+4+strlen($6.mystr));
+ 						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr)+4+strlen($5.mystr));
  						strcpy(tmp2 , $1.mystr);
  						strcat(tmp2 , $2.mystr);
  						strcat(tmp2 , tmp);
  						tmp[0] = ')';
  						strcat(tmp2 , tmp);
- 						strcat(tmp2 , $6.mystr);
+ 						strcat(tmp2 , $5.mystr);
  						$$.mystr = tmp2;
-
-            char ctmp[6];
-            ctmp[0]='P';ctmp[1]='R';ctmp[2]='O';ctmp[3]='C';ctmp[4]='\n';ctmp[5]='\0';
-
-            char * ctmp2 = (char *) malloc(1+strlen($2.mystr)+7+strlen($6.code));
-            strcat(ctmp2 , $2.mystr);
-            ctmp[0]=' ';ctmp[1]='\0';
-            strcat(ctmp2 , ctmp);
-            ctmp[0]='P';ctmp[1]='R';ctmp[2]='O';ctmp[3]='C';ctmp[4]='\n';ctmp[5]='\0';
-
-            strcat(ctmp2 , ctmp);
-            strcat(ctmp2 , $6.code);
-            ctmp[0]='\n';ctmp[1]='\0';
-            strcat(ctmp2 , ctmp);
-            strcat(ctmp2 , $2.mystr);
-            ctmp[0]=' ';ctmp[1]='\0';
-            strcat(ctmp2 , ctmp);
-
-            ctmp[0]='E';ctmp[1]='N';ctmp[2]='D';ctmp[3]='\n';ctmp[4]='\0';ctmp[5]='\0';
-            strcat(ctmp2 , ctmp);
-
-            $$.code = ctmp2;
-
  						fprintf(logout,"%s \n\n",tmp2);
             int flag = 1;
 
@@ -517,9 +478,6 @@ void yyerror(const char *s){
 							strcat(tmp2 , tmp);
 							$$.mystr = tmp2;
               $$.d_type = $3.d_type;
-
-              $$.code = $3.code;
-
 							fprintf(logout,"%s \n\n",tmp2);
 							symboltable->PrintAllScopes();
 							symboltable->ExitScope();
@@ -670,14 +628,7 @@ void yyerror(const char *s){
  						strcat(tmp2 , $2.mystr);
             $$ = $2;
  						$$.mystr = tmp2;
-
-            char * ctmp2 = (char *) malloc(3+strlen($1.code)+strlen($2.code));
-            strcpy(ctmp2 , $1.code);
-            strcat(ctmp2 , $2.code);
-            cout<<" ->"<<ctmp2<<endl;
-            $$.code = ctmp2;
-            free(ctmp2);
-            fprintf(logout,"%s \n\n",tmp2);
+ 						fprintf(logout,"%s \n\n",tmp2);
 					 }
 				   ;
 			statement : var_declaration	{
@@ -688,7 +639,6 @@ void yyerror(const char *s){
 					| expression_statement	{
 						 fprintf(logout,"At line no: %d statement : expression_statement\n\n",line_count);
 						 $$ = $1;
-
  						fprintf(logout,"%s \n\n",$1.mystr);
 					 }
 				  | compound_statement	{
@@ -763,10 +713,7 @@ void yyerror(const char *s){
 					}
 				  | PRINTLN LPAREN ID RPAREN SEMICOLON	{
 						fprintf(logout,"At line no: %d statement : PRINTLN LPAREN ID RPAREN SEMICOLON\n\n",line_count);
-
-            $$.code = $3.mystr;
-
-            char tmp[8];
+						char tmp[8];
 						tmp[0]='p';tmp[1]='r';tmp[2]='i';tmp[3]='n';tmp[4]='t';tmp[5]='l';tmp[6]='n';tmp[7]='\0';
  						char * tmp2 = (char *) malloc(1+strlen(tmp)+1+strlen($3.mystr)+2);
  						strcpy(tmp2 , tmp);
@@ -863,16 +810,7 @@ void yyerror(const char *s){
               tmp[0]='\n';tmp[1]='\0';
               strcat(tmp2 , tmp);
               $$.mystr = tmp2;
-
-              tmp[0]='\n';tmp[1]='\0';
-              char * ctmp2 = (char *) malloc(1+strlen($1.code)+5);
-
-              strcpy(ctmp2 , $1.code);
-              tmp[0]='\n';tmp[1]='\0';
-              strcat(ctmp2 , tmp);
-              $$.code = ctmp2;
-
-              fprintf(logout,"%s \n\n",$$.mystr);
+              fprintf(logout,"%s \n\n",tmp2);
             }
             ;
           variable : ID	{
@@ -991,22 +929,13 @@ void yyerror(const char *s){
 					}
 					| variable ASSIGNOP logic_expression	{
 						fprintf(logout,"At line no: %d expression : variable ASSIGNOP logic_expression\n\n",line_count);
-
-            char tmp[8];
-            tmp[0]='m';tmp[1]='o';tmp[2]='v';tmp[3]=' ';tmp[4]='a';tmp[5]='x';tmp[6]=',';tmp[7]='\0';
-
-            char * ctmp2 = (char *) malloc(1+9+strlen($3.code)+1);
-
-            strcpy(ctmp2 , tmp);
-						strcat(ctmp2 , $3.code);
-
-            $$.code  = ctmp2;
+            $$.code  = $3.code;
             //$$.code += "MOV AX , "+$3.mystr+"\n";
-            char stmp[2];
-						stmp[0]='=';stmp[1]='\0';
+            char tmp[2];
+						tmp[0]='=';tmp[1]='\0';
 						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($3.mystr)+1);
 						strcpy(tmp2 , $1.mystr);
-						strcat(tmp2 , stmp);
+						strcat(tmp2 , tmp);
 						strcat(tmp2 , $3.mystr);
             int flag = 1;
 
@@ -1099,7 +1028,11 @@ void yyerror(const char *s){
 			logic_expression : rel_expression	{
 				 			fprintf(logout,"At line no: %d logic_expression : rel_expression\n\n",line_count);
 							$$ = $1;
-            fprintf(logout,"%s \n\n",$1.mystr);
+              //cout<<" \n\n-- "<<$1.mystr;
+              //cout<<" \n\n Data TYPE -- "<<$1.d_type<<"\n\n";
+
+              //$$.floatvalue = $1.floatvalue;
+ 						 fprintf(logout,"%s \n\n",$1.mystr);
 						}
 					 | rel_expression LOGICOP rel_expression	{
 						 fprintf(logout,"At line no: %d logic_expression : rel_expression LOGICOP rel_expression\n\n",line_count);
@@ -1114,7 +1047,8 @@ void yyerror(const char *s){
 			rel_expression	: simple_expression	{
 							fprintf(logout,"At line no: %d rel_expression	: simple_expression\n\n",line_count);
 							$$ = $1;
-          	 fprintf(logout,"%s \n\n",$1.mystr);
+              //$$.floatvalue = $1.floatvalue;
+ 						 fprintf(logout,"%s \n\n",$1.mystr);
 					}
 					| simple_expression RELOP simple_expression	{
 						fprintf(logout,"At line no: %d rel_expression	: simple_expression RELOP simple_expression\n\n",line_count);
@@ -1158,10 +1092,12 @@ void yyerror(const char *s){
                 char *tmp = $2.mystr;
                 int i = 0;
                 while(tmp[i] != '['){
+                  //cout<<tmp[i]<<endl;
                   i++;
                 }
                 $2.mystr[i] = '\0';
                 if(symboltable->Lookup($2.mystr) == NULL){
+                  ////cout<<endl<<i<<" -- HELOE\n";
                   flag = 0;
                 }
 
@@ -1170,10 +1106,12 @@ void yyerror(const char *s){
                 char *tmp = $2.mystr;
                 int i = 0;
                 while(tmp[i] != '('){
+                  //cout<<tmp[i]<<endl;
                   i++;
                 }
                 $2.mystr[i] = '\0';
                 if(symboltable->Lookup($2.mystr) == NULL){
+                  ////cout<<endl<<i<<" -- HELOE\n";
                   flag = 0;
                 }
 
@@ -1194,15 +1132,13 @@ void yyerror(const char *s){
             fprintf(logout,"%s \n\n",$$.mystr);
           }
 		     |  term MULOP unary_expression	{
-
-           fprintf(logout,"At line no: %d term :	term MULOP unary_expression\n\n",line_count);
+					 fprintf(logout,"At line no: %d term :	term MULOP unary_expression\n\n",line_count);
 					 char tmp[2];
 					 tmp[0]=$2.charvalue ;tmp[1]='\0';
 					 char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1+strlen($3.mystr));
 					 strcpy(tmp2 , $1.mystr);
 					 strcat(tmp2 , tmp);
 					 strcat(tmp2 , $3.mystr);
-
            if($2.charvalue == '%'){
              if(($1.intvalue != NULL && $3.intvalue == NULL) || ($1.intvalue == NULL && $3.intvalue != NULL)){
               error_count++;
@@ -1211,10 +1147,32 @@ void yyerror(const char *s){
              }
           }
           else if($2.charvalue == '*'){
-
+              if($1.intvalue !=NULL && $3.intvalue != NULL){
+                $$.intvalue = $1.intvalue *$3.intvalue;
+              }
+              else if($1.floatvalue !=NULL && $3.floatvalue != NULL){
+                $$.floatvalue = $1.floatvalue *$3.floatvalue;
+              }
+              else if($1.intvalue !=NULL && $3.intvalue == NULL){
+                $$.floatvalue = $1.intvalue * $3.floatvalue;
+              }
+              else{
+                $$.floatvalue = $1.floatvalue * $3.floatvalue;
+              }
           }
           else if($2.charvalue == '/'){
-
+              if($1.intvalue !=NULL && $3.intvalue != NULL){
+                $$.intvalue = $1.intvalue / $3.intvalue;
+              }
+              else if($1.floatvalue !=NULL && $3.floatvalue != NULL){
+                $$.floatvalue = $1.floatvalue / $3.floatvalue;
+              }
+              else if($1.intvalue !=NULL && $3.intvalue == NULL){
+                $$.floatvalue = $1.intvalue / $3.floatvalue;
+              }
+              else{
+                $$.floatvalue = $1.floatvalue / $3.floatvalue;
+              }
           }
 
 					 $$.mystr = tmp2;
@@ -1271,6 +1229,7 @@ void yyerror(const char *s){
           }
           else{
             int arg_no = sym->getArgNumber();
+            //cout<<endl<<arg_no<<" -- argno \n\n";
             while(head!= NULL){
               if(arg_no==0){
                 error_count ++;
@@ -1278,19 +1237,24 @@ void yyerror(const char *s){
                 break;
               }
               SymbolInfo* s = sym->getArgument();
+              //cout<<s->getName()<<"-"<<s->getType()<<endl;
+              //cout<<head->name<<"  - name - "<<head->d_type<<endl;
               if(symboltable->Lookup(head->name) != NULL){
                 if(symboltable->Lookup(head->name)->getDataType() != s->getType()){
                   error_count ++;
                   fprintf(error, "Error %d at Line %d: Wrong type of parameters\n\n",error_count , line_count);
                 }
               }
+              //cout<<head->d_type<<"-"<<symboltable->Lookup(head->name)->getDataType()<<" -- matches -- ";
               head = head->arg_list;
               arg_no--;
             }
           }
 
 					$$.mystr = tmp2;
-          fprintf(logout,"%s \n\n",tmp2);
+          $$.intvalue = NULL;
+          $$.floatvalue = NULL;
+					fprintf(logout,"%s \n\n",tmp2);
         }
 				| LPAREN expression RPAREN	{
 					fprintf(logout,"At line no: %d factor : LPAREN expression RPAREN\n\n",line_count);
@@ -1311,7 +1275,9 @@ void yyerror(const char *s){
 					char * tmp2 = (char *) malloc(1+strlen(tmp));
 					strcat(tmp2 , tmp);
           $$.d_type = "int";
-
+          $$.floatvalue = NULL;
+          $$.intvalue = $1.intvalue;
+          $$.charvalue =  NULL;
           $$.arg_list = NULL;
 	        $$.mystr = tmp2;
           $$.code = tmp2;
@@ -1319,7 +1285,9 @@ void yyerror(const char *s){
 				}
 				| CONST_FLOAT	{
 					fprintf(logout,"At line no: %d factor : CONST_FLOAT\n\n",line_count);
-
+          ////cout<<$1.mystr<<" ------\n";
+          /* char array[10];
+          sprintf(array, "%f", $1.mystr); */
           char* str=NULL;
           int len = asprintf(&str, "%g", $1.floatvalue);
           if (len == -1)
@@ -1328,8 +1296,10 @@ void yyerror(const char *s){
             fprintf(logout,"%s \n\n",str);
           char * tmp2 = (char *) malloc(1+strlen(str));
 					strcpy(tmp2 , str);
-					$$ = $1;
-
+					/* $$ = $1; */
+          $$.floatvalue = $1.floatvalue;
+          $$.intvalue = NULL;
+          $$.charvalue =  NULL;
           $$.mystr = tmp2;
           $$.code = tmp2;
           free(str);
@@ -1359,8 +1329,12 @@ void yyerror(const char *s){
 						fprintf(logout,"At line no: %d argument_list : arguments\n\n",line_count);
 						$$ = $1;
 						fprintf(logout,"%s \n\n",$1.mystr);
-
-          }
+            /* struct node * head = $1.arg_list;
+            while(head!= NULL){
+              //cout<<head->d_type<<"-"<<head->name<<" -- matches -- \n";
+              head = head->arg_list;
+            } */
+					}
 				  |	{
 						fprintf(logout,"At line no: %d argument_list :\n\n",line_count);
             $$.mystr = "";
@@ -1378,21 +1352,21 @@ void yyerror(const char *s){
             fprintf(logout,"%s \n\n",tmp2);
             struct node * item = (struct node *) malloc(1+sizeof(struct node));
             item->name = $3.mystr;
-
             if(symboltable->Lookup($3.mystr) != NULL){
               item->d_type = (char *) symboltable->Lookup($3.mystr)->getDataType().c_str();
             }
             item->arg_list = $1.arg_list;
+            //cout<<symboltable->Lookup($3.mystr)->getDataType().c_str()<<" <ARGUMENT>\n\n";
             $$.arg_list = item;
 					}
 		      | logic_expression	{
 						fprintf(logout,"At line no: %d arguments : logic_expression\n\n",line_count);
-
+            //struct node * item = (struct node *) malloc(1+sizeof(struct node));
             $$.arg_list  = (struct node *) malloc(1+sizeof(struct node));
             $$.arg_list->name = $1.mystr;
-
             if(symboltable->Lookup($1.mystr) != NULL){
               $$.arg_list->d_type = (char *) symboltable->Lookup($1.mystr)->getDataType().c_str();
+              ////cout<<item->d_type<<" datatype \n";
             }
             else{
               if($1.floatvalue != NULL){
@@ -1405,7 +1379,10 @@ void yyerror(const char *s){
 
             $$.arg_list->arg_list = NULL;
             $$.mystr = $1.mystr;
-            fprintf(logout,"%s \n\n",$1.mystr);
+            $$.intvalue = $1.intvalue;
+            $$.floatvalue = $1.floatvalue;
+            $$.charvalue = $1.charvalue;
+						fprintf(logout,"%s \n\n",$1.mystr);
 					}
 		      ;
 %%
