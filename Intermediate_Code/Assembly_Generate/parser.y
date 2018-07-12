@@ -1318,7 +1318,6 @@ void yyerror(const char *s){
 						$$.mystr = tmp2;
 						fprintf(logout,"%s \n\n",tmp2);
 
-            if(!strcmp($2.mystr , "<")){
               char ctmp[9];
               ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
@@ -1347,8 +1346,31 @@ void yyerror(const char *s){
               ctmp[0]='\n';ctmp[1]='\0';
               strcat(ctmp2 , ctmp);
 
+            if(!strcmp($2.mystr , "<")){
               ctmp[0]='J';ctmp[1]='L';ctmp[2]=' ';ctmp[3]='\0';ctmp[4]='\0';
               strcat(ctmp2 , ctmp);
+            }
+            else if(!strcmp($2.mystr , "<=")){
+              ctmp[0]='J';ctmp[1]='L';ctmp[2]='E';ctmp[3]=' ';ctmp[4]='\0';
+              strcat(ctmp2 , ctmp);
+            }
+            else if(!strcmp($2.mystr , ">")){
+              ctmp[0]='J';ctmp[1]='G';ctmp[2]=' ';ctmp[3]='\0';ctmp[4]='\0';
+              strcat(ctmp2 , ctmp);
+            }
+            else if(!strcmp($2.mystr , ">=")){
+              ctmp[0]='J';ctmp[1]='G';ctmp[2]='E';ctmp[3]=' ';ctmp[4]='\0';
+              strcat(ctmp2 , ctmp);
+            }
+            else if(!strcmp($2.mystr , "==")){
+              ctmp[0]='J';ctmp[1]='E';ctmp[2]=' ';ctmp[3]='\0';ctmp[4]='\0';
+              strcat(ctmp2 , ctmp);
+            }
+            else if(!strcmp($2.mystr , "!=")){
+              ctmp[0]='J';ctmp[1]='N';ctmp[2]='E';ctmp[3]=' ';ctmp[4]='\0';
+              strcat(ctmp2 , ctmp);
+            }
+            
               char *lelse = newLabel();
               //$$.LABEL = lelse;
               strcat(ctmp2 , lelse);
@@ -1396,24 +1418,6 @@ void yyerror(const char *s){
               strcat(ctmp2 , ctmp);
 
               $$.code = ctmp2;
-
-            }
-            else if(!strcmp($2.mystr , "<=")){
-
-            }
-            else if(!strcmp($2.mystr , ">")){
-
-            }
-            else if(!strcmp($2.mystr , ">=")){
-
-            }
-            else if(!strcmp($2.mystr , "==")){
-
-            }
-            else if(!strcmp($2.mystr , "!=")){
-
-            }
-            
 
 
 					}
