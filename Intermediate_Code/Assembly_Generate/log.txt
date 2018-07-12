@@ -118,12 +118,151 @@ int i;
 i=i*2;
  
 
-At line no: 7 compound_statement : LCURL statements RCURL
+At line no: 6 factor : CONST_INT
+
+1 
+
+At line no: 6 unary_expression : factor
+
+1 
+
+At line no: 6 term :	unary_expression
+
+1 
+
+At line no: 6 simple_expression : term
+
+1 
+
+At line no: 6 rel_expression	: simple_expression
+
+1 
+
+At line no: 6 logic_expression : rel_expression
+
+1 
+
+At line no: 6 expression : logic_expression
+
+1 
+
+At line no: 6 variable : ID LTHIRD expression RTHIRD
+
+a[1] 
+
+At line no: 6 variable : ID
+
+i
+
+At line no: 6 factor	: variable
+
+i 
+
+At line no: 6 unary_expression : factor
+
+i 
+
+At line no: 6 term :	unary_expression
+
+i 
+
+At line no: 6 factor : CONST_INT
+
+1 
+
+At line no: 6 unary_expression : factor
+
+1 
+
+At line no: 6 term :	unary_expression
+
+1 
+
+At line no: 6 factor : CONST_INT
+
+2 
+
+At line no: 6 unary_expression : factor
+
+2 
+
+At line no: 6 term :	term MULOP unary_expression
+
+1*2 
+
+At line no: 6 simple_expression : term
+
+1*2 
+
+At line no: 6 rel_expression	: simple_expression
+
+1*2 
+
+At line no: 6 logic_expression : rel_expression
+
+1*2 
+
+At line no: 6 expression : logic_expression
+
+1*2 
+
+At line no: 6 variable : ID LTHIRD expression RTHIRD
+
+a[1*2] 
+
+At line no: 6 factor	: variable
+
+a[1*2] 
+
+At line no: 6 unary_expression : factor
+
+a[1*2] 
+
+At line no: 6 term :	term MULOP unary_expression
+
+i*a[1*2] 
+
+At line no: 6 simple_expression : term
+
+i*a[1*2] 
+
+At line no: 6 rel_expression	: simple_expression
+
+i*a[1*2] 
+
+At line no: 6 logic_expression : rel_expression
+
+i*a[1*2] 
+
+At line no: 6 expression : variable ASSIGNOP logic_expression
+
+a[1]=i*a[1*2] 
+
+At line no: 6 expression_statement 	: expression SEMICOLON
+
+a[1]=i*a[1*2];
+ 
+
+At line no: 6 statement : expression_statement
+
+a[1]=i*a[1*2];
+ 
+
+At line no: 6 statements :| statements statement 
+
+int a[3];
+int i;
+i=i*2;
+a[1]=i*a[1*2];
+ 
+
+At line no: 8 compound_statement : LCURL statements RCURL
 
 {
 int a[3];
 int i;
 i=i*2;
+a[1]=i*a[1*2];
 
 } 
 
@@ -137,39 +276,43 @@ ScopeTable # 1
 
 ScopeTable with id 2 removed
 
-At line no: 7 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
+At line no: 8 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
 
 int main(){
 int a[3];
 int i;
 i=i*2;
+a[1]=i*a[1*2];
 
 } 
 
-At line no: 7 unit : func_definition
+At line no: 8 unit : func_definition
 
 int main(){
 int a[3];
 int i;
 i=i*2;
+a[1]=i*a[1*2];
 
 } 
 
-At line no: 7 program : | unit
+At line no: 8 program : | unit
 
 int main(){
 int a[3];
 int i;
 i=i*2;
+a[1]=i*a[1*2];
 
 }
 
-At line no: 8 start : program
+At line no: 9 start : program
 
 int main(){
 int a[3];
 int i;
 i=i*2;
+a[1]=i*a[1*2];
 
 }
 

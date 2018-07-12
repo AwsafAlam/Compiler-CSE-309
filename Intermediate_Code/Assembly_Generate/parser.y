@@ -223,7 +223,8 @@ void yyerror(const char *s){
 
          //$<args>$.code += " PROC\n";
        } compound_statement {
-				 		fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN  RPAREN compound_statement\n\n",line_count);
+
+      	 		fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN  RPAREN compound_statement\n\n",line_count);
 						char tmp[2];
  						tmp[0]='(';tmp[1]='\0';
  						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr)+4+strlen($6.mystr));
@@ -541,7 +542,8 @@ void yyerror(const char *s){
                symboltable->ExitScope();
 						 }
 						;
-			var_declaration : type_specifier declaration_list SEMICOLON  {
+
+      var_declaration : type_specifier declaration_list SEMICOLON  {
 				fprintf(logout,"At line no: %d var_declaration : type_specifier declaration_list SEMICOLON\n\n",line_count);
 				char * tmp = (char *) malloc(1 + strlen($1.mystr) + 1 + strlen($2.mystr));
 				strcpy(tmp, $1.mystr);
@@ -557,6 +559,7 @@ void yyerror(const char *s){
         }
 				fprintf(logout,"%s\n\n",tmp);
 				$$.mystr = tmp;
+
         $$.code = "";
 				////cout<<"--- > "<<vec.size()<<endl;
         vec.clear();
@@ -669,15 +672,18 @@ void yyerror(const char *s){
  						strcpy(tmp2 , $1.mystr);
  						strcat(tmp2 , $2.mystr);
             $$ = $2;
- 						$$.mystr = tmp2;
+            $$.mystr = tmp2;
+
 
             char * ctmp2 = (char *) malloc(1+strlen($1.code)+strlen($2.code));
             strcpy(ctmp2 , $1.code);
+            $$.code = ctmp2;
             strcat(ctmp2 , $2.code);
 
             fprintf(logout,"%s \n\n",tmp2);
 					 }
 				   ;
+
 			statement : var_declaration	{
 					fprintf(logout,"At line no: %d statement : var_declaration\n\n",line_count);
 						$$ = $1;
@@ -789,6 +795,7 @@ void yyerror(const char *s){
 						tmp[0]='\n';tmp[1]='\0';
 						strcat(tmp2 , tmp);
 						$$.mystr = tmp2;
+            $$.code = "";
 						fprintf(logout,"%s \n\n",tmp2);
             returnFlag = true;
             int flag = 1;
@@ -900,7 +907,12 @@ void yyerror(const char *s){
             }
            | ID LTHIRD expression RTHIRD	{
              fprintf(logout,"At line no: %d variable : ID LTHIRD expression RTHIRD\n\n",line_count);
-             $$.code = "";
+
+             char * ctmp2 = (char *) malloc(1+strlen($3.code)+5);
+             strcpy(ctmp2 , $3.code);
+
+             $$.code = ctmp2;
+
 
              char tmp[2];
              tmp[0]='[';tmp[1]='\0';
@@ -998,7 +1010,15 @@ void yyerror(const char *s){
             strcat(ctmp2 , $1.code);
 
             strcat(ctmp2 , ctmp);
-            strcat(ctmp2 , $3.mystr);
+
+            if($3.VAR_NAME == NULL){
+              strcat(ctmp2 , $3.mystr);
+            }
+            else{
+              strcat(ctmp2 , $3.VAR_NAME);
+
+            }
+
             ctmp[0]='\n';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
 
@@ -1228,7 +1248,9 @@ void yyerror(const char *s){
               char ctmp[8];
               ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-              char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+1);
+              char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+1);
+              strcpy(ctmp2 , $1.code);
+              strcat(ctmp2 , $3.code);
 
               strcat(ctmp2 , ctmp);
               strcat(ctmp2 , $1.mystr);
@@ -1248,16 +1270,9 @@ void yyerror(const char *s){
 
               ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
               strcat(ctmp2 , ctmp);
-              strcat(ctmp2 , newTemp());
-
-              /* char *t = new char[4];
-              strcpy(t,"t");
-            	char b[3];
-            	sprintf(b,"%d", tempCount);
-            	tempCount++;
-            	strcat(t,b);
-              //$$.code = tvar;
-              strcat(ctmp2 , t); */
+              char *t = newTemp();
+              $$.VAR_NAME = t;
+              strcat(ctmp2 , t);
 
               ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\0';
               strcat(ctmp2 , ctmp);

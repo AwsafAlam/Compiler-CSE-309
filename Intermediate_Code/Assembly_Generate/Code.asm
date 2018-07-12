@@ -7,9 +7,22 @@ MOV BX,2
 MUL BX
 MOV t0,AX
 
-MOV AX,i*2
+MOV AX,t0
 MOV i,AX
-!
+
+MOV AX,1
+MOV BX,2
+MUL BX
+MOV t1,AX
+
+MOV AX,i
+MOV BX,a[1*2]
+MUL BX
+MOV t2,AX
+
+MOV AX,t2
+MOV a[1],AX
+
 
 main ENDP
 END MAIN
