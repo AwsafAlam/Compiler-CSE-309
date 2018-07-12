@@ -1,0 +1,175 @@
+  New ScopeTable with id 1 created
+
+At line no: 1 type_specifier:INT
+
+int  
+
+  New ScopeTable with id 2 created
+
+At line no: 3 type_specifier:INT
+
+int  
+
+At line no: 3 declaration_list : ID LTHIRD CONST_INT RTHIRD
+
+a[3] 
+
+At line no: 3 var_declaration : type_specifier declaration_list SEMICOLON
+
+int a[3];
+
+
+At line no: 3 statement : var_declaration
+
+int a[3];
+ 
+
+At line no: 3 statements : statement 
+
+int a[3];
+ 
+
+At line no: 4 type_specifier:INT
+
+int  
+
+At line no: 4 declaration_list : ID
+
+i
+
+At line no: 4 var_declaration : type_specifier declaration_list SEMICOLON
+
+int i;
+
+
+At line no: 4 statement : var_declaration
+
+int i;
+ 
+
+At line no: 4 statements :| statements statement 
+
+int a[3];
+int i;
+ 
+
+At line no: 5 variable : ID
+
+i
+
+At line no: 5 variable : ID
+
+i
+
+At line no: 5 factor	: variable
+
+i 
+
+At line no: 5 unary_expression : factor
+
+i 
+
+At line no: 5 term :	unary_expression
+
+i 
+
+At line no: 5 factor : CONST_INT
+
+2 
+
+At line no: 5 unary_expression : factor
+
+2 
+
+At line no: 5 term :	term MULOP unary_expression
+
+i*2 
+
+At line no: 5 simple_expression : term
+
+i*2 
+
+At line no: 5 rel_expression	: simple_expression
+
+i*2 
+
+At line no: 5 logic_expression : rel_expression
+
+i*2 
+
+At line no: 5 expression : variable ASSIGNOP logic_expression
+
+i=i*2 
+
+At line no: 5 expression_statement 	: expression SEMICOLON
+
+i=i*2;
+ 
+
+At line no: 5 statement : expression_statement
+
+i=i*2;
+ 
+
+At line no: 5 statements :| statements statement 
+
+int a[3];
+int i;
+i=i*2;
+ 
+
+At line no: 7 compound_statement : LCURL statements RCURL
+
+{
+int a[3];
+int i;
+i=i*2;
+
+} 
+
+ScopeTable # 2
+----------------------
+14 -->  <a : ID> 
+22 -->  <i : ID> 
+
+ScopeTable # 1
+----------------------
+
+ScopeTable with id 2 removed
+
+At line no: 7 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
+
+int main(){
+int a[3];
+int i;
+i=i*2;
+
+} 
+
+At line no: 7 unit : func_definition
+
+int main(){
+int a[3];
+int i;
+i=i*2;
+
+} 
+
+At line no: 7 program : | unit
+
+int main(){
+int a[3];
+int i;
+i=i*2;
+
+}
+
+At line no: 8 start : program
+
+int main(){
+int a[3];
+int i;
+i=i*2;
+
+}
+

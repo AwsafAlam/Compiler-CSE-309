@@ -1,4 +1,7 @@
-int main(){
-	a = 10;
-	println(a);
+int main()
+{
+	int a[3];
+	int i;
+	i = i*2;
+
 }

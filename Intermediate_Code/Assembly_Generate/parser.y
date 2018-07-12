@@ -101,8 +101,9 @@ void yyerror(const char *s){
           //fprintf(code,"%s\n\n",$1.mystr);
           fprintf(code,"%s",$1.code);
 
-          init = "END MAIN";
+          init = "\nEND MAIN";
           fprintf(code,"%s\n",init);
+
           fprintf(error,"Total Errors: %d\n\n",error_count);
 				}
 				;
@@ -124,7 +125,6 @@ void yyerror(const char *s){
           strcat(ctmp , $2.code);
 
           $$.code = ctmp;
-          free(ctmp);
 					fprintf(logout,"%s \n\n",tmp);
 				}
 				| unit	{
@@ -235,10 +235,9 @@ void yyerror(const char *s){
  						strcat(tmp2 , $6.mystr);
  						$$.mystr = tmp2;
 
-            char ctmp[6];
-            ctmp[0]='P';ctmp[1]='R';ctmp[2]='O';ctmp[3]='C';ctmp[4]='\n';ctmp[5]='\0';
+            char ctmp[7];
 
-            char * ctmp2 = (char *) malloc(1+strlen($2.mystr)+7+strlen($6.code));
+            char * ctmp2 = (char *) malloc(1+strlen($2.mystr)+15+strlen($6.code));
             strcat(ctmp2 , $2.mystr);
             ctmp[0]=' ';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
@@ -252,7 +251,7 @@ void yyerror(const char *s){
             ctmp[0]=' ';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
 
-            ctmp[0]='E';ctmp[1]='N';ctmp[2]='D';ctmp[3]='\n';ctmp[4]='\0';ctmp[5]='\0';
+            ctmp[0]='E';ctmp[1]='N';ctmp[2]='D';ctmp[3]='P';ctmp[4]='\0';ctmp[5]='\0';ctmp[6]='\0';
             strcat(ctmp2 , ctmp);
 
             $$.code = ctmp2;
@@ -558,6 +557,7 @@ void yyerror(const char *s){
         }
 				fprintf(logout,"%s\n\n",tmp);
 				$$.mystr = tmp;
+        $$.code = "";
 				////cout<<"--- > "<<vec.size()<<endl;
         vec.clear();
 			};
@@ -671,12 +671,10 @@ void yyerror(const char *s){
             $$ = $2;
  						$$.mystr = tmp2;
 
-            char * ctmp2 = (char *) malloc(3+strlen($1.code)+strlen($2.code));
+            char * ctmp2 = (char *) malloc(1+strlen($1.code)+strlen($2.code));
             strcpy(ctmp2 , $1.code);
             strcat(ctmp2 , $2.code);
-            cout<<" ->"<<ctmp2<<endl;
-            $$.code = ctmp2;
-            free(ctmp2);
+
             fprintf(logout,"%s \n\n",tmp2);
 					 }
 				   ;
@@ -763,10 +761,7 @@ void yyerror(const char *s){
 					}
 				  | PRINTLN LPAREN ID RPAREN SEMICOLON	{
 						fprintf(logout,"At line no: %d statement : PRINTLN LPAREN ID RPAREN SEMICOLON\n\n",line_count);
-
-            $$.code = $3.mystr;
-
-            char tmp[8];
+						char tmp[8];
 						tmp[0]='p';tmp[1]='r';tmp[2]='i';tmp[3]='n';tmp[4]='t';tmp[5]='l';tmp[6]='n';tmp[7]='\0';
  						char * tmp2 = (char *) malloc(1+strlen(tmp)+1+strlen($3.mystr)+2);
  						strcpy(tmp2 , tmp);
@@ -905,6 +900,8 @@ void yyerror(const char *s){
             }
            | ID LTHIRD expression RTHIRD	{
              fprintf(logout,"At line no: %d variable : ID LTHIRD expression RTHIRD\n\n",line_count);
+             $$.code = "";
+
              char tmp[2];
              tmp[0]='[';tmp[1]='\0';
              char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1+strlen($3.mystr)+1);
@@ -979,7 +976,6 @@ void yyerror(const char *s){
                  }
               }
 
-
                $$.mystr = tmp2;
                fprintf(logout,"%s \n\n",tmp2);
            }
@@ -991,22 +987,35 @@ void yyerror(const char *s){
 					}
 					| variable ASSIGNOP logic_expression	{
 						fprintf(logout,"At line no: %d expression : variable ASSIGNOP logic_expression\n\n",line_count);
-
-            char tmp[8];
-            tmp[0]='m';tmp[1]='o';tmp[2]='v';tmp[3]=' ';tmp[4]='a';tmp[5]='x';tmp[6]=',';tmp[7]='\0';
-
-            char * ctmp2 = (char *) malloc(1+9+strlen($3.code)+1);
-
-            strcpy(ctmp2 , tmp);
-						strcat(ctmp2 , $3.code);
-
-            $$.code  = ctmp2;
+            //$$.code  = $3.code;
             //$$.code += "MOV AX , "+$3.mystr+"\n";
-            char stmp[2];
-						stmp[0]='=';stmp[1]='\0';
+
+            char ctmp[8];
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+
+            char * ctmp2 = (char *) malloc(1+16+strlen($1.code)+strlen($3.code)+1);
+            strcpy(ctmp2 , $3.code);
+            strcat(ctmp2 , $1.code);
+
+            strcat(ctmp2 , ctmp);
+            strcat(ctmp2 , $3.mystr);
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
+            strcat(ctmp2 , ctmp);
+            strcat(ctmp2 , $1.mystr);
+            ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\0';
+            strcat(ctmp2 , ctmp);
+
+
+            $$.code = ctmp2;
+
+            char tmp[2];
+						tmp[0]='=';tmp[1]='\0';
 						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($3.mystr)+1);
 						strcpy(tmp2 , $1.mystr);
-						strcat(tmp2 , stmp);
+						strcat(tmp2 , tmp);
 						strcat(tmp2 , $3.mystr);
             int flag = 1;
 
@@ -1212,6 +1221,58 @@ void yyerror(const char *s){
           }
           else if($2.charvalue == '*'){
 
+            /* if(symboltable->Lookup($1.mystr) != NULL){
+              cout<<$1.mystr<<"--HERE--"<<$3.mystr<<endl;
+            }
+            else{ */
+              char ctmp[8];
+              ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+
+              char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+1);
+
+              strcat(ctmp2 , ctmp);
+              strcat(ctmp2 , $1.mystr);
+              ctmp[0]='\n';ctmp[1]='\0';
+              strcat(ctmp2 , ctmp);
+
+              ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+              strcat(ctmp2 , ctmp);
+              strcat(ctmp2 , $3.mystr);
+              ctmp[0]='\n';ctmp[1]='\0';
+              strcat(ctmp2 , ctmp);
+
+              ctmp[0]='M';ctmp[1]='U';ctmp[2]='L';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='X';ctmp[6]='\0';ctmp[7]='\0';
+              strcat(ctmp2 , ctmp);
+              ctmp[0]='\n';ctmp[1]='\0';
+              strcat(ctmp2 , ctmp);
+
+              ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
+              strcat(ctmp2 , ctmp);
+              strcat(ctmp2 , newTemp());
+
+              /* char *t = new char[4];
+              strcpy(t,"t");
+            	char b[3];
+            	sprintf(b,"%d", tempCount);
+            	tempCount++;
+            	strcat(t,b);
+              //$$.code = tvar;
+              strcat(ctmp2 , t); */
+
+              ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\0';
+              strcat(ctmp2 , ctmp);
+              ctmp[0]='\n';ctmp[1]='\0';
+              strcat(ctmp2 , ctmp);
+
+              $$.code = ctmp2;
+              cout<<$$.code;
+              cout<<"---here---\n";
+
+            //}
+
+
+
+
           }
           else if($2.charvalue == '/'){
 
@@ -1314,7 +1375,7 @@ void yyerror(const char *s){
 
           $$.arg_list = NULL;
 	        $$.mystr = tmp2;
-          $$.code = tmp2;
+          $$.code = "";
 					fprintf(logout,"%s \n\n",tmp2);
 				}
 				| CONST_FLOAT	{
