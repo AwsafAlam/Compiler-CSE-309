@@ -1,10 +1,13 @@
-int main()
-{
-	int a[3];
-	int i;
-	a[1]=i*a[1*2];
-	if(i<2){
-		a[2]=5;
-	}
-
+int main(){
+    int a,b,i;
+    b=0;
+    for(i=0;i<4;i++){
+        a=3;
+        while(a--){
+            b++;
+        }
+    }
+    println(a);
+    println(b);
+		b = 6;
 }
