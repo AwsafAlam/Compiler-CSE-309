@@ -52,7 +52,7 @@ extern int yydebug;
         char * d_type;
         struct node * arg_list;
         char *VAR_NAME;
-        char *DATA_TYPE;
+        char *LABEL;
     };
 
 #line 59 "y.tab.h" /* yacc.c:1909  */
