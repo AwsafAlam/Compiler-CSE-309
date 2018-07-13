@@ -6,646 +6,202 @@ int
 
   New ScopeTable with id 2 created
 
-At line no: 2 type_specifier:INT
+At line no: 3 type_specifier:INT
 
 int  
 
-At line no: 2 declaration_list : ID
+At line no: 3 declaration_list : ID LTHIRD CONST_INT RTHIRD
 
-a
+a[3] 
 
-At line no: 2 declaration_list : declaration_list COMMA ID
+At line no: 3 var_declaration : type_specifier declaration_list SEMICOLON
 
-a,b
-
-At line no: 2 declaration_list : declaration_list COMMA ID
-
-a,b,i
-
-At line no: 2 var_declaration : type_specifier declaration_list SEMICOLON
-
-int a,b,i;
+int a[3];
 
 
-At line no: 2 statement : var_declaration
+At line no: 3 statement : var_declaration
 
-int a,b,i;
+int a[3];
  
 
-At line no: 2 statements : statement 
+At line no: 3 statements : statement 
 
-int a,b,i;
+int a[3];
  
 
-At line no: 3 variable : ID
+At line no: 4 type_specifier:INT
 
-b
+int  
 
-At line no: 3 factor : CONST_INT
-
-0 
-
-At line no: 3 unary_expression : factor
-
-0 
-
-At line no: 3 term :	unary_expression
-
-0 
-
-At line no: 3 simple_expression : term
-
-0 
-
-At line no: 3 rel_expression	: simple_expression
-
-0 
-
-At line no: 3 logic_expression : rel_expression
-
-0 
-
-At line no: 3 expression : variable ASSIGNOP logic_expression
-
-b=0 
-
-At line no: 3 expression_statement 	: expression SEMICOLON
-
-b=0;
- 
-
-At line no: 3 statement : expression_statement
-
-b=0;
- 
-
-At line no: 3 statements :| statements statement 
-
-int a,b,i;
-b=0;
- 
-
-At line no: 4 variable : ID
+At line no: 4 declaration_list : ID
 
 i
 
-At line no: 4 factor : CONST_INT
+At line no: 4 var_declaration : type_specifier declaration_list SEMICOLON
 
-0 
+int i;
 
-At line no: 4 unary_expression : factor
 
-0 
+At line no: 4 statement : var_declaration
 
-At line no: 4 term :	unary_expression
-
-0 
-
-At line no: 4 simple_expression : term
-
-0 
-
-At line no: 4 rel_expression	: simple_expression
-
-0 
-
-At line no: 4 logic_expression : rel_expression
-
-0 
-
-At line no: 4 expression : variable ASSIGNOP logic_expression
-
-i=0 
-
-At line no: 4 expression_statement 	: expression SEMICOLON
-
-i=0;
+int i;
  
 
-At line no: 4 variable : ID
+At line no: 4 statements :| statements statement 
 
-i
-
-At line no: 4 factor	: variable
-
-i 
-
-At line no: 4 unary_expression : factor
-
-i 
-
-At line no: 4 term :	unary_expression
-
-i 
-
-At line no: 4 simple_expression : term
-
-i 
-
-At line no: 4 factor : CONST_INT
-
-4 
-
-At line no: 4 unary_expression : factor
-
-4 
-
-At line no: 4 term :	unary_expression
-
-4 
-
-At line no: 4 simple_expression : term
-
-4 
-
-At line no: 4 rel_expression	: simple_expression RELOP simple_expression
-
-i<4 
-
-At line no: 4 logic_expression : rel_expression
-
-i<4 
-
-At line no: 4 expression : logic_expression
-
-i<4 
-
-At line no: 4 expression_statement 	: expression SEMICOLON
-
-i<4;
+int a[3];
+int i;
  
-
-At line no: 4 variable : ID
-
-i
-
-At line no: 4 factor : variable DECOP
-
-i;; 
-
-At line no: 4 unary_expression : factor
-
-i;; 
-
-At line no: 4 term :	unary_expression
-
-i;; 
-
-At line no: 4 simple_expression : term
-
-i;; 
-
-At line no: 4 rel_expression	: simple_expression
-
-i;; 
-
-At line no: 4 logic_expression : rel_expression
-
-i;; 
-
-At line no: 4 expression : logic_expression
-
-i;; 
-
-  New ScopeTable with id 3 created
-
-At line no: 5 variable : ID
-
-a
 
 At line no: 5 factor : CONST_INT
 
-3 
+1 
 
 At line no: 5 unary_expression : factor
 
-3 
+1 
 
 At line no: 5 term :	unary_expression
 
-3 
+1 
 
 At line no: 5 simple_expression : term
 
-3 
+1 
 
 At line no: 5 rel_expression	: simple_expression
 
-3 
+1 
 
 At line no: 5 logic_expression : rel_expression
 
-3 
+1 
+
+At line no: 5 expression : logic_expression
+
+1 
+
+At line no: 5 variable : ID LTHIRD expression RTHIRD
+
+a[1] 
+
+At line no: 5 variable : ID
+
+i
+
+At line no: 5 factor	: variable
+
+i 
+
+At line no: 5 unary_expression : factor
+
+i 
+
+At line no: 5 term :	unary_expression
+
+i 
+
+At line no: 5 variable : ID
+
+i
+
+At line no: 5 factor	: variable
+
+i 
+
+At line no: 5 unary_expression : factor
+
+i 
+
+At line no: 5 term :	term MULOP unary_expression
+
+i*i 
+
+At line no: 5 simple_expression : term
+
+i*i 
+
+At line no: 5 rel_expression	: simple_expression
+
+i*i 
+
+At line no: 5 logic_expression : rel_expression
+
+i*i 
 
 At line no: 5 expression : variable ASSIGNOP logic_expression
 
-a=3 
+a[1]=i*i 
 
 At line no: 5 expression_statement 	: expression SEMICOLON
 
-a=3;
+a[1]=i*i;
  
 
 At line no: 5 statement : expression_statement
 
-a=3;
+a[1]=i*i;
  
 
-At line no: 5 statements : statement 
+At line no: 5 statements :| statements statement 
 
-a=3;
- 
-
-At line no: 6 variable : ID
-
-a
-
-At line no: 6 factor : variable DECOP
-
-a;; 
-
-At line no: 6 unary_expression : factor
-
-a;; 
-
-At line no: 6 term :	unary_expression
-
-a;; 
-
-At line no: 6 simple_expression : term
-
-a;; 
-
-At line no: 6 rel_expression	: simple_expression
-
-a;; 
-
-At line no: 6 logic_expression : rel_expression
-
-a;; 
-
-At line no: 6 expression : logic_expression
-
-a;; 
-
-  New ScopeTable with id 4 created
-
-At line no: 7 variable : ID
-
-b
-
-At line no: 7 factor : variable DECOP
-
-b;; 
-
-At line no: 7 unary_expression : factor
-
-b;; 
-
-At line no: 7 term :	unary_expression
-
-b;; 
-
-At line no: 7 simple_expression : term
-
-b;; 
-
-At line no: 7 rel_expression	: simple_expression
-
-b;; 
-
-At line no: 7 logic_expression : rel_expression
-
-b;; 
-
-At line no: 7 expression : logic_expression
-
-b;; 
-
-At line no: 7 expression_statement 	: expression SEMICOLON
-
-b;;;
- 
-
-At line no: 7 statement : expression_statement
-
-b;;;
- 
-
-At line no: 7 statements : statement 
-
-b;;;
+int a[3];
+int i;
+a[1]=i*i;
  
 
 At line no: 8 compound_statement : LCURL statements RCURL
 
 {
-b;;;
-
-} 
-
-ScopeTable # 4
-----------------------
-
-ScopeTable # 3
-----------------------
-
-ScopeTable # 2
-----------------------
-14 -->  <a : ID> 
-15 -->  <b : ID> 
-22 -->  <i : ID> 
-
-ScopeTable # 1
-----------------------
-
-ScopeTable with id 4 removed
-
-At line no: 8 statement : compound_statement
-
-{
-b;;;
-
-} 
-
-At line no: 8 statement : WHILE LPAREN expression RPAREN statement
-
-while(a;;){
-b;;;
-
-} 
-
-At line no: 8 statements :| statements statement 
-
-a=3;
-while(a;;){
-b;;;
-
-} 
-
-At line no: 9 compound_statement : LCURL statements RCURL
-
-{
-a=3;
-while(a;;){
-b;;;
-
-}
-} 
-
-ScopeTable # 3
-----------------------
-
-ScopeTable # 2
-----------------------
-14 -->  <a : ID> 
-15 -->  <b : ID> 
-22 -->  <i : ID> 
-
-ScopeTable # 1
-----------------------
-
-ScopeTable with id 4 removed
-
-At line no: 9 statement : compound_statement
-
-{
-a=3;
-while(a;;){
-b;;;
-
-}
-} 
-
-At line no: 9 statement :  FOR LPAREN expression_statement expression_statement expression RPAREN statement
-
-for(i=0;
-i<4;
-i;;){
-a=3;
-while(a;;){
-b;;;
-
-}
-} 
-
-At line no: 9 statements :| statements statement 
-
-int a,b,i;
-b=0;
-for(i=0;
-i<4;
-i;;){
-a=3;
-while(a;;){
-b;;;
-
-}
-} 
-
-At line no: 10 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
-
-println(a);
- 
-
-At line no: 10 statements :| statements statement 
-
-int a,b,i;
-b=0;
-for(i=0;
-i<4;
-i;;){
-a=3;
-while(a;;){
-b;;;
-
-}
-}println(a);
- 
-
-At line no: 11 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
-
-println(b);
- 
-
-At line no: 11 statements :| statements statement 
-
-int a,b,i;
-b=0;
-for(i=0;
-i<4;
-i;;){
-a=3;
-while(a;;){
-b;;;
-
-}
-}println(a);
-println(b);
- 
-
-At line no: 12 variable : ID
-
-b
-
-At line no: 12 factor : CONST_INT
-
-6 
-
-At line no: 12 unary_expression : factor
-
-6 
-
-At line no: 12 term :	unary_expression
-
-6 
-
-At line no: 12 simple_expression : term
-
-6 
-
-At line no: 12 rel_expression	: simple_expression
-
-6 
-
-At line no: 12 logic_expression : rel_expression
-
-6 
-
-At line no: 12 expression : variable ASSIGNOP logic_expression
-
-b=6 
-
-At line no: 12 expression_statement 	: expression SEMICOLON
-
-b=6;
- 
-
-At line no: 12 statement : expression_statement
-
-b=6;
- 
-
-At line no: 12 statements :| statements statement 
-
-int a,b,i;
-b=0;
-for(i=0;
-i<4;
-i;;){
-a=3;
-while(a;;){
-b;;;
-
-}
-}println(a);
-println(b);
-b=6;
- 
-
-At line no: 13 compound_statement : LCURL statements RCURL
-
-{
-int a,b,i;
-b=0;
-for(i=0;
-i<4;
-i;;){
-a=3;
-while(a;;){
-b;;;
-
-}
-}println(a);
-println(b);
-b=6;
+int a[3];
+int i;
+a[1]=i*i;
 
 } 
 
 ScopeTable # 2
 ----------------------
 14 -->  <a : ID> 
-15 -->  <b : ID> 
 22 -->  <i : ID> 
 
 ScopeTable # 1
 ----------------------
 
-ScopeTable with id 4 removed
+ScopeTable with id 2 removed
 
-At line no: 13 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
+At line no: 8 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
 
 int main(){
-int a,b,i;
-b=0;
-for(i=0;
-i<4;
-i;;){
-a=3;
-while(a;;){
-b;;;
-
-}
-}println(a);
-println(b);
-b=6;
+int a[3];
+int i;
+a[1]=i*i;
 
 } 
 
-At line no: 13 unit : func_definition
+At line no: 8 unit : func_definition
 
 int main(){
-int a,b,i;
-b=0;
-for(i=0;
-i<4;
-i;;){
-a=3;
-while(a;;){
-b;;;
-
-}
-}println(a);
-println(b);
-b=6;
+int a[3];
+int i;
+a[1]=i*i;
 
 } 
 
-At line no: 13 program : | unit
+At line no: 8 program : | unit
 
 int main(){
-int a,b,i;
-b=0;
-for(i=0;
-i<4;
-i;;){
-a=3;
-while(a;;){
-b;;;
-
-}
-}println(a);
-println(b);
-b=6;
+int a[3];
+int i;
+a[1]=i*i;
 
 }
 
-At line no: 14 start : program
+At line no: 9 start : program
 
 int main(){
-int a,b,i;
-b=0;
-for(i=0;
-i<4;
-i;;){
-a=3;
-while(a;;){
-b;;;
-
-}
-}println(a);
-println(b);
-b=6;
+int a[3];
+int i;
+a[1]=i*i;
 
 }
 

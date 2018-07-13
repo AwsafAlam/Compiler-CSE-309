@@ -17,7 +17,7 @@ extern int error_count;
 vector<char *> vec;
 vector<char *> DATA_SEGMENT;
 vector<char *> DATA_SEGMENT_ARR;
-vector<char *> DATA_SEGMENT_ARR_SIZE;
+vector<int> DATA_SEGMENT_ARR_SIZE;
 
 vector<SymbolInfo *> param_list;
 
@@ -153,10 +153,20 @@ void yyerror(const char *s){
           fprintf(code,"%s\n",init);
           for(int i = 0; i<DATA_SEGMENT.size() ; i++){
             fprintf(code,"%s",DATA_SEGMENT[i]);
-            init = " dw ?\n";
+            init = " DW ?\n";
+            fprintf(code,"%s",init);
+    			}
+
+          for(int i = 0; i<DATA_SEGMENT_ARR.size() ; i++){
+            fprintf(code,"%s",DATA_SEGMENT_ARR[i]);
+            init = " DW ";
+            fprintf(code,"%s",init);
+            fprintf(code,"%d",DATA_SEGMENT_ARR_SIZE[i]);
+            init = " DUP (?)\n";
             fprintf(code,"%s",init);
 
     			}
+
           init = ".CODE\n";
           fprintf(code,"%s\n",init);
 
@@ -214,6 +224,7 @@ void yyerror(const char *s){
 			     ;
          func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON	{
                fprintf(logout,"At line no: %d func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON\n\n",line_count);
+               $$.code = "";
 
                char tmp[2];
                tmp[0]='(';tmp[1]='\0';
@@ -256,6 +267,8 @@ void yyerror(const char *s){
              }
              | type_specifier ID LPAREN RPAREN SEMICOLON	{
                fprintf(logout,"At line no: %d func_declaration :type_specifier ID LPAREN RPAREN SEMICOLON\n\n",line_count);
+               $$.code = "";
+
                char tmp[2];
                tmp[0]='(';tmp[1]='\0';
                char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr)+3);
@@ -505,14 +518,6 @@ void yyerror(const char *s){
               $$.arg_list = item;
               fprintf(logout,"%s \n\n",tmp2);
 
-              /* SymbolInfo *item;
-              item = new SymbolInfo;
-              item->setName("");
-              item->setType($3.mystr);
-              item->setDataStructure("");
-              item->next = NULL;
-
-              param_list.push_back(item); */
 
             }
             | type_specifier ID  {
@@ -520,10 +525,6 @@ void yyerror(const char *s){
               char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr));
               strcpy(tmp2 , $1.mystr);
               strcat(tmp2 , $2.mystr);
-
-              /* symboltable->Insert($2.mystr , "ID","PARAM");
-              SymbolInfo *s = symboltable->Lookup($2.mystr);
-              s->setDataType($1.mystr); */
 
               $$.mystr = tmp2;
               fprintf(logout,"%s \n\n",tmp2);
@@ -552,15 +553,6 @@ void yyerror(const char *s){
               item->d_type = $1.mystr;
               item->arg_list = NULL;
               $$.arg_list = item;
-
-              /* SymbolInfo *item;
-              item = new SymbolInfo;
-              item->setName("");
-              item->setType($1.mystr);
-              item->setDataStructure("");
-              item->next = NULL;
-
-              param_list.push_back(item); */
 
             }
             ;
@@ -598,7 +590,8 @@ void yyerror(const char *s){
 							symboltable->ExitScope();
 						}
 						| LCURL {symboltable->EnterScope();} RCURL  {
-							 fprintf(logout,"At line no: %d compound_statement : LCURL RCURL\n\n",line_count);
+               $$.code = "";
+              fprintf(logout,"At line no: %d compound_statement : LCURL RCURL\n\n",line_count);
 							 char tmp[2];
 							 tmp[0]='{';tmp[1]='\0';
 							 char * tmp2 = (char *) malloc(1+2);
@@ -638,6 +631,8 @@ void yyerror(const char *s){
         vec.clear();
 			};
 			type_specifier	: INT {
+        $$.code = "";
+
 				fprintf(logout,"At line no: %d type_specifier:INT\n\n",line_count);
 				char tmp[5];
 				tmp[0]='i';tmp[1]='n';tmp[2]='t';tmp[3]=' ';tmp[4]='\0';
@@ -647,7 +642,8 @@ void yyerror(const char *s){
 				fprintf(logout,"%s \n\n",tmp2);
 				}
 		 		| FLOAT {
-					fprintf(logout,"At line no: %d type_specifier : FLOAT\n\n",line_count);
+          $$.code = "";
+          fprintf(logout,"At line no: %d type_specifier : FLOAT\n\n",line_count);
 					char tmp[7];
 					tmp[0]='f';tmp[1]='l';tmp[2]='o';tmp[3]='a';tmp[4]='t';tmp[5]='   ';tmp[6]='\0';
 					char * tmp2 = (char *) malloc(1+strlen(tmp));
@@ -656,7 +652,8 @@ void yyerror(const char *s){
 					fprintf(logout,"%s \n\n",tmp2);
 				}
 		 		| VOID {
-					fprintf(logout,"At line no: %d type_specifier : VOID\n\n",line_count);
+          $$.code = "";
+          fprintf(logout,"At line no: %d type_specifier : VOID\n\n",line_count);
 					char tmp[6];
 					tmp[0]='v';tmp[1]='o';tmp[2]='i';tmp[3]='d';tmp[4]=' ';tmp[5]='\0';
 					char * tmp2 = (char *) malloc(1+strlen(tmp));
@@ -683,6 +680,7 @@ void yyerror(const char *s){
 		 		  | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD {
 						fprintf(logout,"At line no: %d declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD\n\n",line_count);
             DATA_SEGMENT_ARR.push_back($3.mystr);
+            DATA_SEGMENT_ARR_SIZE.push_back($5.intvalue);
 
 						char integer[2];
 						sprintf(integer, "%d", $5.intvalue);
@@ -722,7 +720,8 @@ void yyerror(const char *s){
 					}
 		 		  | ID LTHIRD CONST_INT RTHIRD {
 						fprintf(logout,"At line no: %d declaration_list : ID LTHIRD CONST_INT RTHIRD\n\n",line_count);
-            DATA_SEGMENT_ARR.push_back($3.mystr);
+            DATA_SEGMENT_ARR.push_back($1.mystr);
+            DATA_SEGMENT_ARR_SIZE.push_back($3.intvalue);
 
 						char tmp[2];
  						tmp[0]='[';tmp[1]='\0';
@@ -754,11 +753,10 @@ void yyerror(const char *s){
             $$ = $2;
             $$.mystr = tmp2;
 
-
             char * ctmp2 = (char *) malloc(1+strlen($1.code)+strlen($2.code));
             strcpy(ctmp2 , $1.code);
-            $$.code = ctmp2;
             strcat(ctmp2 , $2.code);
+            $$.code = ctmp2;
 
             fprintf(logout,"%s \n\n",tmp2);
 					 }
@@ -1079,6 +1077,12 @@ void yyerror(const char *s){
 					}
 				  | PRINTLN LPAREN ID RPAREN SEMICOLON	{
 						fprintf(logout,"At line no: %d statement : PRINTLN LPAREN ID RPAREN SEMICOLON\n\n",line_count);
+            if(symboltable->Lookup($3.mystr) == NULL){
+                error_count++;
+                fprintf(error, "Error %d at Line %d: Undeclared Variable: %s\n\n",error_count , line_count,$3.mystr);
+
+            }
+
             $$.code = printID($3.mystr);
 
 						char tmp[8];
@@ -1182,7 +1186,6 @@ void yyerror(const char *s){
               strcat(tmp2 , tmp);
               $$.mystr = tmp2;
 
-
               char * ctmp2 = (char *) malloc(1+strlen($1.code)+5);
 
               strcpy(ctmp2 , $1.code);
@@ -1190,8 +1193,8 @@ void yyerror(const char *s){
               strcat(ctmp2 , tmp);
               $$.code = ctmp2;
               $$.VAR_NAME = $1.VAR_NAME;
-              //cout<<"\n--"<<$$.code<<endl;
               fprintf(logout,"%s \n\n",$$.mystr);
+
             }
             ;
           variable : ID	{
@@ -1212,7 +1215,6 @@ void yyerror(const char *s){
                 fprintf(error, "Error %d at Line %d: Expected [ after Array type\n\n",error_count , line_count);
               }
               else{
-                  //cout<<"\n-->"<<symboltable->Lookup($1.mystr)->getName()<<" Data types  "<<symboltable->Lookup($1.mystr)->getDataType()<<endl;
                   if(symboltable->Lookup($1.mystr)->getDataType() == "int"){
                     $$.d_type = "int";
                   }
@@ -1279,9 +1281,7 @@ void yyerror(const char *s){
                  strcat(ctmp2 , ctmp);
 
                  }
-
-
-             }
+               }
 
              $$.code = ctmp2;
 
@@ -1444,8 +1444,7 @@ void yyerror(const char *s){
                   fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
                 }
               }
-              ////cout<<"\n  -- sth"<<$3.floatvalue<<endl;
-              if($3.floatvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "float "){
+            if($3.floatvalue !=NULL && symboltable->Lookup($1.mystr)->getDataType() != "float "){
                 error_count++;
                 fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
               }
@@ -1455,7 +1454,6 @@ void yyerror(const char *s){
               }
             }
             else{
-                //cout<<"Flag set to 0\n";
                 if($3.floatvalue != NULL && symboltable->Lookup($1.mystr)!= NULL && symboltable->Lookup($1.mystr)->getDataType() != "int"){
                   error_count++;
                   fprintf(error, "Error %d at Line %d: Type Mismatch\n\n",error_count , line_count);
@@ -1476,7 +1474,6 @@ void yyerror(const char *s){
             }
             else{
               strcat(ctmp2 , $3.VAR_NAME);
-
             }
 
             ctmp[0]='\n';ctmp[1]='\0';
@@ -1494,15 +1491,11 @@ void yyerror(const char *s){
                 strcat(ctmp2 , $1.mystr);
               }
             }
-
-
             ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\0';
             strcat(ctmp2 , ctmp);
 
-
             $$.code = ctmp2;
-            //cout<<$$.code<<endl;
-						fprintf(logout,"%s \n\n",tmp2);
+            fprintf(logout,"%s \n\n",tmp2);
 					}
 					;
 			logic_expression : rel_expression	{
@@ -1518,6 +1511,73 @@ void yyerror(const char *s){
  						strcat(tmp2 , $3.mystr);
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
+
+            char ctmp[8];
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+
+            char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+30);
+            strcat(ctmp2 , $3.code);
+            strcpy(ctmp2 , $1.code);
+
+            strcat(ctmp2 , ctmp);
+            if($3.VAR_NAME != NULL){
+              strcat(ctmp2 , $3.VAR_NAME);
+            }
+            else{
+              strcat(ctmp2 , $3.mystr);
+            }
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            if(!strcmp($2.mystr , "&&")){
+              ctmp[0]='A';ctmp[1]='N';ctmp[2]='D';ctmp[3]=' ';ctmp[4]='\0';
+              strcat(ctmp2 , ctmp);
+            }
+            else if(!strcmp($2.mystr , "||")){
+              ctmp[0]='O';ctmp[1]='R';ctmp[2]=' ';ctmp[3]='\0';ctmp[4]='\0';
+              strcat(ctmp2 , ctmp);
+            }
+
+            if($1.VAR_NAME != NULL){
+              strcat(ctmp2 , $1.VAR_NAME);
+            }
+            else{
+              strcat(ctmp2 , $1.mystr);
+            }
+            ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+            strcat(ctmp2 , ctmp);
+
+            if($1.VAR_NAME != NULL){
+              strcat(ctmp2 , $1.VAR_NAME);
+            }
+            else{
+              strcat(ctmp2 , $1.mystr);
+            }
+
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
+            strcat(ctmp2 , ctmp);
+            char *t = newTemp();
+            $$.VAR_NAME = t;
+            DATA_SEGMENT.push_back(t);
+
+            strcat(ctmp2 , t);
+
+            ctmp[0]=',';ctmp[1]='B';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\0';
+            strcat(ctmp2 , ctmp);
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            $$.code = ctmp2;
+
 					 }
 					 ;
 			rel_expression	: simple_expression	{
@@ -1646,8 +1706,77 @@ void yyerror(const char *s){
             fprintf(logout,"%s \n\n",$1.mystr);
 					}
 				  | simple_expression ADDOP term	{
+
 						fprintf(logout,"At line no: %d simple_expression : simple_expression ADDOP term\n\n",line_count);
-						char tmp[2];
+
+            char ctmp[8];
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+
+            char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+30);
+            strcat(ctmp2 , $3.code);
+            strcpy(ctmp2 , $1.code);
+
+            strcat(ctmp2 , ctmp);
+            if($3.VAR_NAME != NULL){
+              strcat(ctmp2 , $3.VAR_NAME);
+            }
+            else{
+              strcat(ctmp2 , $3.mystr);
+            }
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            if($2.charvalue == '+'){
+              ctmp[0]='A';ctmp[1]='D';ctmp[2]='D';ctmp[3]=' ';ctmp[4]='\0';
+              strcat(ctmp2 , ctmp);
+            }
+            else if($2.charvalue == '-'){
+              ctmp[0]='S';ctmp[1]='U';ctmp[2]='B';ctmp[3]=' ';ctmp[4]='\0';
+              strcat(ctmp2 , ctmp);
+            }
+
+            if($1.VAR_NAME != NULL){
+              strcat(ctmp2 , $1.VAR_NAME);
+            }
+            else{
+              strcat(ctmp2 , $1.mystr);
+            }
+            ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+            strcat(ctmp2 , ctmp);
+
+            if($1.VAR_NAME != NULL){
+              strcat(ctmp2 , $1.VAR_NAME);
+            }
+            else{
+              strcat(ctmp2 , $1.mystr);
+            }
+
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
+            strcat(ctmp2 , ctmp);
+            char *t = newTemp();
+            $$.VAR_NAME = t;
+            DATA_SEGMENT.push_back(t);
+
+            strcat(ctmp2 , t);
+
+            ctmp[0]=',';ctmp[1]='B';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\0';
+            strcat(ctmp2 , ctmp);
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            $$.code = ctmp2;
+
+
+            char tmp[2];
 						tmp[0]=$2.charvalue; tmp[1]='\0';
 						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1+strlen($3.mystr));
 						strcpy(tmp2 , $1.mystr);
@@ -1717,6 +1846,56 @@ void yyerror(const char *s){
 					 strcat(tmp2 , $3.mystr);
 
            if($2.charvalue == '%'){
+             char ctmp[8];
+             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+
+             char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+1);
+             strcpy(ctmp2 , $1.code);
+             strcat(ctmp2 , $3.code);
+
+             strcat(ctmp2 , ctmp);
+             if($1.VAR_NAME != NULL){
+               strcat(ctmp2 , $1.VAR_NAME);
+             }
+             else{
+               strcat(ctmp2 , $1.mystr);
+             }
+             ctmp[0]='\n';ctmp[1]='\0';
+             strcat(ctmp2 , ctmp);
+
+             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+             strcat(ctmp2 , ctmp);
+
+             if($3.VAR_NAME != NULL){
+               strcat(ctmp2 , $3.VAR_NAME);
+             }
+             else{
+               strcat(ctmp2 , $3.mystr);
+             }
+
+             ctmp[0]='\n';ctmp[1]='\0';
+             strcat(ctmp2 , ctmp);
+
+             ctmp[0]='D';ctmp[1]='I';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='X';ctmp[6]='\0';ctmp[7]='\0';
+             strcat(ctmp2 , ctmp);
+             ctmp[0]='\n';ctmp[1]='\0';
+             strcat(ctmp2 , ctmp);
+
+             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
+             strcat(ctmp2 , ctmp);
+             char *t = newTemp();
+             $$.VAR_NAME = t;
+             DATA_SEGMENT.push_back(t);
+
+             strcat(ctmp2 , t);
+
+             ctmp[0]=',';ctmp[1]='D';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\0';
+             strcat(ctmp2 , ctmp);
+             ctmp[0]='\n';ctmp[1]='\0';
+             strcat(ctmp2 , ctmp);
+
+             $$.code = ctmp2;
+
              if(($1.intvalue != NULL && $3.intvalue == NULL) || ($1.intvalue == NULL && $3.intvalue != NULL)){
               error_count++;
               fprintf(error, "Error %d at Line %d: Integer operands on modulus operator\n\n",error_count , line_count);
@@ -1724,12 +1903,6 @@ void yyerror(const char *s){
              }
           }
           else if($2.charvalue == '*'){
-
-            if(symboltable->Lookup($1.mystr) != NULL && symboltable->Lookup($3.mystr) != NULL){
-              cout<<$1.mystr<<"--NOT HANDLED--"<<$3.mystr<<endl;
-
-            }
-            else{
               char ctmp[8];
               ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
@@ -1780,15 +1953,58 @@ void yyerror(const char *s){
 
               $$.code = ctmp2;
               cout<<$$.code;
-              cout<<"---here---\n";
-
-            }
-
-
-
 
           }
           else if($2.charvalue == '/'){
+            char ctmp[8];
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+
+            char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+1);
+            strcpy(ctmp2 , $1.code);
+            strcat(ctmp2 , $3.code);
+
+            strcat(ctmp2 , ctmp);
+            if($1.VAR_NAME != NULL){
+              strcat(ctmp2 , $1.VAR_NAME);
+            }
+            else{
+              strcat(ctmp2 , $1.mystr);
+            }
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+            strcat(ctmp2 , ctmp);
+
+            if($3.VAR_NAME != NULL){
+              strcat(ctmp2 , $3.VAR_NAME);
+            }
+            else{
+              strcat(ctmp2 , $3.mystr);
+            }
+
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='D';ctmp[1]='I';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='X';ctmp[6]='\0';ctmp[7]='\0';
+            strcat(ctmp2 , ctmp);
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
+            strcat(ctmp2 , ctmp);
+            char *t = newTemp();
+            $$.VAR_NAME = t;
+            DATA_SEGMENT.push_back(t);
+
+            strcat(ctmp2 , t);
+
+            ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\0';
+            strcat(ctmp2 , ctmp);
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            $$.code = ctmp2;
 
           }
 
@@ -1805,6 +2021,54 @@ void yyerror(const char *s){
 							strcat(tmp2 , $2.mystr);
 							$$.mystr = tmp2;
 							fprintf(logout,"%s \n\n",tmp2);
+
+              if($2.charvalue == '-'){
+                char ctmp[8];
+                ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+
+                char * ctmp2 = (char *) malloc(1+strlen(ctmp)*3+strlen($2.mystr)+strlen($2.code)+1);
+                strcpy(ctmp2 , $2.code);
+
+                strcat(ctmp2 , ctmp);
+                if($2.VAR_NAME != NULL){
+                  strcat(ctmp2 , $2.VAR_NAME);
+                }
+                else{
+                  strcat(ctmp2 , $2.mystr);
+                }
+                ctmp[0]='\n';ctmp[1]='\0';
+                strcat(ctmp2 , ctmp);
+
+                ctmp[0]='N';ctmp[1]='E';ctmp[2]='G';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]='\0';ctmp[7]='\0';
+                strcat(ctmp2 , ctmp);
+
+                ctmp[0]='\n';ctmp[1]='\0';
+                strcat(ctmp2 , ctmp);
+
+                ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
+                strcat(ctmp2 , ctmp);
+                if($2.VAR_NAME != NULL){
+                  strcat(ctmp2 , $2.VAR_NAME);
+                }
+                else{
+                  strcat(ctmp2 , $2.mystr);
+                }
+                ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\0';
+                strcat(ctmp2 , ctmp);
+
+                ctmp[0]='\n';ctmp[1]='\0';
+                strcat(ctmp2 , ctmp);
+
+                $$.code = ctmp2;
+
+              }
+              else{
+                char * ctmp2 = (char *) malloc(1+strlen($2.mystr)+strlen($2.code)+1);
+                strcpy(ctmp2 , $2.code);
+                $$.code = ctmp2;
+
+              }
+
 					}
 					 | NOT unary_expression	{
 						 fprintf(logout,"At line no: %d unary_expression : NOT unary_expression\n\n",line_count);
@@ -1815,6 +2079,45 @@ void yyerror(const char *s){
  						strcat(tmp2 , $2.mystr);
  						$$.mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
+
+            char ctmp[8];
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+
+            char * ctmp2 = (char *) malloc(1+strlen(ctmp)*3+strlen($2.mystr)+strlen($2.code)+1);
+            strcpy(ctmp2 , $2.code);
+
+            strcat(ctmp2 , ctmp);
+            if($2.VAR_NAME != NULL){
+              strcat(ctmp2 , $2.VAR_NAME);
+            }
+            else{
+              strcat(ctmp2 , $2.mystr);
+            }
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='N';ctmp[1]='O';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]='\0';ctmp[7]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
+            strcat(ctmp2 , ctmp);
+            if($2.VAR_NAME != NULL){
+              strcat(ctmp2 , $2.VAR_NAME);
+            }
+            else{
+              strcat(ctmp2 , $2.mystr);
+            }
+            ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\0';
+            strcat(ctmp2 , ctmp);
+
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            $$.code = ctmp2;
+
 					 }
 					 | factor	{
 						 fprintf(logout,"At line no: %d unary_expression : factor\n\n",line_count);
@@ -1868,6 +2171,7 @@ void yyerror(const char *s){
           fprintf(logout,"%s \n\n",tmp2);
         }
 				| LPAREN expression RPAREN	{
+          //Scope handling
 					fprintf(logout,"At line no: %d factor : LPAREN expression RPAREN\n\n",line_count);
 					char tmp[2];
 					tmp[0]='(';tmp[1]='\0';
@@ -1878,6 +2182,8 @@ void yyerror(const char *s){
 					strcat(tmp2 , tmp);
 					$$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
+          $$.code = $2.code;
+
 				}
 				| CONST_INT	{
 					fprintf(logout,"At line no: %d factor : CONST_INT\n\n",line_count);
@@ -1894,6 +2200,9 @@ void yyerror(const char *s){
 				}
 				| CONST_FLOAT	{
 					fprintf(logout,"At line no: %d factor : CONST_FLOAT\n\n",line_count);
+          error_count++;
+
+          fprintf(error, "Error %d at Line %d: Assembly cannot handle float: %m\n",error_count , line_count);
 
           char* str=NULL;
           int len = asprintf(&str, "%g", $1.floatvalue);
@@ -1906,7 +2215,7 @@ void yyerror(const char *s){
 					$$ = $1;
 
           $$.mystr = tmp2;
-          $$.code = tmp2;
+          $$.code = "";
           free(str);
 				}
 				| variable INCOP	{
@@ -1985,13 +2294,7 @@ void yyerror(const char *s){
 
           ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
           strcat(ctmp2 , ctmp);
-          /* char * fals = newTemp();
-          $$.VAR_NAME = fals;
-          DATA_SEGMENT.push_back(fals);
-          strcat(ctmp2 , fals); */
 
-          //$$.VAR_NAME = $1.mystr;
-          //strcpy($$.VAR_NAME , $1.mystr);
           strcat(ctmp2 , $1.mystr);
 
           ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\0';
