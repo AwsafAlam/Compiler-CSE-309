@@ -7,13 +7,29 @@ t1 DW ?
 t2 DW ?
 a DW ?
 b DW ?
+t3 DW ?
+t4 DW ?
+c DW 3 DUP (?)
 .CODE
+f PROC
+PUSH BP
+MOV BP,SP
+MOV AX,[BP+4]
+MOV a,AX
 MOV AX,2
 MOV BX,a
 MUL BX
 MOV t0,AX
 
 
+f ENDP
+g PROC
+PUSH BP
+MOV BP,SP
+MOV AX,[BP+4]
+MOV a,AX
+MOV AX,[BP+6]
+MOV b,AX
 PUSH a
 CALL f
 MOV AX,a
@@ -30,6 +46,7 @@ MOV AX,t2
 MOV x,AX
 
 
+g ENDP
 main PROC
 MOV AX,@DATA
 MOV DS,AX
@@ -37,13 +54,27 @@ MOV DS,AX
 MOV AX,1
 MOV a,AX
 
-MOV AX,2
-MOV b,AX
+MOV BX,2
+ADD BX,BX
+MOV AX,c[BX]
+MOV t3,AX
 
-PUSH b
+MOV AX,2
+MOV c[BX],AX
+
+MOV BX,2
+ADD BX,BX
+MOV AX,c[BX]
+MOV t4,AX
+
+PUSH t4
 CALL f
 MOV AX,f
 MOV a,AX
+
+PUSH 3
+PUSH a
+CALL g
 
 MOV AX,a
 CALL PRINT

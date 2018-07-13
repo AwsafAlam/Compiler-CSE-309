@@ -405,253 +405,454 @@ At line no: 12 statements : statement
 int a,b;
  
 
-At line no: 13 variable : ID
+At line no: 13 type_specifier:INT
 
-a
+int  
 
-At line no: 13 factor : CONST_INT
+At line no: 13 declaration_list : ID LTHIRD CONST_INT RTHIRD
 
-1 
+c[3] 
 
-At line no: 13 unary_expression : factor
+At line no: 13 var_declaration : type_specifier declaration_list SEMICOLON
 
-1 
+int c[3];
 
-At line no: 13 term :	unary_expression
 
-1 
+At line no: 13 statement : var_declaration
 
-At line no: 13 simple_expression : term
-
-1 
-
-At line no: 13 rel_expression	: simple_expression
-
-1 
-
-At line no: 13 logic_expression : rel_expression
-
-1 
-
-At line no: 13 expression : variable ASSIGNOP logic_expression
-
-a=1 
-
-At line no: 13 expression_statement 	: expression SEMICOLON
-
-a=1;
- 
-
-At line no: 13 statement : expression_statement
-
-a=1;
+int c[3];
  
 
 At line no: 13 statements :| statements statement 
 
 int a,b;
-a=1;
+int c[3];
  
 
 At line no: 14 variable : ID
 
-b
+a
 
 At line no: 14 factor : CONST_INT
 
-2 
+1 
 
 At line no: 14 unary_expression : factor
 
-2 
+1 
 
 At line no: 14 term :	unary_expression
 
-2 
+1 
 
 At line no: 14 simple_expression : term
 
-2 
+1 
 
 At line no: 14 rel_expression	: simple_expression
 
-2 
+1 
 
 At line no: 14 logic_expression : rel_expression
 
-2 
+1 
 
 At line no: 14 expression : variable ASSIGNOP logic_expression
 
-b=2 
+a=1 
 
 At line no: 14 expression_statement 	: expression SEMICOLON
 
-b=2;
+a=1;
  
 
 At line no: 14 statement : expression_statement
 
-b=2;
+a=1;
  
 
 At line no: 14 statements :| statements statement 
 
 int a,b;
+int c[3];
 a=1;
-b=2;
  
 
-At line no: 15 variable : ID
+At line no: 15 factor : CONST_INT
 
-a
-
-At line no: 15 variable : ID
-
-b
-
-At line no: 15 factor	: variable
-
-b 
+2 
 
 At line no: 15 unary_expression : factor
 
-b 
+2 
 
 At line no: 15 term :	unary_expression
 
-b 
+2 
 
 At line no: 15 simple_expression : term
 
-b 
+2 
 
 At line no: 15 rel_expression	: simple_expression
 
-b 
+2 
 
 At line no: 15 logic_expression : rel_expression
 
-b 
+2 
 
-At line no: 15 arguments : logic_expression
+At line no: 15 expression : logic_expression
 
-b 
+2 
 
-At line no: 15 argument_list : arguments
+At line no: 15 variable : ID LTHIRD expression RTHIRD
 
-b 
+c[2] 
 
-At line no: 15 factor	: ID LPAREN argument_list RPAREN
+At line no: 15 factor : CONST_INT
 
-f(b) 
+2 
 
 At line no: 15 unary_expression : factor
 
-f(b) 
+2 
 
 At line no: 15 term :	unary_expression
 
-f(b) 
+2 
 
 At line no: 15 simple_expression : term
 
-f(b) 
+2 
 
 At line no: 15 rel_expression	: simple_expression
 
-f(b) 
+2 
 
 At line no: 15 logic_expression : rel_expression
 
-f(b) 
+2 
 
 At line no: 15 expression : variable ASSIGNOP logic_expression
 
-a=f(b) 
+c[2]=2 
 
 At line no: 15 expression_statement 	: expression SEMICOLON
 
-a=f(b);
+c[2]=2;
  
 
 At line no: 15 statement : expression_statement
 
-a=f(b);
+c[2]=2;
  
 
 At line no: 15 statements :| statements statement 
 
 int a,b;
+int c[3];
 a=1;
-b=2;
-a=f(b);
+c[2]=2;
  
 
-At line no: 16 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+At line no: 16 variable : ID
 
-println(a);
+a
+
+At line no: 16 factor : CONST_INT
+
+2 
+
+At line no: 16 unary_expression : factor
+
+2 
+
+At line no: 16 term :	unary_expression
+
+2 
+
+At line no: 16 simple_expression : term
+
+2 
+
+At line no: 16 rel_expression	: simple_expression
+
+2 
+
+At line no: 16 logic_expression : rel_expression
+
+2 
+
+At line no: 16 expression : logic_expression
+
+2 
+
+At line no: 16 variable : ID LTHIRD expression RTHIRD
+
+c[2] 
+
+At line no: 16 factor	: variable
+
+c[2] 
+
+At line no: 16 unary_expression : factor
+
+c[2] 
+
+At line no: 16 term :	unary_expression
+
+c[2] 
+
+At line no: 16 simple_expression : term
+
+c[2] 
+
+At line no: 16 rel_expression	: simple_expression
+
+c[2] 
+
+At line no: 16 logic_expression : rel_expression
+
+c[2] 
+
+At line no: 16 arguments : logic_expression
+
+c[2] 
+
+At line no: 16 argument_list : arguments
+
+c[2] 
+
+At line no: 16 factor	: ID LPAREN argument_list RPAREN
+
+f(c[2]) 
+
+At line no: 16 unary_expression : factor
+
+f(c[2]) 
+
+At line no: 16 term :	unary_expression
+
+f(c[2]) 
+
+At line no: 16 simple_expression : term
+
+f(c[2]) 
+
+At line no: 16 rel_expression	: simple_expression
+
+f(c[2]) 
+
+At line no: 16 logic_expression : rel_expression
+
+f(c[2]) 
+
+At line no: 16 expression : variable ASSIGNOP logic_expression
+
+a=f(c[2]) 
+
+At line no: 16 expression_statement 	: expression SEMICOLON
+
+a=f(c[2]);
+ 
+
+At line no: 16 statement : expression_statement
+
+a=f(c[2]);
  
 
 At line no: 16 statements :| statements statement 
 
 int a,b;
+int c[3];
 a=1;
-b=2;
-a=f(b);
-println(a);
+c[2]=2;
+a=f(c[2]);
  
 
-At line no: 17 factor : CONST_INT
+At line no: 17 variable : ID
 
-0 
+a
+
+At line no: 17 factor	: variable
+
+a 
 
 At line no: 17 unary_expression : factor
 
-0 
+a 
 
 At line no: 17 term :	unary_expression
 
-0 
+a 
 
 At line no: 17 simple_expression : term
 
-0 
+a 
 
 At line no: 17 rel_expression	: simple_expression
 
-0 
+a 
 
 At line no: 17 logic_expression : rel_expression
 
-0 
+a 
+
+At line no: 17 arguments : logic_expression
+
+a 
+
+At line no: 17 factor : CONST_INT
+
+3 
+
+At line no: 17 unary_expression : factor
+
+3 
+
+At line no: 17 term :	unary_expression
+
+3 
+
+At line no: 17 simple_expression : term
+
+3 
+
+At line no: 17 rel_expression	: simple_expression
+
+3 
+
+At line no: 17 logic_expression : rel_expression
+
+3 
+
+At line no: 17 arguments : arguments COMMA logic_expression
+
+a,3 
+
+At line no: 17 argument_list : arguments
+
+a,3 
+
+At line no: 17 factor	: ID LPAREN argument_list RPAREN
+
+g(a,3) 
+
+At line no: 17 unary_expression : factor
+
+g(a,3) 
+
+At line no: 17 term :	unary_expression
+
+g(a,3) 
+
+At line no: 17 simple_expression : term
+
+g(a,3) 
+
+At line no: 17 rel_expression	: simple_expression
+
+g(a,3) 
+
+At line no: 17 logic_expression : rel_expression
+
+g(a,3) 
 
 At line no: 17 expression : logic_expression
 
-0 
+g(a,3) 
 
-At line no: 17 statement : RETURN expression SEMICOLON
+At line no: 17 expression_statement 	: expression SEMICOLON
 
-return 0;
+g(a,3);
+ 
+
+At line no: 17 statement : expression_statement
+
+g(a,3);
  
 
 At line no: 17 statements :| statements statement 
 
 int a,b;
+int c[3];
 a=1;
-b=2;
-a=f(b);
+c[2]=2;
+a=f(c[2]);
+g(a,3);
+ 
+
+At line no: 18 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(a);
+ 
+
+At line no: 18 statements :| statements statement 
+
+int a,b;
+int c[3];
+a=1;
+c[2]=2;
+a=f(c[2]);
+g(a,3);
+println(a);
+ 
+
+At line no: 19 factor : CONST_INT
+
+0 
+
+At line no: 19 unary_expression : factor
+
+0 
+
+At line no: 19 term :	unary_expression
+
+0 
+
+At line no: 19 simple_expression : term
+
+0 
+
+At line no: 19 rel_expression	: simple_expression
+
+0 
+
+At line no: 19 logic_expression : rel_expression
+
+0 
+
+At line no: 19 expression : logic_expression
+
+0 
+
+At line no: 19 statement : RETURN expression SEMICOLON
+
+return 0;
+ 
+
+At line no: 19 statements :| statements statement 
+
+int a,b;
+int c[3];
+a=1;
+c[2]=2;
+a=f(c[2]);
+g(a,3);
 println(a);
 return 0;
  
 
-At line no: 18 compound_statement : LCURL statements RCURL
+At line no: 20 compound_statement : LCURL statements RCURL
 
 {
 int a,b;
+int c[3];
 a=1;
-b=2;
-a=f(b);
+c[2]=2;
+a=f(c[2]);
+g(a,3);
 println(a);
 return 0;
 
@@ -661,6 +862,7 @@ ScopeTable # 4
 ----------------------
 14 -->  <a : ID> 
 15 -->  <b : ID> 
+16 -->  <c : ID> 
 
 ScopeTable # 1
 ----------------------
@@ -670,31 +872,35 @@ ScopeTable # 1
 
 ScopeTable with id 4 removed
 
-At line no: 18 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
+At line no: 20 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
 
 int main(){
 int a,b;
+int c[3];
 a=1;
-b=2;
-a=f(b);
+c[2]=2;
+a=f(c[2]);
+g(a,3);
 println(a);
 return 0;
 
 } 
 
-At line no: 18 unit : func_definition
+At line no: 20 unit : func_definition
 
 int main(){
 int a,b;
+int c[3];
 a=1;
-b=2;
-a=f(b);
+c[2]=2;
+a=f(c[2]);
+g(a,3);
 println(a);
 return 0;
 
 } 
 
-At line no: 18 program : program unit
+At line no: 20 program : program unit
 
 int f(int a){
 return 2*a;
@@ -708,15 +914,17 @@ return x;
 }
 int main(){
 int a,b;
+int c[3];
 a=1;
-b=2;
-a=f(b);
+c[2]=2;
+a=f(c[2]);
+g(a,3);
 println(a);
 return 0;
 
 } 
 
-At line no: 19 start : program
+At line no: 21 start : program
 
 int f(int a){
 return 2*a;
@@ -730,9 +938,11 @@ return x;
 }
 int main(){
 int a,b;
+int c[3];
 a=1;
-b=2;
-a=f(b);
+c[2]=2;
+a=f(c[2]);
+g(a,3);
 println(a);
 return 0;
 

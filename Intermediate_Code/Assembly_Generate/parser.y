@@ -79,33 +79,6 @@ char *printID(char * id){
   ctmp[0]='\n';ctmp[1]='\0';
   strcat(ctmp2 , ctmp);
 
-  /* ctmp[0]='I';ctmp[1]='N';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='2';ctmp[5]='1';ctmp[6]='H';ctmp[7]='\0';strcat(ctmp2 , ctmp);
-  ctmp[0]='\n';ctmp[1]='\0';
-  strcat(ctmp2 , ctmp);
-
-  //New Line
-  ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='H';ctmp[6]=',';ctmp[7]='0';ctmp[8]='2';ctmp[9]='H';ctmp[10]='\0';
-  strcat(ctmp2 , ctmp);
-  ctmp[0]='\n';ctmp[1]='\0';
-  strcat(ctmp2 , ctmp);
-
-  ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='D';ctmp[5]='L';ctmp[6]=',';ctmp[7]='0';ctmp[8]='D';ctmp[9]='H';ctmp[10]='\0';
-  strcat(ctmp2 , ctmp);
-  ctmp[0]='\n';ctmp[1]='\0';
-  strcat(ctmp2 , ctmp);
-  ctmp[0]='I';ctmp[1]='N';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='2';ctmp[5]='1';ctmp[6]='H';ctmp[7]='\0';strcat(ctmp2 , ctmp);
-  ctmp[0]='\n';ctmp[1]='\0';
-  strcat(ctmp2 , ctmp);
-
-  ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='D';ctmp[5]='L';ctmp[6]=',';ctmp[7]='0';ctmp[8]='A';ctmp[9]='H';ctmp[10]='\0';
-  strcat(ctmp2 , ctmp);
-  ctmp[0]='\n';ctmp[1]='\0';
-  strcat(ctmp2 , ctmp);
-
-  ctmp[0]='I';ctmp[1]='N';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='2';ctmp[5]='1';ctmp[6]='H';ctmp[7]='\0';strcat(ctmp2 , ctmp);
-  ctmp[0]='\n';ctmp[1]='\0';
-  strcat(ctmp2 , ctmp); */
-
   return ctmp2;
 
 }
@@ -483,6 +456,40 @@ void yyerror(const char *s){
 						 $$.mystr = tmp2;
 						 fprintf(logout,"%s \n\n",tmp2);
 
+             //Assembly for func define
+             char ctmp[8];
+
+             char * ctmp2 = (char *) malloc(25+strlen($2.mystr)+35+strlen($7.code));
+             strcat(ctmp2 , $2.mystr);
+             ctmp[0]=' ';ctmp[1]='\0';
+             strcat(ctmp2 , ctmp);
+             ctmp[0]='P';ctmp[1]='R';ctmp[2]='O';ctmp[3]='C';ctmp[4]='\n';ctmp[5]='\0';
+             strcat(ctmp2 , ctmp);
+             //PUSH BP
+             ctmp[0]='P';ctmp[1]='U';ctmp[2]='S';ctmp[3]='H';ctmp[4]=' ';ctmp[5]='B';ctmp[6]='P';ctmp[7]='\0';
+             strcat(ctmp2 , ctmp);
+             ctmp[0]='\n';ctmp[1]='\0';
+             strcat(ctmp2 , ctmp);
+
+             //MOV BP , SP
+             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='P';ctmp[6]=',';ctmp[7]='\0';
+             strcat(ctmp2 , ctmp);
+             ctmp[0]='S';ctmp[1]='P';ctmp[2]='\n';ctmp[3]='\0';
+             strcat(ctmp2 , ctmp);
+
+
+             strcat(ctmp2 , $7.code);
+             ctmp[0]='\n';ctmp[1]='\0';
+             strcat(ctmp2 , ctmp);
+
+             strcat(ctmp2 , $2.mystr);
+             ctmp[0]=' ';ctmp[1]='\0';
+             strcat(ctmp2 , ctmp);
+             ctmp[0]='E';ctmp[1]='N';ctmp[2]='D';ctmp[3]='P';ctmp[4]='\0';ctmp[5]='\0';ctmp[6]='\0';
+             strcat(ctmp2 , ctmp);
+
+             $$.code = ctmp2;
+
 			 		}
 					;
         parameter_list  : parameter_list COMMA type_specifier ID  {
@@ -588,8 +595,7 @@ void yyerror(const char *s){
             SymbolInfo * sym = symboltable->Lookup(s->getName());
             sym->setDataType(s->getType());
         }
-        cout<<"\nDO NOT CLEAR PARAM LIST??\n";
-        param_list.clear();
+        //param_list.clear();
         return_Type = "";
         } statements RCURL  {
 							fprintf(logout,"At line no: %d compound_statement : LCURL statements RCURL\n\n",line_count);
@@ -607,7 +613,38 @@ void yyerror(const char *s){
 							$$.mystr = tmp2;
               $$.d_type = $3.d_type;
 
-              $$.code = $3.code;
+              char ctmp[10];
+              ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+
+              char * ctmp2 = (char *) malloc(20+strlen(ctmp)*4+30+strlen($3.code)+strlen($3.mystr)+20);
+
+              int stackaddr = 4;
+              for(int i = 0 ; i< param_list.size() ; i++){
+                  SymbolInfo * s = param_list[i];
+                  cout<<s->getName()<<"- ID-\n";
+
+                  ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+                  //MOV AX , [BP + Addr]
+                  strcat(ctmp2 , ctmp);
+                  ctmp[0]='[';ctmp[1]='B';ctmp[2]='P';ctmp[3]='+';ctmp[4]='\0';
+                  strcat(ctmp2 , ctmp);
+                  char integer[2];
+      						sprintf(integer, "%d", stackaddr);
+                  strcat(ctmp2 , integer);
+                  ctmp[0]=']';ctmp[1]='\n';ctmp[2]='\0';
+                  strcat(ctmp2 , ctmp);
+                  //MOV param , AX
+                  ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
+                  strcat(ctmp2 , ctmp);
+                  strcat(ctmp2 , s->getName().c_str());
+                  ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\0';
+                  strcat(ctmp2 , ctmp);
+                  stackaddr+=2;
+              }
+              param_list.clear();
+              strcat(ctmp2 , $3.code);
+
+              $$.code = ctmp2;
 
 							fprintf(logout,"%s \n\n",tmp2);
 							symboltable->PrintAllScopes();
@@ -2188,7 +2225,12 @@ void yyerror(const char *s){
 
               ctmp[0]='P';ctmp[1]='U';ctmp[2]='S';ctmp[3]='H';ctmp[4]=' ';ctmp[5]='\0';
               strcat(ctmp2 , ctmp);
-              strcat(ctmp2 , head->name);
+              if(head->VAR_NAME != NULL){
+                strcat(ctmp2 , head->VAR_NAME);
+              }
+              else{
+                strcat(ctmp2 , head->name);
+              }
 
               ctmp[0]='\n';ctmp[1]='\0';
               strcat(ctmp2 , ctmp);
@@ -2392,8 +2434,10 @@ void yyerror(const char *s){
 						strcat(tmp2 , $3.mystr);
             $$.mystr = tmp2;
             fprintf(logout,"%s \n\n",tmp2);
+
             struct node * item = (struct node *) malloc(1+sizeof(struct node));
             item->name = $3.mystr;
+            item->VAR_NAME = $3.VAR_NAME;
 
             if(symboltable->Lookup($3.mystr) != NULL){
               item->d_type = (char *) symboltable->Lookup($3.mystr)->getDataType().c_str();
@@ -2403,9 +2447,11 @@ void yyerror(const char *s){
 					}
 		      | logic_expression	{
 						fprintf(logout,"At line no: %d arguments : logic_expression\n\n",line_count);
-            $$.code = $1.code;
+            $$ = $1;
+
             $$.arg_list  = (struct node *) malloc(1+sizeof(struct node));
             $$.arg_list->name = $1.mystr;
+            $$.arg_list->VAR_NAME = $1.VAR_NAME;
 
             if(symboltable->Lookup($1.mystr) != NULL){
               $$.arg_list->d_type = (char *) symboltable->Lookup($1.mystr)->getDataType().c_str();

@@ -10,9 +10,11 @@ int g(int a, int b){
 
 int main(){
     int a,b;
+    int c[3];
     a=1;
-    b=2;
-    a=f(b);
+    c[2]=2;
+    a=f(c[2]);
+    g(a,3);
     println(a);
     return 0;
 }
