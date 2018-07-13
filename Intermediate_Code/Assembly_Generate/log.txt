@@ -262,31 +262,31 @@ a
 
 At line no: 6 factor : variable DECOP
 
-a-- 
+a;; 
 
 At line no: 6 unary_expression : factor
 
-a-- 
+a;; 
 
 At line no: 6 term :	unary_expression
 
-a-- 
+a;; 
 
 At line no: 6 simple_expression : term
 
-a-- 
+a;; 
 
 At line no: 6 rel_expression	: simple_expression
 
-a-- 
+a;; 
 
 At line no: 6 logic_expression : rel_expression
 
-a-- 
+a;; 
 
 At line no: 6 expression : logic_expression
 
-a-- 
+a;; 
 
   New ScopeTable with id 4 created
 
@@ -370,7 +370,7 @@ b++;
 
 At line no: 8 statement : WHILE LPAREN expression RPAREN statement
 
-while(a--){
+while(a;;){
 b++;
 
 } 
@@ -378,7 +378,7 @@ b++;
 At line no: 8 statements :| statements statement 
 
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 } 
@@ -387,7 +387,7 @@ At line no: 9 compound_statement : LCURL statements RCURL
 
 {
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 }
@@ -411,7 +411,7 @@ At line no: 9 statement : compound_statement
 
 {
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 }
@@ -423,7 +423,7 @@ for(i=0;
 i<4;
 i++){
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 }
@@ -437,7 +437,7 @@ for(i=0;
 i<4;
 i++){
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 }
@@ -456,7 +456,7 @@ for(i=0;
 i<4;
 i++){
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 }
@@ -476,7 +476,7 @@ for(i=0;
 i<4;
 i++){
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 }
@@ -534,7 +534,7 @@ for(i=0;
 i<4;
 i++){
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 }
@@ -552,7 +552,7 @@ for(i=0;
 i<4;
 i++){
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 }
@@ -582,7 +582,7 @@ for(i=0;
 i<4;
 i++){
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 }
@@ -601,7 +601,7 @@ for(i=0;
 i<4;
 i++){
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 }
@@ -620,7 +620,7 @@ for(i=0;
 i<4;
 i++){
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 }
@@ -639,7 +639,7 @@ for(i=0;
 i<4;
 i++){
 a=3;
-while(a--){
+while(a;;){
 b++;
 
 }

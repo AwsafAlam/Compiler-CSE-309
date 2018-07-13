@@ -1911,18 +1911,18 @@ void yyerror(const char *s){
 				}
 				| variable INCOP	{
 					fprintf(logout,"At line no: %d factor : variable INCOP\n\n",line_count);
-					char tmp[3];
-					tmp[0] = '+';tmp[1]='+';tmp[2]='\0';
-					char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1);
-					strcpy(tmp2 , $1.mystr);
-					strcat(tmp2 , tmp);
-					$$.mystr = tmp2;
-					fprintf(logout,"%s \n\n",tmp2);
+          char tmp[3];
+          tmp[0] = '+';tmp[1]='+';tmp[2]='\0';
+          char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1);
+          strcpy(tmp2 , $1.mystr);
+          strcat(tmp2 , tmp);
+          $$.mystr = tmp2;
+          fprintf(logout,"%s \n\n",tmp2);
 
           char ctmp[8];
           ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-          char * ctmp2 = (char *) malloc(1+strlen(ctmp)*2+strlen($1.mystr)+strlen($1.code)+1);
+          char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($1.code)+1);
           strcpy(ctmp2 , $1.code);
 
           strcat(ctmp2 , ctmp);
@@ -1942,30 +1942,25 @@ void yyerror(const char *s){
           strcat(ctmp2 , ctmp);
           ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
           strcat(ctmp2 , ctmp);
+
           char * fals = newTemp();
           $$.VAR_NAME = fals;
           DATA_SEGMENT.push_back(fals);
-
           strcat(ctmp2 , fals);
+          strcat(ctmp2 , $1.mystr);
+
           ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\0';
           strcat(ctmp2 , ctmp);
 
-          ctmp[0]='\n';ctmp[1]='\0';
-          strcat(ctmp2 , ctmp);
+          /* ctmp[0]='\n';ctmp[1]='\0';
+          strcat(ctmp2 , ctmp); */
 
           $$.code = ctmp2;
 
 				}
 				| variable DECOP	{
 					fprintf(logout,"At line no: %d factor : variable DECOP\n\n",line_count);
-					char tmp[3];
-					tmp[0] = '-';tmp[1]='-';tmp[2]='\0';
-					char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1);
-					strcpy(tmp2 , $1.mystr);
-					strcat(tmp2 , tmp);
-					$$.mystr = tmp2;
-					fprintf(logout,"%s \n\n",tmp2);
-
+          //$$ = $1;
           char ctmp[8];
           ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
@@ -1990,10 +1985,15 @@ void yyerror(const char *s){
 
           ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
           strcat(ctmp2 , ctmp);
-          char * fals = newTemp();
+          /* char * fals = newTemp();
           $$.VAR_NAME = fals;
           DATA_SEGMENT.push_back(fals);
-          strcat(ctmp2 , fals);
+          strcat(ctmp2 , fals); */
+
+          //$$.VAR_NAME = $1.mystr;
+          //strcpy($$.VAR_NAME , $1.mystr);
+          strcat(ctmp2 , $1.mystr);
+
           ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\0';
           strcat(ctmp2 , ctmp);
 
@@ -2001,6 +2001,14 @@ void yyerror(const char *s){
           strcat(ctmp2 , ctmp);
 
           $$.code = ctmp2;
+          
+          char tmp[3];
+					tmp[0] = ';';tmp[1]=';';tmp[2]='\0';
+					char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1);
+					strcpy(tmp2 , $1.mystr);
+					strcat(tmp2 , tmp);
+					$$.mystr = tmp2;
+					fprintf(logout,"%s \n\n",tmp2);
 				}
 				;
 			argument_list : arguments	{

@@ -7,7 +7,6 @@ i dw ?
 t0 dw ?
 t1 dw ?
 t2 dw ?
-t3 dw ?
 .CODE
 
 main PROC
@@ -39,21 +38,19 @@ MOV a,AX
 L2:
 MOV AX,a
 DEC AX
-MOV t2,AX
-MOV AX,t2
+MOV a,AX
+MOV AX,a;;
 CMP AX,0
 JE L3
 MOV AX,b
 INC AX
-MOV t3,AX
-
+MOV t2b,AX
 
 JMP L2
 L3:
 MOV AX,i
 INC AX
-MOV t1,AX
-
+MOV t1i,AX
 JMP L4
 L5:
 LEA DX,a
