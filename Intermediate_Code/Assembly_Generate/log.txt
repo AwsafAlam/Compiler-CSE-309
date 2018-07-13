@@ -81,6 +81,7 @@ ScopeTable # 2
 
 ScopeTable # 1
 ----------------------
+19 -->  <f : ID> 
 
 ScopeTable with id 2 removed
 
@@ -336,6 +337,7 @@ ScopeTable # 3
 ScopeTable # 1
 ----------------------
 19 -->  <f : ID> 
+20 -->  <g : ID> 
 
 ScopeTable with id 3 removed
 
@@ -506,38 +508,6 @@ a
 
 At line no: 15 variable : ID
 
-a
-
-At line no: 15 factor	: variable
-
-a 
-
-At line no: 15 unary_expression : factor
-
-a 
-
-At line no: 15 term :	unary_expression
-
-a 
-
-At line no: 15 simple_expression : term
-
-a 
-
-At line no: 15 rel_expression	: simple_expression
-
-a 
-
-At line no: 15 logic_expression : rel_expression
-
-a 
-
-At line no: 15 arguments : logic_expression
-
-a 
-
-At line no: 15 variable : ID
-
 b
 
 At line no: 15 factor	: variable
@@ -564,50 +534,50 @@ At line no: 15 logic_expression : rel_expression
 
 b 
 
-At line no: 15 arguments : arguments COMMA logic_expression
+At line no: 15 arguments : logic_expression
 
-a,b 
+b 
 
 At line no: 15 argument_list : arguments
 
-a,b 
+b 
 
 At line no: 15 factor	: ID LPAREN argument_list RPAREN
 
-f(a,b) 
+f(b) 
 
 At line no: 15 unary_expression : factor
 
-f(a,b) 
+f(b) 
 
 At line no: 15 term :	unary_expression
 
-f(a,b) 
+f(b) 
 
 At line no: 15 simple_expression : term
 
-f(a,b) 
+f(b) 
 
 At line no: 15 rel_expression	: simple_expression
 
-f(a,b) 
+f(b) 
 
 At line no: 15 logic_expression : rel_expression
 
-f(a,b) 
+f(b) 
 
 At line no: 15 expression : variable ASSIGNOP logic_expression
 
-a=f(a,b) 
+a=f(b) 
 
 At line no: 15 expression_statement 	: expression SEMICOLON
 
-a=f(a,b);
+a=f(b);
  
 
 At line no: 15 statement : expression_statement
 
-a=f(a,b);
+a=f(b);
  
 
 At line no: 15 statements :| statements statement 
@@ -615,7 +585,7 @@ At line no: 15 statements :| statements statement
 int a,b;
 a=1;
 b=2;
-a=f(a,b);
+a=f(b);
  
 
 At line no: 16 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
@@ -628,7 +598,7 @@ At line no: 16 statements :| statements statement
 int a,b;
 a=1;
 b=2;
-a=f(a,b);
+a=f(b);
 println(a);
  
 
@@ -670,7 +640,7 @@ At line no: 17 statements :| statements statement
 int a,b;
 a=1;
 b=2;
-a=f(a,b);
+a=f(b);
 println(a);
 return 0;
  
@@ -681,7 +651,7 @@ At line no: 18 compound_statement : LCURL statements RCURL
 int a,b;
 a=1;
 b=2;
-a=f(a,b);
+a=f(b);
 println(a);
 return 0;
 
@@ -694,6 +664,7 @@ ScopeTable # 4
 
 ScopeTable # 1
 ----------------------
+8 -->  <main : ID> 
 19 -->  <f : ID> 
 20 -->  <g : ID> 
 
@@ -705,7 +676,7 @@ int main(){
 int a,b;
 a=1;
 b=2;
-a=f(a,b);
+a=f(b);
 println(a);
 return 0;
 
@@ -717,7 +688,7 @@ int main(){
 int a,b;
 a=1;
 b=2;
-a=f(a,b);
+a=f(b);
 println(a);
 return 0;
 
@@ -739,7 +710,7 @@ int main(){
 int a,b;
 a=1;
 b=2;
-a=f(a,b);
+a=f(b);
 println(a);
 return 0;
 
@@ -761,7 +732,7 @@ int main(){
 int a,b;
 a=1;
 b=2;
-a=f(a,b);
+a=f(b);
 println(a);
 return 0;
 

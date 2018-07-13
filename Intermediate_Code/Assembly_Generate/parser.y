@@ -300,7 +300,7 @@ void yyerror(const char *s){
              ;
 			 func_definition : type_specifier ID LPAREN RPAREN {
          cout<<"NEED TO INS FUNC NAME FOR RECURSION "<<$2.mystr<<endl;
-         /* int flag = 1;
+         int flag = 1;
 
          if(symboltable->Lookup($2.mystr) != NULL){
            if(symboltable->Lookup($2.mystr)->getDataType() != return_Type && return_Type != "" && returnFlag){
@@ -330,7 +330,7 @@ void yyerror(const char *s){
            }
          }
          return_Type = "";
-         returnFlag = false; */
+         returnFlag = false;
          //$<args>$.code += " PROC\n";
        } compound_statement {
 
@@ -393,44 +393,80 @@ void yyerror(const char *s){
             $$.code = ctmp2;
 
  						fprintf(logout,"%s \n\n",tmp2);
-            int flag = 1;
-
-            if(symboltable->Lookup($2.mystr) != NULL){
-              if(symboltable->Lookup($2.mystr)->getDataType() != return_Type && return_Type != "" && returnFlag){
-                error_count++;
-                fprintf(error,"Error %d at line %d: Return Type does not match\n\n",error_count,line_count,$2.mystr);
-              }
-              if(symboltable->Lookup($2.mystr)->getDataStructure()=="FUNCTION.DEC"){
-                SymbolInfo *s = symboltable->Lookup($2.mystr);
-                s->setDataStructure("FUNCTION.DEF");
-              }
-              else if(symboltable->Lookup($2.mystr)->getDataStructure()=="FUNCTION.DEF"){
-                flag = 0;
-                error_count++;
-                fprintf(error,"Error %d at line %d: Redefinition of  %s\n\n",error_count,line_count,$2.mystr);
-              }
-              if(symboltable->Lookup($2.mystr)->getDataType() != $1.mystr){
-                  error_count++;
-                  fprintf(error,"Error %d at line %d: Conflicting return-type for %s\n\n",error_count,line_count,$2.mystr);
-                }
-            }
-            else{
-              symboltable->Insert($2.mystr , "ID","FUNCTION.DEF");
-              symboltable->Lookup($2.mystr)->setDataType($1.mystr);
-
-              //cout<<return_Type<<" FUNC-RET--"<<symboltable->Lookup($2.mystr)->getDataType()<<"--\n\n";
-              if(symboltable->Lookup($2.mystr)->getDataType() != return_Type && return_Type != "" && returnFlag){
-                error_count++;
-                fprintf(error,"Error %d at line %d: Return Type does not match\n\n",error_count,line_count,$2.mystr);
-              }
-            }
-            return_Type = "";
-            returnFlag = false;
 
 					 }
 					 |type_specifier ID LPAREN parameter_list RPAREN
             {
                 cout<<"\n--FUNCTION WITH PARAMETER LIST\n";
+                int flag = 1;
+                SymbolInfo *s;
+                if(symboltable->Lookup($2.mystr)!= NULL){
+                  cout<<return_Type<<"- FUNC-RET--"<<symboltable->Lookup($2.mystr)->getDataType()<<"--\n\n";
+                  if(symboltable->Lookup($2.mystr)->getDataType() != return_Type && return_Type != "" && returnFlag){
+                    error_count++;
+                    fprintf(error,"Error %d at line %d: Return Type does not match\n\n",error_count,line_count,$2.mystr);
+                  }
+                    if(symboltable->Lookup($2.mystr)->getDataStructure()=="FUNCTION.DEC"){
+                      flag = 0;
+                      s = symboltable->Lookup($2.mystr);
+                      s->setDataStructure("FUNCTION.DEF");
+                      //checking parameters
+                      struct node * head = $4.arg_list;
+                      int arg_no = s->getArgNumber();
+                      while(head!= NULL){
+                        if(arg_no == 0){
+                          flag = 0;
+                          error_count++;
+                          fprintf(error,"Error %d at line %d: Conflicting arguments  %s\n\n",error_count,line_count,$2.mystr);
+                          break;
+                        }
+                        SymbolInfo *sym = s->getArgument();
+                        if(head->d_type != sym->getType()){
+                          flag = 0;
+                          error_count++;
+                          fprintf(error,"Error %d at line %d: Conflicting arguments  %s\n\n",error_count,line_count,$2.mystr);
+                          break;
+                       }
+                        arg_no--;
+                        head = head->arg_list;
+                      }
+                    }
+                    else if(symboltable->Lookup($2.mystr)->getDataStructure()=="FUNCTION.DEF"){
+                      flag = 0;
+                      error_count++;
+                      fprintf(error,"Error %d at line %d: Redefinition of  %s\n\n",error_count,line_count,$2.mystr);
+                    }
+                    if(symboltable->Lookup($2.mystr)->getDataType() != $1.mystr){
+                      error_count++;
+                      fprintf(error,"Error %d at line %d: Conflicting return-type for %s\n\n",error_count,line_count,$2.mystr);
+                    }
+                }
+                else{
+                  symboltable->Insert($2.mystr , "ID","FUNCTION.DEF");
+                  s = symboltable->Lookup($2.mystr);
+                  s->setDataType($1.mystr);
+
+                  if(symboltable->Lookup($2.mystr)->getDataType() != return_Type&& return_Type != "" && returnFlag){
+                    error_count++;
+                    fprintf(error,"Error %d at line %d: Return Type does not match\n\n",error_count,line_count,$2.mystr);
+                  }
+                }
+                if(flag == 1){
+                  struct node * head = $4.arg_list;
+                  while(head!= NULL){
+                    ////cout<<head->name<<" - "<<head->d_type<<endl;
+                    if(head->name == NULL){
+                      s->addArgument("" , head->d_type , "");
+                    }
+                    else{
+                      s->addArgument(head->name , head->d_type , "");
+                    }
+                    head = head->arg_list;
+                  }
+                }
+                return_Type = "";
+                returnFlag = false;
+
             }
             compound_statement{
 						 fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n\n",line_count);
@@ -447,80 +483,7 @@ void yyerror(const char *s){
 						 strcat(tmp2 , $7.mystr);
 						 $$.mystr = tmp2;
 						 fprintf(logout,"%s \n\n",tmp2);
-             //SymbolInfo *s = symboltable->Lookup($2.mystr);
-             int flag = 1;
-             SymbolInfo *s;
-             if(symboltable->Lookup($2.mystr)!= NULL){
-               cout<<return_Type<<"- FUNC-RET--"<<symboltable->Lookup($2.mystr)->getDataType()<<"--\n\n";
-               if(symboltable->Lookup($2.mystr)->getDataType() != return_Type && return_Type != "" && returnFlag){
-                 error_count++;
-                 fprintf(error,"Error %d at line %d: Return Type does not match\n\n",error_count,line_count,$2.mystr);
-               }
-                 if(symboltable->Lookup($2.mystr)->getDataStructure()=="FUNCTION.DEC"){
-                   flag = 0;
-                   s = symboltable->Lookup($2.mystr);
-                   s->setDataStructure("FUNCTION.DEF");
-                   //checking parameters
-                   struct node * head = $4.arg_list;
-                   int arg_no = s->getArgNumber();
-                   while(head!= NULL){
-                     if(arg_no == 0){
-                       flag = 0;
-                       error_count++;
-                       fprintf(error,"Error %d at line %d: Conflicting arguments  %s\n\n",error_count,line_count,$2.mystr);
-                       break;
-                     }
-                     SymbolInfo *sym = s->getArgument();
-                     //cout<<head->name<<" - "<<head->d_type<<endl;
-                     if(head->d_type != sym->getType()){
-                       flag = 0;
-                       error_count++;
-                       fprintf(error,"Error %d at line %d: Conflicting arguments  %s\n\n",error_count,line_count,$2.mystr);
-                       break;
-                    }
-                      //cout<<"Ekbar\n\n";
-                     arg_no--;
-                     head = head->arg_list;
-                   }
-                 }
-                 else if(symboltable->Lookup($2.mystr)->getDataStructure()=="FUNCTION.DEF"){
-                   flag = 0;
-                   error_count++;
-                   fprintf(error,"Error %d at line %d: Redefinition of  %s\n\n",error_count,line_count,$2.mystr);
-                 }
-                 if(symboltable->Lookup($2.mystr)->getDataType() != $1.mystr){
-                   error_count++;
-                   fprintf(error,"Error %d at line %d: Conflicting return-type for %s\n\n",error_count,line_count,$2.mystr);
-                   //yyerror("Conflicting return-type for");
-                 }
-             }
-             else{
-               symboltable->Insert($2.mystr , "ID","FUNCTION.DEF");
-               s = symboltable->Lookup($2.mystr);
-               s->setDataType($1.mystr);
-
-               //cout<<"\n\nHERE-"<<return_Type<<"--FUNC-RET--"<<symboltable->Lookup($2.mystr)->getDataType()<<"--\n\n";
-               if(symboltable->Lookup($2.mystr)->getDataType() != return_Type&& return_Type != "" && returnFlag){
-                 error_count++;
-                 fprintf(error,"Error %d at line %d: Return Type does not match\n\n",error_count,line_count,$2.mystr);
-               }
-             }
-             if(flag == 1){
-               struct node * head = $4.arg_list;
-               while(head!= NULL){
-                 ////cout<<head->name<<" - "<<head->d_type<<endl;
-                 if(head->name == NULL){
-                   s->addArgument("" , head->d_type , "");
-                 }
-                 else{
-                   s->addArgument(head->name , head->d_type , "");
-                 }
-                 head = head->arg_list;
-               }
-             }
-             return_Type = "";
-             returnFlag = false;
-
+            
 			 		}
 					;
         parameter_list  : parameter_list COMMA type_specifier ID  {
