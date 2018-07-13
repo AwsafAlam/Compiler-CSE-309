@@ -96,6 +96,7 @@ bool ScopeTable::Insert(string name , string type ,string datastructure)
    item->setName(name);
    item->setType(type);
    item->setDataStructure(datastructure);
+   item->setScope(scope);
    // item->index = index;
    item->next = NULL;
 

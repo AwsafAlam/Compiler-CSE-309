@@ -46,17 +46,17 @@ char *newLabel()
 	return lb;
 }
 
-char *newTemp(int scope)
+char *newTemp()
 {
-  char integer[2];
-  sprintf(integer, "%d", scope);
-	char *t= new char[6];
+  /* char integer[2];
+  sprintf(integer, "%d", scope); */
+	char *t= new char[4];
 	strcpy(t,"t");
 	char b[3];
 	sprintf(b,"%d", tempCount);
 	tempCount++;
 	strcat(t,b);
-  strcat(t,integer);
+  //strcat(t,integer);
 
 	return t;
 }
@@ -527,9 +527,6 @@ void yyerror(const char *s){
               $$.arg_list = item;
               fprintf(logout,"%s \n\n",tmp2);
 
-              /* symboltable->Insert($4.mystr , "ID","PARAM");
-              SymbolInfo *s = symboltable->Lookup($4.mystr);
-              s->setDataType($3.mystr); */
 
               SymbolInfo *it;
               it = new SymbolInfo;
@@ -537,14 +534,12 @@ void yyerror(const char *s){
               it->setType($3.mystr);
               it->setDataStructure("");
               it->next = NULL;
-              char integer[2];
+              /* char integer[2];
               sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
               char * var = (char *) malloc(15+strlen($4.mystr));
               strcpy(var , $4.mystr);
               strcat(var , integer);
-              DATA_SEGMENT.push_back(var);
-
-              DATA_SEGMENT.push_back($4.mystr);
+              DATA_SEGMENT.push_back(var); */
               param_list.push_back(it);
 
             }
@@ -570,12 +565,12 @@ void yyerror(const char *s){
             }
             | type_specifier ID  {
               $$.code = "";
-              char integer[2];
+              /* char integer[2];
               sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
               char * var = (char *) malloc(15+strlen($2.mystr));
               strcpy(var , $2.mystr);
               strcat(var , integer);
-              DATA_SEGMENT.push_back(var);
+              DATA_SEGMENT.push_back(var); */
 
               fprintf(logout,"At line no: %d parameter_list : type_specifier ID\n\n",line_count);
               char * tmp2 = (char *) malloc(15+strlen($1.mystr)+strlen($2.mystr));
@@ -664,7 +659,16 @@ void yyerror(const char *s){
                   //MOV param , AX
                   ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
                   strcat(ctmp2 , ctmp);
-                  strcat(ctmp2 , s->getName().c_str());
+
+                  char inte[2];
+                  sprintf(inte, "%d", symboltable->getCurrentScope()->getScopeNumber());
+                  char * var = (char *) malloc(15+strlen(s->getName().c_str()));
+                  strcpy(var , s->getName().c_str());
+                  strcat(var , inte);
+                  DATA_SEGMENT.push_back(var);
+                  
+
+                  strcat(ctmp2 , var);
                   ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\0';
                   strcat(ctmp2 , ctmp);
                   stackaddr+=2;
@@ -1360,6 +1364,11 @@ void yyerror(const char *s){
              if(symboltable->Lookup($1.mystr) != NULL){
                if(symboltable->Lookup($1.mystr)->getDataStructure() == "ARRAY"){
 
+                 /* char inte[2];
+                 sprintf(inte, "%d", symboltable->Lookup($1.mystr)->getCurrentScope());
+                 //char * var = (char *) malloc(15+strlen($1.mystr));
+                 strcat($1.mystr , inte); */
+
                  char ctmp[8];
                  ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
@@ -1397,7 +1406,7 @@ void yyerror(const char *s){
 
                  ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
                  strcat(ctmp2 , ctmp);
-                 char *t = newTemp(symboltable->getCurrentScope()->getScopeNumber());
+                 char *t = newTemp();
                  $$.VAR_NAME = t;
                  DATA_SEGMENT.push_back(t);
                  strcat(ctmp2 , t);
@@ -1692,7 +1701,7 @@ void yyerror(const char *s){
 
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
             strcat(ctmp2 , ctmp);
-            char *t = newTemp(symboltable->getCurrentScope()->getScopeNumber());
+            char *t = newTemp();
             $$.VAR_NAME = t;
             DATA_SEGMENT.push_back(t);
 
@@ -1782,7 +1791,7 @@ void yyerror(const char *s){
 
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
             strcat(ctmp2 , ctmp);
-            char * fals = newTemp(symboltable->getCurrentScope()->getScopeNumber());
+            char * fals = newTemp();
             $$.VAR_NAME = fals;
             DATA_SEGMENT.push_back(fals);
             strcat(ctmp2 , fals);
@@ -1885,7 +1894,7 @@ void yyerror(const char *s){
 
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
             strcat(ctmp2 , ctmp);
-            char *t = newTemp(symboltable->getCurrentScope()->getScopeNumber());
+            char *t = newTemp();
             $$.VAR_NAME = t;
             DATA_SEGMENT.push_back(t);
 
@@ -2006,7 +2015,7 @@ void yyerror(const char *s){
 
              ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
              strcat(ctmp2 , ctmp);
-             char *t = newTemp(symboltable->getCurrentScope()->getScopeNumber());
+             char *t = newTemp();
              $$.VAR_NAME = t;
              DATA_SEGMENT.push_back(t);
 
@@ -2063,7 +2072,7 @@ void yyerror(const char *s){
 
               ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
               strcat(ctmp2 , ctmp);
-              char *t = newTemp(symboltable->getCurrentScope()->getScopeNumber());
+              char *t = newTemp();
               $$.VAR_NAME = t;
               DATA_SEGMENT.push_back(t);
 
@@ -2116,7 +2125,7 @@ void yyerror(const char *s){
 
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
             strcat(ctmp2 , ctmp);
-            char *t = newTemp(symboltable->getCurrentScope()->getScopeNumber());
+            char *t = newTemp();
             $$.VAR_NAME = t;
             DATA_SEGMENT.push_back(t);
 

@@ -1,2 +1,4 @@
-Total Errors: 0
+Error 1 at line 5: Return Type does not match
+
+Total Errors: 1
 
