@@ -50,7 +50,6 @@ char *newTemp(int scope)
 {
   char integer[2];
   sprintf(integer, "%d", scope);
-
 	char *t= new char[6];
 	strcpy(t,"t");
 	char b[3];
@@ -510,15 +509,6 @@ void yyerror(const char *s){
 					;
         parameter_list  : parameter_list COMMA type_specifier ID  {
               fprintf(logout,"At line no: %d parameter_list  : parameter_list COMMA type_specifier ID\n\n",line_count);
-
-              char integer[2];
-              sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
-              char * var = (char *) malloc(15+strlen($4.mystr));
-              strcpy(var , $4.mystr);
-              strcat(var , integer);
-              DATA_SEGMENT.push_back(var);
-              $4.mystr = var;
-
               $$.code = $1.code;
 
               char tmp[2];
@@ -537,13 +527,24 @@ void yyerror(const char *s){
               $$.arg_list = item;
               fprintf(logout,"%s \n\n",tmp2);
 
+              /* symboltable->Insert($4.mystr , "ID","PARAM");
+              SymbolInfo *s = symboltable->Lookup($4.mystr);
+              s->setDataType($3.mystr); */
+
               SymbolInfo *it;
               it = new SymbolInfo;
               it->setName($4.mystr);
               it->setType($3.mystr);
               it->setDataStructure("");
               it->next = NULL;
+              char integer[2];
+              sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
+              char * var = (char *) malloc(15+strlen($4.mystr));
+              strcpy(var , $4.mystr);
+              strcat(var , integer);
+              DATA_SEGMENT.push_back(var);
 
+              DATA_SEGMENT.push_back($4.mystr);
               param_list.push_back(it);
 
             }
@@ -575,7 +576,6 @@ void yyerror(const char *s){
               strcpy(var , $2.mystr);
               strcat(var , integer);
               DATA_SEGMENT.push_back(var);
-              $2.mystr = var;
 
               fprintf(logout,"At line no: %d parameter_list : type_specifier ID\n\n",line_count);
               char * tmp2 = (char *) malloc(15+strlen($1.mystr)+strlen($2.mystr));
@@ -753,14 +753,6 @@ void yyerror(const char *s){
 		 		;
 			declaration_list : declaration_list COMMA ID {
 						fprintf(logout,"At line no: %d declaration_list : declaration_list COMMA ID\n\n",line_count);
-            char integer[2];
-            sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
-            char * var = (char *) malloc(15+strlen($3.mystr));
-            strcpy(var , $3.mystr);
-            strcat(var , integer);
-            DATA_SEGMENT.push_back(var);
-            $3.mystr = var;
-
 						char * tmp = (char *) malloc(11 + strlen($1.mystr)+ 1+strlen($3.mystr) );
 			      strcpy(tmp, $1.mystr);
 						char tmp2[2];
@@ -771,7 +763,12 @@ void yyerror(const char *s){
 						fprintf(logout,"%s\n\n",tmp);
 						$$.mystr = tmp;
             vec.push_back($3.mystr);
-
+            char integer[2];
+            sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
+            char * var = (char *) malloc(15+strlen($3.mystr));
+            strcpy(var , $3.mystr);
+            strcat(var , integer);
+            DATA_SEGMENT.push_back(var);
 						symboltable->Insert($3.mystr , "ID","");
 					}
 		 		  | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD {
@@ -783,7 +780,6 @@ void yyerror(const char *s){
             strcat(var , inte);
             DATA_SEGMENT_ARR.push_back(var);
             DATA_SEGMENT_ARR_SIZE.push_back($5.intvalue);
-            $3.mystr = var;
 
 						char integer[2];
 						sprintf(integer, "%d", $5.intvalue);
@@ -807,16 +803,14 @@ void yyerror(const char *s){
 		 		  | ID {
 						fprintf(logout,"At line no: %d declaration_list : ID\n\n",line_count);
 						fprintf(logout,"%s\n\n",$1.mystr);
-            $$ = $1;
-
             char integer[2];
             sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
             char * var = (char *) malloc(15+strlen($1.mystr));
             strcpy(var , $1.mystr);
             strcat(var , integer);
             DATA_SEGMENT.push_back(var);
-            strcpy($1.mystr , var);
 
+						$$ = $1;
             SymbolInfo *s = symboltable->Lookup($1.mystr);
             if(s != NULL && strcmp(s->getDataStructure().c_str() , "PARAM")){
               error_count++;
@@ -837,7 +831,6 @@ void yyerror(const char *s){
             strcat(var , inte);
             DATA_SEGMENT_ARR.push_back(var);
             DATA_SEGMENT_ARR_SIZE.push_back($3.intvalue);
-            $1.mystr = var;
 
 						char tmp[2];
  						tmp[0]='[';tmp[1]='\0';
@@ -1193,10 +1186,6 @@ void yyerror(const char *s){
 					}
 				  | PRINTLN LPAREN ID RPAREN SEMICOLON	{
 						fprintf(logout,"At line no: %d statement : PRINTLN LPAREN ID RPAREN SEMICOLON\n\n",line_count);
-            char inte[2];
-            sprintf(inte, "%d", symboltable->getCurrentScope()->getScopeNumber());
-            strcat($3.mystr , inte);
-
             if(symboltable->Lookup($3.mystr) == NULL){
                 error_count++;
                 fprintf(error, "Error %d at Line %d: Undeclared Variable: %s\n\n",error_count , line_count,$3.mystr);
@@ -1339,10 +1328,6 @@ void yyerror(const char *s){
               //symboltable->Insert($1.mystr , "ID");
               fprintf(logout,"At line no: %d variable : ID\n\n",line_count);
               $$ = $1;
-              char inte[2];
-              sprintf(inte, "%d", symboltable->getCurrentScope()->getScopeNumber());
-              strcat($1.mystr , inte);
-
               $$.code = "";
 
               $$.intvalue = NULL;
@@ -1368,9 +1353,6 @@ void yyerror(const char *s){
             }
            | ID LTHIRD expression RTHIRD	{
              fprintf(logout,"At line no: %d variable : ID LTHIRD expression RTHIRD\n\n",line_count);
-             char inte[2];
-             sprintf(inte, "%d", symboltable->getCurrentScope()->getScopeNumber());
-             strcat($1.mystr , inte);
 
              char * ctmp2 = (char *) malloc(19+strlen($3.code)+strlen($1.mystr)+strlen($3.mystr)+50);
              strcpy(ctmp2 , $3.code);

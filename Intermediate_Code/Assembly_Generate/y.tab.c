@@ -115,7 +115,6 @@ char *newTemp(int scope)
 {
   char integer[2];
   sprintf(integer, "%d", scope);
-
 	char *t= new char[6];
 	strcpy(t,"t");
 	char b[3];
@@ -159,7 +158,7 @@ void yyerror(const char *s){
 }
 
 
-#line 163 "y.tab.c" /* yacc.c:339  */
+#line 162 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -189,7 +188,7 @@ void yyerror(const char *s){
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 100 "parser.y" /* yacc.c:355  */
+#line 99 "parser.y" /* yacc.c:355  */
 
     struct node {
         char * mystr;
@@ -204,7 +203,7 @@ extern int yydebug;
         char *LABEL;
     };
 
-#line 208 "y.tab.c" /* yacc.c:355  */
+#line 207 "y.tab.c" /* yacc.c:355  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -306,11 +305,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 114 "parser.y" /* yacc.c:355  */
+#line 113 "parser.y" /* yacc.c:355  */
 
   struct node args;
 
-#line 314 "y.tab.c" /* yacc.c:355  */
+#line 313 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -327,7 +326,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 331 "y.tab.c" /* yacc.c:358  */
+#line 330 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -629,13 +628,13 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   129,   129,   165,   185,   192,   197,   202,   209,   252,
-     279,   279,   383,   382,   511,   550,   570,   603,   617,   617,
-     681,   681,   701,   722,   733,   743,   754,   777,   807,   831,
-     858,   864,   881,   886,   892,   897,   980,  1061,  1118,  1194,
-    1224,  1303,  1316,  1338,  1369,  1511,  1516,  1646,  1651,  1728,
-    1733,  1847,  1853,  1974,  1979,  2156,  2214,  2263,  2269,  2274,
-    2348,  2364,  2377,  2397,  2446,  2493,  2499,  2505,  2531
+       0,   128,   128,   164,   184,   191,   196,   201,   208,   251,
+     278,   278,   382,   381,   510,   551,   571,   603,   617,   617,
+     681,   681,   701,   722,   733,   743,   754,   774,   803,   825,
+     851,   857,   874,   879,   885,   890,   973,  1054,  1111,  1187,
+    1213,  1292,  1305,  1327,  1354,  1493,  1498,  1628,  1633,  1710,
+    1715,  1829,  1835,  1956,  1961,  2138,  2196,  2245,  2251,  2256,
+    2330,  2346,  2359,  2379,  2428,  2475,  2481,  2487,  2513
 };
 #endif
 
@@ -1496,7 +1495,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 130 "parser.y" /* yacc.c:1646  */
+#line 129 "parser.y" /* yacc.c:1646  */
     {
 					fprintf(logout,"At line no: %d start : program\n\n",line_count);
 					(yyval.args) = (yyvsp[0].args);
@@ -1531,11 +1530,11 @@ yyreduce:
           //cout<<"---FInal Code----\n\n"<<$1.code<<endl;
 
 				}
-#line 1535 "y.tab.c" /* yacc.c:1646  */
+#line 1534 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 165 "parser.y" /* yacc.c:1646  */
+#line 164 "parser.y" /* yacc.c:1646  */
     {
 					fprintf(logout,"At line no: %d program : program unit\n\n",line_count);
 					char * tmp = (char *) malloc(20+strlen((yyvsp[-1].args).mystr)+strlen((yyvsp[0].args).mystr)+10);
@@ -1556,53 +1555,53 @@ yyreduce:
           (yyval.args).code = ctmp;
 					fprintf(logout,"%s \n\n",tmp);
 				}
-#line 1560 "y.tab.c" /* yacc.c:1646  */
+#line 1559 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 185 "parser.y" /* yacc.c:1646  */
+#line 184 "parser.y" /* yacc.c:1646  */
     {
 					fprintf(logout,"At line no: %d program : | unit\n\n",line_count);
 					(yyval.args) = (yyvsp[0].args);
 
 					fprintf(logout,"%s\n\n",(yyvsp[0].args).mystr);
 				}
-#line 1571 "y.tab.c" /* yacc.c:1646  */
+#line 1570 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 192 "parser.y" /* yacc.c:1646  */
+#line 191 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d unit : var_declaration\n\n",line_count);
 						(yyval.args) = (yyvsp[0].args);
 						fprintf(logout,"%s\n\n",(yyvsp[0].args).mystr);
 					 }
-#line 1581 "y.tab.c" /* yacc.c:1646  */
+#line 1580 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 197 "parser.y" /* yacc.c:1646  */
+#line 196 "parser.y" /* yacc.c:1646  */
     {
 						 fprintf(logout,"At line no: %d unit : func_declaration\n\n",line_count);
 						 (yyval.args) = (yyvsp[0].args);
 						 fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 					 }
-#line 1591 "y.tab.c" /* yacc.c:1646  */
+#line 1590 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 202 "parser.y" /* yacc.c:1646  */
+#line 201 "parser.y" /* yacc.c:1646  */
     {
 						 fprintf(logout,"At line no: %d unit : func_definition\n\n",line_count);
 						 (yyval.args) = (yyvsp[0].args);
 
 						 fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 					 }
-#line 1602 "y.tab.c" /* yacc.c:1646  */
+#line 1601 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 209 "parser.y" /* yacc.c:1646  */
+#line 208 "parser.y" /* yacc.c:1646  */
     {
                fprintf(logout,"At line no: %d func_declaration : type_specifier ID LPAREN parameter_list RPAREN SEMICOLON\n\n",line_count);
                (yyval.args).code = "";
@@ -1646,11 +1645,11 @@ yyreduce:
                }
                param_list.clear();
              }
-#line 1650 "y.tab.c" /* yacc.c:1646  */
+#line 1649 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 252 "parser.y" /* yacc.c:1646  */
+#line 251 "parser.y" /* yacc.c:1646  */
     {
                fprintf(logout,"At line no: %d func_declaration :type_specifier ID LPAREN RPAREN SEMICOLON\n\n",line_count);
                (yyval.args).code = "";
@@ -1677,11 +1676,11 @@ yyreduce:
                  s->setDataType((yyvsp[-4].args).mystr);
                }
              }
-#line 1681 "y.tab.c" /* yacc.c:1646  */
+#line 1680 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 279 "parser.y" /* yacc.c:1646  */
+#line 278 "parser.y" /* yacc.c:1646  */
     {
          //cout<<"NEED TO INS FUNC NAME FOR RECURSION "<<$2.mystr<<endl;
          int flag = 1;
@@ -1717,11 +1716,11 @@ yyreduce:
          returnFlag = false;
          //$<args>$.code += " PROC\n";
        }
-#line 1721 "y.tab.c" /* yacc.c:1646  */
+#line 1720 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 313 "parser.y" /* yacc.c:1646  */
+#line 312 "parser.y" /* yacc.c:1646  */
     {
       	 		fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN  RPAREN compound_statement\n\n",line_count);
 						char tmp[2];
@@ -1791,11 +1790,11 @@ yyreduce:
  						fprintf(logout,"%s \n\n",tmp2);
 
 					 }
-#line 1795 "y.tab.c" /* yacc.c:1646  */
+#line 1794 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 383 "parser.y" /* yacc.c:1646  */
+#line 382 "parser.y" /* yacc.c:1646  */
     {
                 int flag = 1;
                 SymbolInfo *s;
@@ -1867,11 +1866,11 @@ yyreduce:
                 returnFlag = false;
 
             }
-#line 1871 "y.tab.c" /* yacc.c:1646  */
+#line 1870 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 454 "parser.y" /* yacc.c:1646  */
+#line 453 "parser.y" /* yacc.c:1646  */
     {
 						 fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n\n",line_count);
              (yyval.args).code = (yyvsp[0].args).code;
@@ -1928,22 +1927,13 @@ yyreduce:
              (yyval.args).code = ctmp2;
 
 			 		}
-#line 1932 "y.tab.c" /* yacc.c:1646  */
+#line 1931 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 511 "parser.y" /* yacc.c:1646  */
+#line 510 "parser.y" /* yacc.c:1646  */
     {
               fprintf(logout,"At line no: %d parameter_list  : parameter_list COMMA type_specifier ID\n\n",line_count);
-
-              char integer[2];
-              sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
-              char * var = (char *) malloc(15+strlen((yyvsp[0].args).mystr));
-              strcpy(var , (yyvsp[0].args).mystr);
-              strcat(var , integer);
-              DATA_SEGMENT.push_back(var);
-              (yyvsp[0].args).mystr = var;
-
               (yyval.args).code = (yyvsp[-3].args).code;
 
               char tmp[2];
@@ -1962,21 +1952,32 @@ yyreduce:
               (yyval.args).arg_list = item;
               fprintf(logout,"%s \n\n",tmp2);
 
+              /* symboltable->Insert($4.mystr , "ID","PARAM");
+              SymbolInfo *s = symboltable->Lookup($4.mystr);
+              s->setDataType($3.mystr); */
+
               SymbolInfo *it;
               it = new SymbolInfo;
               it->setName((yyvsp[0].args).mystr);
               it->setType((yyvsp[-1].args).mystr);
               it->setDataStructure("");
               it->next = NULL;
+              char integer[2];
+              sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
+              char * var = (char *) malloc(15+strlen((yyvsp[0].args).mystr));
+              strcpy(var , (yyvsp[0].args).mystr);
+              strcat(var , integer);
+              DATA_SEGMENT.push_back(var);
 
+              DATA_SEGMENT.push_back((yyvsp[0].args).mystr);
               param_list.push_back(it);
 
             }
-#line 1976 "y.tab.c" /* yacc.c:1646  */
+#line 1977 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 550 "parser.y" /* yacc.c:1646  */
+#line 551 "parser.y" /* yacc.c:1646  */
     {
               (yyval.args).code = "";
               fprintf(logout,"At line no: %d parameter_list : parameter_list COMMA type_specifier\n\n",line_count);
@@ -1997,11 +1998,11 @@ yyreduce:
 
 
             }
-#line 2001 "y.tab.c" /* yacc.c:1646  */
+#line 2002 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 570 "parser.y" /* yacc.c:1646  */
+#line 571 "parser.y" /* yacc.c:1646  */
     {
               (yyval.args).code = "";
               char integer[2];
@@ -2010,7 +2011,6 @@ yyreduce:
               strcpy(var , (yyvsp[0].args).mystr);
               strcat(var , integer);
               DATA_SEGMENT.push_back(var);
-              (yyvsp[0].args).mystr = var;
 
               fprintf(logout,"At line no: %d parameter_list : type_specifier ID\n\n",line_count);
               char * tmp2 = (char *) malloc(15+strlen((yyvsp[-1].args).mystr)+strlen((yyvsp[0].args).mystr));
@@ -2236,14 +2236,6 @@ yyreduce:
 #line 754 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d declaration_list : declaration_list COMMA ID\n\n",line_count);
-            char integer[2];
-            sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
-            char * var = (char *) malloc(15+strlen((yyvsp[0].args).mystr));
-            strcpy(var , (yyvsp[0].args).mystr);
-            strcat(var , integer);
-            DATA_SEGMENT.push_back(var);
-            (yyvsp[0].args).mystr = var;
-
 						char * tmp = (char *) malloc(11 + strlen((yyvsp[-2].args).mystr)+ 1+strlen((yyvsp[0].args).mystr) );
 			      strcpy(tmp, (yyvsp[-2].args).mystr);
 						char tmp2[2];
@@ -2254,14 +2246,19 @@ yyreduce:
 						fprintf(logout,"%s\n\n",tmp);
 						(yyval.args).mystr = tmp;
             vec.push_back((yyvsp[0].args).mystr);
-
+            char integer[2];
+            sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
+            char * var = (char *) malloc(15+strlen((yyvsp[0].args).mystr));
+            strcpy(var , (yyvsp[0].args).mystr);
+            strcat(var , integer);
+            DATA_SEGMENT.push_back(var);
 						symboltable->Insert((yyvsp[0].args).mystr , "ID","");
 					}
-#line 2261 "y.tab.c" /* yacc.c:1646  */
+#line 2258 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 777 "parser.y" /* yacc.c:1646  */
+#line 774 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD\n\n",line_count);
             char inte[2];
@@ -2271,7 +2268,6 @@ yyreduce:
             strcat(var , inte);
             DATA_SEGMENT_ARR.push_back(var);
             DATA_SEGMENT_ARR_SIZE.push_back((yyvsp[-1].args).intvalue);
-            (yyvsp[-3].args).mystr = var;
 
 						char integer[2];
 						sprintf(integer, "%d", (yyvsp[-1].args).intvalue);
@@ -2292,24 +2288,22 @@ yyreduce:
             symboltable->Insert((yyvsp[-3].args).mystr , "ID","ARRAY");
             vec.push_back((yyvsp[-3].args).mystr);
 					}
-#line 2296 "y.tab.c" /* yacc.c:1646  */
+#line 2292 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 807 "parser.y" /* yacc.c:1646  */
+#line 803 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d declaration_list : ID\n\n",line_count);
 						fprintf(logout,"%s\n\n",(yyvsp[0].args).mystr);
-            (yyval.args) = (yyvsp[0].args);
-
             char integer[2];
             sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
             char * var = (char *) malloc(15+strlen((yyvsp[0].args).mystr));
             strcpy(var , (yyvsp[0].args).mystr);
             strcat(var , integer);
             DATA_SEGMENT.push_back(var);
-            strcpy((yyvsp[0].args).mystr , var);
 
+						(yyval.args) = (yyvsp[0].args);
             SymbolInfo *s = symboltable->Lookup((yyvsp[0].args).mystr);
             if(s != NULL && strcmp(s->getDataStructure().c_str() , "PARAM")){
               error_count++;
@@ -2321,11 +2315,11 @@ yyreduce:
               vec.push_back((yyvsp[0].args).mystr);
             }
 					}
-#line 2325 "y.tab.c" /* yacc.c:1646  */
+#line 2319 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 831 "parser.y" /* yacc.c:1646  */
+#line 825 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d declaration_list : ID LTHIRD CONST_INT RTHIRD\n\n",line_count);
             char inte[2];
@@ -2335,7 +2329,6 @@ yyreduce:
             strcat(var , inte);
             DATA_SEGMENT_ARR.push_back(var);
             DATA_SEGMENT_ARR_SIZE.push_back((yyvsp[-1].args).intvalue);
-            (yyvsp[-3].args).mystr = var;
 
 						char tmp[2];
  						tmp[0]='[';tmp[1]='\0';
@@ -2352,22 +2345,22 @@ yyreduce:
  						fprintf(logout,"%s \n\n",tmp2);
 						symboltable->Insert((yyvsp[-3].args).mystr , "ID","ARRAY");
 					 }
-#line 2356 "y.tab.c" /* yacc.c:1646  */
+#line 2349 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 858 "parser.y" /* yacc.c:1646  */
+#line 851 "parser.y" /* yacc.c:1646  */
     {
 						//
 						fprintf(logout,"At line no: %d statements : statement \n\n",line_count);
 						(yyval.args) = (yyvsp[0].args);
 						fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 					 }
-#line 2367 "y.tab.c" /* yacc.c:1646  */
+#line 2360 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 864 "parser.y" /* yacc.c:1646  */
+#line 857 "parser.y" /* yacc.c:1646  */
     {
 						 fprintf(logout,"At line no: %d statements :| statements statement \n\n",line_count);
  						char * tmp2 = (char *) malloc(15+strlen((yyvsp[-1].args).mystr)+strlen((yyvsp[0].args).mystr));
@@ -2383,42 +2376,42 @@ yyreduce:
 
             fprintf(logout,"%s \n\n",tmp2);
 					 }
-#line 2387 "y.tab.c" /* yacc.c:1646  */
+#line 2380 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 881 "parser.y" /* yacc.c:1646  */
+#line 874 "parser.y" /* yacc.c:1646  */
     {
 					fprintf(logout,"At line no: %d statement : var_declaration\n\n",line_count);
 						(yyval.args) = (yyvsp[0].args);
 						fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 					}
-#line 2397 "y.tab.c" /* yacc.c:1646  */
+#line 2390 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 886 "parser.y" /* yacc.c:1646  */
+#line 879 "parser.y" /* yacc.c:1646  */
     {
 						 fprintf(logout,"At line no: %d statement : expression_statement\n\n",line_count);
 						 (yyval.args) = (yyvsp[0].args);
 
  						fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 					 }
-#line 2408 "y.tab.c" /* yacc.c:1646  */
+#line 2401 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 892 "parser.y" /* yacc.c:1646  */
+#line 885 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d statement : compound_statement\n\n",line_count);
 						(yyval.args) = (yyvsp[0].args);
 						fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 					}
-#line 2418 "y.tab.c" /* yacc.c:1646  */
+#line 2411 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 897 "parser.y" /* yacc.c:1646  */
+#line 890 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d statement :  FOR LPAREN expression_statement expression_statement expression RPAREN statement\n\n",line_count);
 						char tmp[4];
@@ -2502,11 +2495,11 @@ yyreduce:
             (yyval.args).code = ctmp2;
 
 					}
-#line 2506 "y.tab.c" /* yacc.c:1646  */
+#line 2499 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 980 "parser.y" /* yacc.c:1646  */
+#line 973 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d statement : IF LPAREN expression RPAREN statement ELSE statement\n\n",line_count);
 						char tmp[5];
@@ -2588,11 +2581,11 @@ yyreduce:
             (yyval.args).code = ctmp2;
 
 					}
-#line 2592 "y.tab.c" /* yacc.c:1646  */
+#line 2585 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 1061 "parser.y" /* yacc.c:1646  */
+#line 1054 "parser.y" /* yacc.c:1646  */
     {
 							fprintf(logout,"At line no: %d statement : IF LPAREN expression RPAREN statement\n\n",line_count);
 							char tmp[5];
@@ -2650,11 +2643,11 @@ yyreduce:
 
             (yyval.args).code = ctmp2;
 					}
-#line 2654 "y.tab.c" /* yacc.c:1646  */
+#line 2647 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 1118 "parser.y" /* yacc.c:1646  */
+#line 1111 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d statement : WHILE LPAREN expression RPAREN statement\n\n",line_count);
 						char tmp[6];
@@ -2731,17 +2724,13 @@ yyreduce:
             (yyval.args).code = ctmp2;
 
 					}
-#line 2735 "y.tab.c" /* yacc.c:1646  */
+#line 2728 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 1194 "parser.y" /* yacc.c:1646  */
+#line 1187 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d statement : PRINTLN LPAREN ID RPAREN SEMICOLON\n\n",line_count);
-            char inte[2];
-            sprintf(inte, "%d", symboltable->getCurrentScope()->getScopeNumber());
-            strcat((yyvsp[-2].args).mystr , inte);
-
             if(symboltable->Lookup((yyvsp[-2].args).mystr) == NULL){
                 error_count++;
                 fprintf(error, "Error %d at Line %d: Undeclared Variable: %s\n\n",error_count , line_count,(yyvsp[-2].args).mystr);
@@ -2766,11 +2755,11 @@ yyreduce:
  						(yyval.args).mystr = tmp2;
  						fprintf(logout,"%s \n\n",tmp2);
 					}
-#line 2770 "y.tab.c" /* yacc.c:1646  */
+#line 2759 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 1224 "parser.y" /* yacc.c:1646  */
+#line 1213 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d statement : RETURN expression SEMICOLON\n\n",line_count);
 						char tmp[8];
@@ -2849,11 +2838,11 @@ yyreduce:
               }
             }
 					}
-#line 2853 "y.tab.c" /* yacc.c:1646  */
+#line 2842 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 1303 "parser.y" /* yacc.c:1646  */
+#line 1292 "parser.y" /* yacc.c:1646  */
     {
               fprintf(logout,"At line no: %d expression_statement 	: SEMICOLON\n\n",line_count);
               char tmp[2];
@@ -2867,11 +2856,11 @@ yyreduce:
               (yyval.args).code = "";
 
             }
-#line 2871 "y.tab.c" /* yacc.c:1646  */
+#line 2860 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 1316 "parser.y" /* yacc.c:1646  */
+#line 1305 "parser.y" /* yacc.c:1646  */
     {
               fprintf(logout,"At line no: %d expression_statement 	: expression SEMICOLON\n\n",line_count);
               char tmp[2];
@@ -2893,19 +2882,15 @@ yyreduce:
               fprintf(logout,"%s \n\n",(yyval.args).mystr);
 
             }
-#line 2897 "y.tab.c" /* yacc.c:1646  */
+#line 2886 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 1338 "parser.y" /* yacc.c:1646  */
+#line 1327 "parser.y" /* yacc.c:1646  */
     {
               //symboltable->Insert($1.mystr , "ID");
               fprintf(logout,"At line no: %d variable : ID\n\n",line_count);
               (yyval.args) = (yyvsp[0].args);
-              char inte[2];
-              sprintf(inte, "%d", symboltable->getCurrentScope()->getScopeNumber());
-              strcat((yyvsp[0].args).mystr , inte);
-
               (yyval.args).code = "";
 
               (yyval.args).intvalue = NULL;
@@ -2929,16 +2914,13 @@ yyreduce:
                   //return_Type = symboltable->Lookup($1.mystr)->getDataType();
               }
             }
-#line 2933 "y.tab.c" /* yacc.c:1646  */
+#line 2918 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 1369 "parser.y" /* yacc.c:1646  */
+#line 1354 "parser.y" /* yacc.c:1646  */
     {
              fprintf(logout,"At line no: %d variable : ID LTHIRD expression RTHIRD\n\n",line_count);
-             char inte[2];
-             sprintf(inte, "%d", symboltable->getCurrentScope()->getScopeNumber());
-             strcat((yyvsp[-3].args).mystr , inte);
 
              char * ctmp2 = (char *) malloc(19+strlen((yyvsp[-1].args).code)+strlen((yyvsp[-3].args).mystr)+strlen((yyvsp[-1].args).mystr)+50);
              strcpy(ctmp2 , (yyvsp[-1].args).code);
@@ -3075,21 +3057,21 @@ yyreduce:
                (yyval.args).mystr = tmp2;
                fprintf(logout,"%s \n\n",tmp2);
            }
-#line 3079 "y.tab.c" /* yacc.c:1646  */
+#line 3061 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 1511 "parser.y" /* yacc.c:1646  */
+#line 1493 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d expression : logic_expression\n\n",line_count);
 						(yyval.args) = (yyvsp[0].args);
             fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 					}
-#line 3089 "y.tab.c" /* yacc.c:1646  */
+#line 3071 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 1516 "parser.y" /* yacc.c:1646  */
+#line 1498 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d expression : variable ASSIGNOP logic_expression\n\n",line_count);
 
@@ -3219,21 +3201,21 @@ yyreduce:
             (yyval.args).code = ctmp2;
             fprintf(logout,"%s \n\n",tmp2);
 					}
-#line 3223 "y.tab.c" /* yacc.c:1646  */
+#line 3205 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 1646 "parser.y" /* yacc.c:1646  */
+#line 1628 "parser.y" /* yacc.c:1646  */
     {
 				 			fprintf(logout,"At line no: %d logic_expression : rel_expression\n\n",line_count);
 							(yyval.args) = (yyvsp[0].args);
               fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 						}
-#line 3233 "y.tab.c" /* yacc.c:1646  */
+#line 3215 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 1651 "parser.y" /* yacc.c:1646  */
+#line 1633 "parser.y" /* yacc.c:1646  */
     {
 						 fprintf(logout,"At line no: %d logic_expression : rel_expression LOGICOP rel_expression\n\n",line_count);
  						char * tmp2 = (char *) malloc(11+strlen((yyvsp[-2].args).mystr)+strlen((yyvsp[-1].args).mystr)+strlen((yyvsp[0].args).mystr));
@@ -3310,21 +3292,21 @@ yyreduce:
             (yyval.args).code = ctmp2;
 
 					 }
-#line 3314 "y.tab.c" /* yacc.c:1646  */
+#line 3296 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 1728 "parser.y" /* yacc.c:1646  */
+#line 1710 "parser.y" /* yacc.c:1646  */
     {
 							fprintf(logout,"At line no: %d rel_expression	: simple_expression\n\n",line_count);
 							(yyval.args) = (yyvsp[0].args);
           	 fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 					}
-#line 3324 "y.tab.c" /* yacc.c:1646  */
+#line 3306 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 1733 "parser.y" /* yacc.c:1646  */
+#line 1715 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d rel_expression	: simple_expression RELOP simple_expression\n\n",line_count);
 						char * tmp2 = (char *) malloc(19+strlen((yyvsp[-2].args).mystr)+strlen((yyvsp[-1].args).mystr)+strlen((yyvsp[0].args).mystr));
@@ -3438,22 +3420,22 @@ yyreduce:
 
 
 					}
-#line 3442 "y.tab.c" /* yacc.c:1646  */
+#line 3424 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 1847 "parser.y" /* yacc.c:1646  */
+#line 1829 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d simple_expression : term\n\n",line_count);
 						(yyval.args) = (yyvsp[0].args);
 
             fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 					}
-#line 3453 "y.tab.c" /* yacc.c:1646  */
+#line 3435 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 1853 "parser.y" /* yacc.c:1646  */
+#line 1835 "parser.y" /* yacc.c:1646  */
     {
 
 						fprintf(logout,"At line no: %d simple_expression : simple_expression ADDOP term\n\n",line_count);
@@ -3574,21 +3556,21 @@ yyreduce:
             }
 
           }
-#line 3578 "y.tab.c" /* yacc.c:1646  */
+#line 3560 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 1974 "parser.y" /* yacc.c:1646  */
+#line 1956 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d term :	unary_expression\n\n",line_count);
 						(yyval.args) = (yyvsp[0].args);
             fprintf(logout,"%s \n\n",(yyval.args).mystr);
           }
-#line 3588 "y.tab.c" /* yacc.c:1646  */
+#line 3570 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 1979 "parser.y" /* yacc.c:1646  */
+#line 1961 "parser.y" /* yacc.c:1646  */
     {
 
            fprintf(logout,"At line no: %d term :	term MULOP unary_expression\n\n",line_count);
@@ -3765,11 +3747,11 @@ yyreduce:
 					 (yyval.args).mystr = tmp2;
 					 fprintf(logout,"%s \n\n",tmp2);
 				 }
-#line 3769 "y.tab.c" /* yacc.c:1646  */
+#line 3751 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 2156 "parser.y" /* yacc.c:1646  */
+#line 2138 "parser.y" /* yacc.c:1646  */
     {
 							fprintf(logout,"At line no: %d unary_expression : ADDOP unary_expression\n\n",line_count);
 							char tmp[2];
@@ -3828,11 +3810,11 @@ yyreduce:
               }
 
 					}
-#line 3832 "y.tab.c" /* yacc.c:1646  */
+#line 3814 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 2214 "parser.y" /* yacc.c:1646  */
+#line 2196 "parser.y" /* yacc.c:1646  */
     {
 						 fprintf(logout,"At line no: %d unary_expression : NOT unary_expression\n\n",line_count);
 						 char tmp[2];
@@ -3882,31 +3864,31 @@ yyreduce:
             (yyval.args).code = ctmp2;
 
 					 }
-#line 3886 "y.tab.c" /* yacc.c:1646  */
+#line 3868 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 2263 "parser.y" /* yacc.c:1646  */
+#line 2245 "parser.y" /* yacc.c:1646  */
     {
 						 fprintf(logout,"At line no: %d unary_expression : factor\n\n",line_count);
 						 (yyval.args) = (yyvsp[0].args);
              fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 					 }
-#line 3896 "y.tab.c" /* yacc.c:1646  */
+#line 3878 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 2269 "parser.y" /* yacc.c:1646  */
+#line 2251 "parser.y" /* yacc.c:1646  */
     {
 					fprintf(logout,"At line no: %d factor	: variable\n\n",line_count);
 					(yyval.args) = (yyvsp[0].args);
 					fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 				}
-#line 3906 "y.tab.c" /* yacc.c:1646  */
+#line 3888 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 59:
-#line 2274 "parser.y" /* yacc.c:1646  */
+#line 2256 "parser.y" /* yacc.c:1646  */
     {
           fprintf(logout,"At line no: %d factor	: ID LPAREN argument_list RPAREN\n\n",line_count);
 
@@ -3981,11 +3963,11 @@ yyreduce:
 					(yyval.args).mystr = tmp2;
           fprintf(logout,"%s \n\n",tmp2);
         }
-#line 3985 "y.tab.c" /* yacc.c:1646  */
+#line 3967 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 2348 "parser.y" /* yacc.c:1646  */
+#line 2330 "parser.y" /* yacc.c:1646  */
     {
           //Scope handling
           (yyval.args) = (yyvsp[-1].args);
@@ -4002,11 +3984,11 @@ yyreduce:
           (yyval.args).code = (yyvsp[-1].args).code;
 
 				}
-#line 4006 "y.tab.c" /* yacc.c:1646  */
+#line 3988 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 2364 "parser.y" /* yacc.c:1646  */
+#line 2346 "parser.y" /* yacc.c:1646  */
     {
 					fprintf(logout,"At line no: %d factor : CONST_INT\n\n",line_count);
 					char tmp[2];
@@ -4020,11 +4002,11 @@ yyreduce:
           (yyval.args).code = "";
 					fprintf(logout,"%s \n\n",tmp2);
 				}
-#line 4024 "y.tab.c" /* yacc.c:1646  */
+#line 4006 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 62:
-#line 2377 "parser.y" /* yacc.c:1646  */
+#line 2359 "parser.y" /* yacc.c:1646  */
     {
 					fprintf(logout,"At line no: %d factor : CONST_FLOAT\n\n",line_count);
           error_count++;
@@ -4045,11 +4027,11 @@ yyreduce:
           (yyval.args).code = "";
           free(str);
 				}
-#line 4049 "y.tab.c" /* yacc.c:1646  */
+#line 4031 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 2397 "parser.y" /* yacc.c:1646  */
+#line 2379 "parser.y" /* yacc.c:1646  */
     {
           fprintf(logout,"At line no: %d factor : variable DECOP\n\n",line_count);
           char ctmp[8];
@@ -4099,11 +4081,11 @@ yyreduce:
           (yyval.args).mystr = tmp2;
           fprintf(logout,"%s \n\n",tmp2);
 				}
-#line 4103 "y.tab.c" /* yacc.c:1646  */
+#line 4085 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 64:
-#line 2446 "parser.y" /* yacc.c:1646  */
+#line 2428 "parser.y" /* yacc.c:1646  */
     {
 					fprintf(logout,"At line no: %d factor : variable DECOP\n\n",line_count);
           //$$ = $1;
@@ -4150,32 +4132,32 @@ yyreduce:
 					(yyval.args).mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
 				}
-#line 4154 "y.tab.c" /* yacc.c:1646  */
+#line 4136 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 2493 "parser.y" /* yacc.c:1646  */
+#line 2475 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d argument_list : arguments\n\n",line_count);
 						(yyval.args) = (yyvsp[0].args);
 						fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 
           }
-#line 4165 "y.tab.c" /* yacc.c:1646  */
+#line 4147 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 66:
-#line 2499 "parser.y" /* yacc.c:1646  */
+#line 2481 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d argument_list :\n\n",line_count);
             (yyval.args).code = "";
             (yyval.args).mystr = "";
 					}
-#line 4175 "y.tab.c" /* yacc.c:1646  */
+#line 4157 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 2505 "parser.y" /* yacc.c:1646  */
+#line 2487 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d arguments : arguments COMMA logic_expression\n\n",line_count);
             char * ctmp2 = (char *) malloc(20+strlen((yyvsp[-2].args).code)+2+strlen((yyvsp[0].args).code));
@@ -4202,11 +4184,11 @@ yyreduce:
             item->arg_list = (yyvsp[-2].args).arg_list;
             (yyval.args).arg_list = item;
 					}
-#line 4206 "y.tab.c" /* yacc.c:1646  */
+#line 4188 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 2531 "parser.y" /* yacc.c:1646  */
+#line 2513 "parser.y" /* yacc.c:1646  */
     {
 						fprintf(logout,"At line no: %d arguments : logic_expression\n\n",line_count);
             (yyval.args) = (yyvsp[0].args);
@@ -4231,11 +4213,11 @@ yyreduce:
             (yyval.args).mystr = (yyvsp[0].args).mystr;
             fprintf(logout,"%s \n\n",(yyvsp[0].args).mystr);
 					}
-#line 4235 "y.tab.c" /* yacc.c:1646  */
+#line 4217 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 4239 "y.tab.c" /* yacc.c:1646  */
+#line 4221 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -4463,7 +4445,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 2556 "parser.y" /* yacc.c:1906  */
+#line 2538 "parser.y" /* yacc.c:1906  */
 
 int main(int argc,char *argv[])
 {
