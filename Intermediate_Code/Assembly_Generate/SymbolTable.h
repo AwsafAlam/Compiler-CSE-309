@@ -24,7 +24,7 @@ public:
   bool Insert(string name , string type,string datastructure);
   SymbolInfo* Lookup(string name );
   bool Delete(string name );
-
+  int getScopeNumber(){return scope;}
   int getCollision(){return collision;}
   void printHash();
 };
@@ -236,7 +236,7 @@ public:
   bool Remove(string name);
   SymbolInfo * Lookup(string name);
   SymbolInfo * LookupCurrentScope(string name);
-
+  ScopeTable * getCurrentScope(){return CurrentScope;}
   void PrintCurrentScope();
   void PrintAllScopes();
 

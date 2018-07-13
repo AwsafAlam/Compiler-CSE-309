@@ -46,14 +46,19 @@ char *newLabel()
 	return lb;
 }
 
-char *newTemp()
+char *newTemp(int scope)
 {
-	char *t= new char[4];
+  char integer[2];
+  sprintf(integer, "%d", scope);
+
+	char *t= new char[6];
 	strcpy(t,"t");
 	char b[3];
 	sprintf(b,"%d", tempCount);
 	tempCount++;
 	strcat(t,b);
+  strcat(t,integer);
+
 	return t;
 }
 
@@ -272,7 +277,7 @@ void yyerror(const char *s){
              }
              ;
 			 func_definition : type_specifier ID LPAREN RPAREN {
-         cout<<"NEED TO INS FUNC NAME FOR RECURSION "<<$2.mystr<<endl;
+         //cout<<"NEED TO INS FUNC NAME FOR RECURSION "<<$2.mystr<<endl;
          int flag = 1;
 
          if(symboltable->Lookup($2.mystr) != NULL){
@@ -355,6 +360,13 @@ void yyerror(const char *s){
               ctmp[0]='\n';ctmp[1]='\0';
               strcat(ctmp2 , ctmp);
             }
+            else{
+              ctmp[0]='P';ctmp[1]='O';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='P';ctmp[6]='\n';ctmp[7]='\0';
+              strcat(ctmp2 , ctmp);
+              ctmp[0]='R';ctmp[1]='E';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='4';ctmp[5]='\n';ctmp[6]='\0';
+              strcat(ctmp2 , ctmp);
+
+            }
 
             strcat(ctmp2 , $2.mystr);
             ctmp[0]=' ';ctmp[1]='\0';
@@ -369,7 +381,6 @@ void yyerror(const char *s){
 					 }
 					 |type_specifier ID LPAREN parameter_list RPAREN
             {
-                cout<<"\n--FUNCTION WITH PARAMETER LIST\n";
                 int flag = 1;
                 SymbolInfo *s;
                 if(symboltable->Lookup($2.mystr)!= NULL){
@@ -481,6 +492,11 @@ void yyerror(const char *s){
              strcat(ctmp2 , $7.code);
              ctmp[0]='\n';ctmp[1]='\0';
              strcat(ctmp2 , ctmp);
+             //POP BP; RET 4
+            ctmp[0]='P';ctmp[1]='O';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='P';ctmp[6]='\n';ctmp[7]='\0';
+             strcat(ctmp2 , ctmp);
+             ctmp[0]='R';ctmp[1]='E';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='4';ctmp[5]='\n';ctmp[6]='\0';
+             strcat(ctmp2 , ctmp);
 
              strcat(ctmp2 , $2.mystr);
              ctmp[0]=' ';ctmp[1]='\0';
@@ -494,6 +510,15 @@ void yyerror(const char *s){
 					;
         parameter_list  : parameter_list COMMA type_specifier ID  {
               fprintf(logout,"At line no: %d parameter_list  : parameter_list COMMA type_specifier ID\n\n",line_count);
+
+              char integer[2];
+              sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
+              char * var = (char *) malloc(15+strlen($4.mystr));
+              strcpy(var , $4.mystr);
+              strcat(var , integer);
+              DATA_SEGMENT.push_back(var);
+              $4.mystr = var;
+
               $$.code = $1.code;
 
               char tmp[2];
@@ -511,10 +536,6 @@ void yyerror(const char *s){
               item->arg_list = $1.arg_list;
               $$.arg_list = item;
               fprintf(logout,"%s \n\n",tmp2);
-
-              /* symboltable->Insert($4.mystr , "ID","PARAM");
-              SymbolInfo *s = symboltable->Lookup($4.mystr);
-              s->setDataType($3.mystr); */
 
               SymbolInfo *it;
               it = new SymbolInfo;
@@ -548,6 +569,13 @@ void yyerror(const char *s){
             }
             | type_specifier ID  {
               $$.code = "";
+              char integer[2];
+              sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
+              char * var = (char *) malloc(15+strlen($2.mystr));
+              strcpy(var , $2.mystr);
+              strcat(var , integer);
+              DATA_SEGMENT.push_back(var);
+              $2.mystr = var;
 
               fprintf(logout,"At line no: %d parameter_list : type_specifier ID\n\n",line_count);
               char * tmp2 = (char *) malloc(15+strlen($1.mystr)+strlen($2.mystr));
@@ -621,7 +649,7 @@ void yyerror(const char *s){
               int stackaddr = 4;
               for(int i = 0 ; i< param_list.size() ; i++){
                   SymbolInfo * s = param_list[i];
-                  cout<<s->getName()<<"- ID-\n";
+                  //cout<<s->getName()<<"- ID-\n";
 
                   ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
                   //MOV AX , [BP + Addr]
@@ -725,6 +753,14 @@ void yyerror(const char *s){
 		 		;
 			declaration_list : declaration_list COMMA ID {
 						fprintf(logout,"At line no: %d declaration_list : declaration_list COMMA ID\n\n",line_count);
+            char integer[2];
+            sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
+            char * var = (char *) malloc(15+strlen($3.mystr));
+            strcpy(var , $3.mystr);
+            strcat(var , integer);
+            DATA_SEGMENT.push_back(var);
+            $3.mystr = var;
+
 						char * tmp = (char *) malloc(11 + strlen($1.mystr)+ 1+strlen($3.mystr) );
 			      strcpy(tmp, $1.mystr);
 						char tmp2[2];
@@ -735,13 +771,19 @@ void yyerror(const char *s){
 						fprintf(logout,"%s\n\n",tmp);
 						$$.mystr = tmp;
             vec.push_back($3.mystr);
-            DATA_SEGMENT.push_back($3.mystr);
+
 						symboltable->Insert($3.mystr , "ID","");
 					}
 		 		  | declaration_list COMMA ID LTHIRD CONST_INT RTHIRD {
 						fprintf(logout,"At line no: %d declaration_list : declaration_list COMMA ID LTHIRD CONST_INT RTHIRD\n\n",line_count);
-            DATA_SEGMENT_ARR.push_back($3.mystr);
+            char inte[2];
+            sprintf(inte, "%d", symboltable->getCurrentScope()->getScopeNumber());
+            char * var = (char *) malloc(15+strlen($3.mystr));
+            strcpy(var , $3.mystr);
+            strcat(var , inte);
+            DATA_SEGMENT_ARR.push_back(var);
             DATA_SEGMENT_ARR_SIZE.push_back($5.intvalue);
+            $3.mystr = var;
 
 						char integer[2];
 						sprintf(integer, "%d", $5.intvalue);
@@ -765,9 +807,16 @@ void yyerror(const char *s){
 		 		  | ID {
 						fprintf(logout,"At line no: %d declaration_list : ID\n\n",line_count);
 						fprintf(logout,"%s\n\n",$1.mystr);
-            DATA_SEGMENT.push_back($1.mystr);
+            $$ = $1;
 
-						$$ = $1;
+            char integer[2];
+            sprintf(integer, "%d", symboltable->getCurrentScope()->getScopeNumber());
+            char * var = (char *) malloc(15+strlen($1.mystr));
+            strcpy(var , $1.mystr);
+            strcat(var , integer);
+            DATA_SEGMENT.push_back(var);
+            strcpy($1.mystr , var);
+
             SymbolInfo *s = symboltable->Lookup($1.mystr);
             if(s != NULL && strcmp(s->getDataStructure().c_str() , "PARAM")){
               error_count++;
@@ -781,8 +830,14 @@ void yyerror(const char *s){
 					}
 		 		  | ID LTHIRD CONST_INT RTHIRD {
 						fprintf(logout,"At line no: %d declaration_list : ID LTHIRD CONST_INT RTHIRD\n\n",line_count);
-            DATA_SEGMENT_ARR.push_back($1.mystr);
+            char inte[2];
+            sprintf(inte, "%d", symboltable->getCurrentScope()->getScopeNumber());
+            char * var = (char *) malloc(15+strlen($1.mystr));
+            strcpy(var , $1.mystr);
+            strcat(var , inte);
+            DATA_SEGMENT_ARR.push_back(var);
             DATA_SEGMENT_ARR_SIZE.push_back($3.intvalue);
+            $1.mystr = var;
 
 						char tmp[2];
  						tmp[0]='[';tmp[1]='\0';
@@ -1138,6 +1193,10 @@ void yyerror(const char *s){
 					}
 				  | PRINTLN LPAREN ID RPAREN SEMICOLON	{
 						fprintf(logout,"At line no: %d statement : PRINTLN LPAREN ID RPAREN SEMICOLON\n\n",line_count);
+            char inte[2];
+            sprintf(inte, "%d", symboltable->getCurrentScope()->getScopeNumber());
+            strcat($3.mystr , inte);
+
             if(symboltable->Lookup($3.mystr) == NULL){
                 error_count++;
                 fprintf(error, "Error %d at Line %d: Undeclared Variable: %s\n\n",error_count , line_count,$3.mystr);
@@ -1174,7 +1233,25 @@ void yyerror(const char *s){
 						tmp[0]='\n';tmp[1]='\0';
 						strcat(tmp2 , tmp);
 						$$.mystr = tmp2;
-            $$.code = $2.code;
+
+            char ctmp[8];
+            ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+
+            char * ctmp2 = (char *) malloc(30+strlen(ctmp)*6+strlen($2.code)+strlen($2.mystr)+20);
+            strcat(ctmp2 , $2.code);
+            strcat(ctmp2 , ctmp);
+            if($2.VAR_NAME != NULL){
+              strcat(ctmp2 , $2.VAR_NAME);
+            }
+            else{
+              strcat(ctmp2 , $2.mystr);
+            }
+
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            $$.code = ctmp2;
+
 						fprintf(logout,"%s \n\n",tmp2);
             returnFlag = true;
             int flag = 1;
@@ -1262,6 +1339,10 @@ void yyerror(const char *s){
               //symboltable->Insert($1.mystr , "ID");
               fprintf(logout,"At line no: %d variable : ID\n\n",line_count);
               $$ = $1;
+              char inte[2];
+              sprintf(inte, "%d", symboltable->getCurrentScope()->getScopeNumber());
+              strcat($1.mystr , inte);
+
               $$.code = "";
 
               $$.intvalue = NULL;
@@ -1287,6 +1368,9 @@ void yyerror(const char *s){
             }
            | ID LTHIRD expression RTHIRD	{
              fprintf(logout,"At line no: %d variable : ID LTHIRD expression RTHIRD\n\n",line_count);
+             char inte[2];
+             sprintf(inte, "%d", symboltable->getCurrentScope()->getScopeNumber());
+             strcat($1.mystr , inte);
 
              char * ctmp2 = (char *) malloc(19+strlen($3.code)+strlen($1.mystr)+strlen($3.mystr)+50);
              strcpy(ctmp2 , $3.code);
@@ -1331,7 +1415,7 @@ void yyerror(const char *s){
 
                  ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
                  strcat(ctmp2 , ctmp);
-                 char *t = newTemp();
+                 char *t = newTemp(symboltable->getCurrentScope()->getScopeNumber());
                  $$.VAR_NAME = t;
                  DATA_SEGMENT.push_back(t);
                  strcat(ctmp2 , t);
@@ -1626,7 +1710,7 @@ void yyerror(const char *s){
 
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
             strcat(ctmp2 , ctmp);
-            char *t = newTemp();
+            char *t = newTemp(symboltable->getCurrentScope()->getScopeNumber());
             $$.VAR_NAME = t;
             DATA_SEGMENT.push_back(t);
 
@@ -1716,7 +1800,7 @@ void yyerror(const char *s){
 
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
             strcat(ctmp2 , ctmp);
-            char * fals = newTemp();
+            char * fals = newTemp(symboltable->getCurrentScope()->getScopeNumber());
             $$.VAR_NAME = fals;
             DATA_SEGMENT.push_back(fals);
             strcat(ctmp2 , fals);
@@ -1819,7 +1903,7 @@ void yyerror(const char *s){
 
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
             strcat(ctmp2 , ctmp);
-            char *t = newTemp();
+            char *t = newTemp(symboltable->getCurrentScope()->getScopeNumber());
             $$.VAR_NAME = t;
             DATA_SEGMENT.push_back(t);
 
@@ -1940,7 +2024,7 @@ void yyerror(const char *s){
 
              ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
              strcat(ctmp2 , ctmp);
-             char *t = newTemp();
+             char *t = newTemp(symboltable->getCurrentScope()->getScopeNumber());
              $$.VAR_NAME = t;
              DATA_SEGMENT.push_back(t);
 
@@ -1997,7 +2081,7 @@ void yyerror(const char *s){
 
               ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
               strcat(ctmp2 , ctmp);
-              char *t = newTemp();
+              char *t = newTemp(symboltable->getCurrentScope()->getScopeNumber());
               $$.VAR_NAME = t;
               DATA_SEGMENT.push_back(t);
 
@@ -2009,7 +2093,7 @@ void yyerror(const char *s){
               strcat(ctmp2 , ctmp);
 
               $$.code = ctmp2;
-              cout<<$$.code;
+              //cout<<$$.code;
 
           }
           else if($2.charvalue == '/'){
@@ -2050,7 +2134,7 @@ void yyerror(const char *s){
 
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
             strcat(ctmp2 , ctmp);
-            char *t = newTemp();
+            char *t = newTemp(symboltable->getCurrentScope()->getScopeNumber());
             $$.VAR_NAME = t;
             DATA_SEGMENT.push_back(t);
 
@@ -2188,7 +2272,6 @@ void yyerror(const char *s){
 					fprintf(logout,"%s \n\n",$1.mystr);
 				}
 				| ID LPAREN argument_list RPAREN	{
-          cout<<"\nFUNCTION CALL\n";
           fprintf(logout,"At line no: %d factor	: ID LPAREN argument_list RPAREN\n\n",line_count);
 
           char ctmp[6];
