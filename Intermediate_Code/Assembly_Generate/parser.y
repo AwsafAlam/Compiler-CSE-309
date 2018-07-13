@@ -300,7 +300,37 @@ void yyerror(const char *s){
              ;
 			 func_definition : type_specifier ID LPAREN RPAREN {
          cout<<"NEED TO INS FUNC NAME FOR RECURSION "<<$2.mystr<<endl;
+         /* int flag = 1;
 
+         if(symboltable->Lookup($2.mystr) != NULL){
+           if(symboltable->Lookup($2.mystr)->getDataType() != return_Type && return_Type != "" && returnFlag){
+             error_count++;
+             fprintf(error,"Error %d at line %d: Return Type does not match\n\n",error_count,line_count,$2.mystr);
+           }
+           if(symboltable->Lookup($2.mystr)->getDataStructure()=="FUNCTION.DEC"){
+             SymbolInfo *s = symboltable->Lookup($2.mystr);
+             s->setDataStructure("FUNCTION.DEF");
+           }
+           else if(symboltable->Lookup($2.mystr)->getDataStructure()=="FUNCTION.DEF"){
+             flag = 0;
+             error_count++;
+             fprintf(error,"Error %d at line %d: Redefinition of  %s\n\n",error_count,line_count,$2.mystr);
+           }
+           if(symboltable->Lookup($2.mystr)->getDataType() != $1.mystr){
+               error_count++;
+               fprintf(error,"Error %d at line %d: Conflicting return-type for %s\n\n",error_count,line_count,$2.mystr);
+             }
+         }
+         else{
+           symboltable->Insert($2.mystr , "ID","FUNCTION.DEF");
+           symboltable->Lookup($2.mystr)->setDataType($1.mystr);
+           if(symboltable->Lookup($2.mystr)->getDataType() != return_Type && return_Type != "" && returnFlag){
+             error_count++;
+             fprintf(error,"Error %d at line %d: Return Type does not match\n\n",error_count,line_count,$2.mystr);
+           }
+         }
+         return_Type = "";
+         returnFlag = false; */
          //$<args>$.code += " PROC\n";
        } compound_statement {
 
@@ -353,7 +383,7 @@ void yyerror(const char *s){
               ctmp[0]='\n';ctmp[1]='\0';
               strcat(ctmp2 , ctmp);
             }
-            
+
             strcat(ctmp2 , $2.mystr);
             ctmp[0]=' ';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
@@ -398,18 +428,23 @@ void yyerror(const char *s){
             returnFlag = false;
 
 					 }
-					 |type_specifier ID LPAREN parameter_list RPAREN compound_statement{
+					 |type_specifier ID LPAREN parameter_list RPAREN
+            {
+                cout<<"\n--FUNCTION WITH PARAMETER LIST\n";
+            }
+            compound_statement{
 						 fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n\n",line_count);
-						 char tmp[2];
+             $$.code = $7.code;
+             char tmp[2];
 						 tmp[0]='(';tmp[1]='\0';
-						 char * tmp2 = (char *) malloc(15+strlen($1.mystr)+strlen($2.mystr)+1+strlen($4.mystr)+1+strlen($6.mystr));
+						 char * tmp2 = (char *) malloc(15+strlen($1.mystr)+strlen($2.mystr)+1+strlen($4.mystr)+1+strlen($7.mystr));
 						 strcpy(tmp2 , $1.mystr);
 						 strcat(tmp2 , $2.mystr);
 						 strcat(tmp2 , tmp);
 						 strcat(tmp2 , $4.mystr);
 						 tmp[0] = ')';
 						 strcat(tmp2 , tmp);
-						 strcat(tmp2 , $6.mystr);
+						 strcat(tmp2 , $7.mystr);
 						 $$.mystr = tmp2;
 						 fprintf(logout,"%s \n\n",tmp2);
              //SymbolInfo *s = symboltable->Lookup($2.mystr);
@@ -490,6 +525,8 @@ void yyerror(const char *s){
 					;
         parameter_list  : parameter_list COMMA type_specifier ID  {
               fprintf(logout,"At line no: %d parameter_list  : parameter_list COMMA type_specifier ID\n\n",line_count);
+              $$.code = $1.code;
+
               char tmp[2];
               tmp[0]=',';tmp[1]='\0';
               char * tmp2 = (char *) malloc(15+strlen($1.mystr)+1+strlen($3.mystr)+strlen($4.mystr));
@@ -521,6 +558,7 @@ void yyerror(const char *s){
 
             }
             | parameter_list COMMA type_specifier  {
+              $$.code = "";
               fprintf(logout,"At line no: %d parameter_list : parameter_list COMMA type_specifier\n\n",line_count);
               char tmp[2];
               tmp[0]=',';tmp[1]='\0';
@@ -540,6 +578,8 @@ void yyerror(const char *s){
 
             }
             | type_specifier ID  {
+              $$.code = "";
+
               fprintf(logout,"At line no: %d parameter_list : type_specifier ID\n\n",line_count);
               char * tmp2 = (char *) malloc(15+strlen($1.mystr)+strlen($2.mystr));
               strcpy(tmp2 , $1.mystr);
@@ -564,6 +604,8 @@ void yyerror(const char *s){
 
             }
             | type_specifier  {
+              $$.code = "";
+
               fprintf(logout,"At line no: %d parameter_list : type_specifier\n\n",line_count);
               fprintf(logout,"%s \n\n",$1.mystr);
               $$.mystr = $1.mystr;
@@ -1132,7 +1174,7 @@ void yyerror(const char *s){
 						tmp[0]='\n';tmp[1]='\0';
 						strcat(tmp2 , tmp);
 						$$.mystr = tmp2;
-            $$.code = "";
+            $$.code = $2.code;
 						fprintf(logout,"%s \n\n",tmp2);
             returnFlag = true;
             int flag = 1;
@@ -2146,8 +2188,9 @@ void yyerror(const char *s){
 					fprintf(logout,"%s \n\n",$1.mystr);
 				}
 				| ID LPAREN argument_list RPAREN	{
-
-					fprintf(logout,"At line no: %d factor	: ID LPAREN argument_list RPAREN\n\n",line_count);
+          cout<<"\nFUNCTION CALL\n";
+          $$.code = "";
+          fprintf(logout,"At line no: %d factor	: ID LPAREN argument_list RPAREN\n\n",line_count);
 					char tmp[2];
 					tmp[0]='(';tmp[1]='\0';
 					char * tmp2 = (char *) malloc(19+strlen($1.mystr)+1+strlen($3.mystr)+1);

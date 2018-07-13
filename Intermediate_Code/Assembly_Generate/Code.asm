@@ -1,60 +1,47 @@
 .MODEL SMALL
 .STACK 100H
 .DATA
+t0 DW ?
+x DW ?
+t1 DW ?
+t2 DW ?
 a DW ?
 b DW ?
-i DW ?
-t0 DW ?
 .CODE
+MOV AX,2
+MOV BX,a
+MUL BX
+MOV t0,AX
+
+
+MOV AX,a
+MOV BX,f(a)
+ADD BX,,AX
+MOV t1,BX
+
+MOV AX,b
+MOV BX,t1
+ADD BX,,AX
+MOV t2,BX
+
+MOV AX,t2
+MOV x,AX
+
+
 main PROC
 MOV AX,@DATA
 MOV DS,AX
 
-MOV AX,0
-MOV b,AX
-
-MOV AX,0
-MOV i,AX
-
-L4:
-MOV AX,i
-CMP AX,4
-JL L0
-MOV t0,0
-JMP L1
-L0:
-MOV t0,1
-L1:
-
-MOV AX,t0
-CMP AX,0
-JE L5
-MOV AX,3
+MOV AX,1
 MOV a,AX
 
-L2:
-MOV AX,a
-DEC AX
-MOV a,AX
-MOV AX,a;;
-CMP AX,0
-JE L3
-MOV AX,b
-INC AX
+MOV AX,2
 MOV b,AX
-b
 
-JMP L2
-L3:
-MOV AX,i
-INC AX
-MOV i,AX
-i
-JMP L4
-L5:
+MOV AX,f
+MOV a,AX
+
 MOV AX,a
-CALL PRINT
-MOV AX,b
 CALL PRINT
 
 MOV AH,4CH
