@@ -179,33 +179,33 @@ At line no: 4 variable : ID
 
 i
 
-At line no: 4 factor : variable INCOP
+At line no: 4 factor : variable DECOP
 
-i++ 
+i;; 
 
 At line no: 4 unary_expression : factor
 
-i++ 
+i;; 
 
 At line no: 4 term :	unary_expression
 
-i++ 
+i;; 
 
 At line no: 4 simple_expression : term
 
-i++ 
+i;; 
 
 At line no: 4 rel_expression	: simple_expression
 
-i++ 
+i;; 
 
 At line no: 4 logic_expression : rel_expression
 
-i++ 
+i;; 
 
 At line no: 4 expression : logic_expression
 
-i++ 
+i;; 
 
   New ScopeTable with id 3 created
 
@@ -294,53 +294,53 @@ At line no: 7 variable : ID
 
 b
 
-At line no: 7 factor : variable INCOP
+At line no: 7 factor : variable DECOP
 
-b++ 
+b;; 
 
 At line no: 7 unary_expression : factor
 
-b++ 
+b;; 
 
 At line no: 7 term :	unary_expression
 
-b++ 
+b;; 
 
 At line no: 7 simple_expression : term
 
-b++ 
+b;; 
 
 At line no: 7 rel_expression	: simple_expression
 
-b++ 
+b;; 
 
 At line no: 7 logic_expression : rel_expression
 
-b++ 
+b;; 
 
 At line no: 7 expression : logic_expression
 
-b++ 
+b;; 
 
 At line no: 7 expression_statement 	: expression SEMICOLON
 
-b++;
+b;;;
  
 
 At line no: 7 statement : expression_statement
 
-b++;
+b;;;
  
 
 At line no: 7 statements : statement 
 
-b++;
+b;;;
  
 
 At line no: 8 compound_statement : LCURL statements RCURL
 
 {
-b++;
+b;;;
 
 } 
 
@@ -364,14 +364,14 @@ ScopeTable with id 4 removed
 At line no: 8 statement : compound_statement
 
 {
-b++;
+b;;;
 
 } 
 
 At line no: 8 statement : WHILE LPAREN expression RPAREN statement
 
 while(a;;){
-b++;
+b;;;
 
 } 
 
@@ -379,7 +379,7 @@ At line no: 8 statements :| statements statement
 
 a=3;
 while(a;;){
-b++;
+b;;;
 
 } 
 
@@ -388,7 +388,7 @@ At line no: 9 compound_statement : LCURL statements RCURL
 {
 a=3;
 while(a;;){
-b++;
+b;;;
 
 }
 } 
@@ -412,7 +412,7 @@ At line no: 9 statement : compound_statement
 {
 a=3;
 while(a;;){
-b++;
+b;;;
 
 }
 } 
@@ -421,10 +421,10 @@ At line no: 9 statement :  FOR LPAREN expression_statement expression_statement 
 
 for(i=0;
 i<4;
-i++){
+i;;){
 a=3;
 while(a;;){
-b++;
+b;;;
 
 }
 } 
@@ -435,10 +435,10 @@ int a,b,i;
 b=0;
 for(i=0;
 i<4;
-i++){
+i;;){
 a=3;
 while(a;;){
-b++;
+b;;;
 
 }
 } 
@@ -454,10 +454,10 @@ int a,b,i;
 b=0;
 for(i=0;
 i<4;
-i++){
+i;;){
 a=3;
 while(a;;){
-b++;
+b;;;
 
 }
 }println(a);
@@ -474,10 +474,10 @@ int a,b,i;
 b=0;
 for(i=0;
 i<4;
-i++){
+i;;){
 a=3;
 while(a;;){
-b++;
+b;;;
 
 }
 }println(a);
@@ -532,10 +532,10 @@ int a,b,i;
 b=0;
 for(i=0;
 i<4;
-i++){
+i;;){
 a=3;
 while(a;;){
-b++;
+b;;;
 
 }
 }println(a);
@@ -550,10 +550,10 @@ int a,b,i;
 b=0;
 for(i=0;
 i<4;
-i++){
+i;;){
 a=3;
 while(a;;){
-b++;
+b;;;
 
 }
 }println(a);
@@ -580,10 +580,10 @@ int a,b,i;
 b=0;
 for(i=0;
 i<4;
-i++){
+i;;){
 a=3;
 while(a;;){
-b++;
+b;;;
 
 }
 }println(a);
@@ -599,10 +599,10 @@ int a,b,i;
 b=0;
 for(i=0;
 i<4;
-i++){
+i;;){
 a=3;
 while(a;;){
-b++;
+b;;;
 
 }
 }println(a);
@@ -618,10 +618,10 @@ int a,b,i;
 b=0;
 for(i=0;
 i<4;
-i++){
+i;;){
 a=3;
 while(a;;){
-b++;
+b;;;
 
 }
 }println(a);
@@ -637,10 +637,10 @@ int a,b,i;
 b=0;
 for(i=0;
 i<4;
-i++){
+i;;){
 a=3;
 while(a;;){
-b++;
+b;;;
 
 }
 }println(a);
