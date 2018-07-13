@@ -333,7 +333,6 @@ void yyerror(const char *s){
          returnFlag = false;
          //$<args>$.code += " PROC\n";
        } compound_statement {
-
       	 		fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN  RPAREN compound_statement\n\n",line_count);
 						char tmp[2];
  						tmp[0]='(';tmp[1]='\0';
@@ -483,7 +482,7 @@ void yyerror(const char *s){
 						 strcat(tmp2 , $7.mystr);
 						 $$.mystr = tmp2;
 						 fprintf(logout,"%s \n\n",tmp2);
-            
+
 			 		}
 					;
         parameter_list  : parameter_list COMMA type_specifier ID  {
@@ -589,6 +588,7 @@ void yyerror(const char *s){
             SymbolInfo * sym = symboltable->Lookup(s->getName());
             sym->setDataType(s->getType());
         }
+        cout<<"\nDO NOT CLEAR PARAM LIST??\n";
         param_list.clear();
         return_Type = "";
         } statements RCURL  {
@@ -2152,8 +2152,15 @@ void yyerror(const char *s){
 				}
 				| ID LPAREN argument_list RPAREN	{
           cout<<"\nFUNCTION CALL\n";
-          $$.code = "";
           fprintf(logout,"At line no: %d factor	: ID LPAREN argument_list RPAREN\n\n",line_count);
+
+          char ctmp[6];
+          ctmp[0]='P';ctmp[1]='U';ctmp[2]='S';ctmp[3]='H';ctmp[4]=' ';ctmp[5]='\0';
+
+          char * ctmp2 = (char *) malloc(30+strlen(ctmp)*3+strlen($3.mystr)+strlen($3.code)+1);
+          strcpy(ctmp2 , $3.code);
+
+
 					char tmp[2];
 					tmp[0]='(';tmp[1]='\0';
 					char * tmp2 = (char *) malloc(19+strlen($1.mystr)+1+strlen($3.mystr)+1);
@@ -2162,6 +2169,7 @@ void yyerror(const char *s){
 					strcat(tmp2 , $3.mystr);
 					tmp[0] = ')';
 					strcat(tmp2 , tmp);
+
           SymbolInfo* sym = symboltable->Lookup($1.mystr);
           struct node * head = $3.arg_list;
           if(symboltable->Lookup($1.mystr) == NULL){
@@ -2177,6 +2185,14 @@ void yyerror(const char *s){
                 break;
               }
               SymbolInfo* s = sym->getArgument();
+
+              ctmp[0]='P';ctmp[1]='U';ctmp[2]='S';ctmp[3]='H';ctmp[4]=' ';ctmp[5]='\0';
+              strcat(ctmp2 , ctmp);
+              strcat(ctmp2 , head->name);
+
+              ctmp[0]='\n';ctmp[1]='\0';
+              strcat(ctmp2 , ctmp);
+
               if(symboltable->Lookup(head->name) != NULL){
                 if(symboltable->Lookup(head->name)->getDataType() != s->getType()){
                   error_count ++;
@@ -2186,7 +2202,20 @@ void yyerror(const char *s){
               head = head->arg_list;
               arg_no--;
             }
+            if(arg_no > 0){
+              error_count ++;
+              fprintf(error, "Error %d at Line %d: Not enough arguments\n\n",error_count , line_count);
+            }
           }
+          ctmp[0]='C';ctmp[1]='A';ctmp[2]='L';ctmp[3]='L';ctmp[4]=' ';ctmp[5]='\0';
+          strcat(ctmp2 , ctmp);
+
+          strcat(ctmp2 , $1.mystr);
+
+          ctmp[0]='\n';ctmp[1]='\0';
+          strcat(ctmp2 , ctmp);
+
+          $$.code = ctmp2;
 
 					$$.mystr = tmp2;
           fprintf(logout,"%s \n\n",tmp2);
@@ -2344,11 +2373,17 @@ void yyerror(const char *s){
           }
 				  |	{
 						fprintf(logout,"At line no: %d argument_list :\n\n",line_count);
+            $$.code = "";
             $$.mystr = "";
 					}
 				  ;
 			arguments : arguments COMMA logic_expression	{
 						fprintf(logout,"At line no: %d arguments : arguments COMMA logic_expression\n\n",line_count);
+            char * ctmp2 = (char *) malloc(20+strlen($1.code)+2+strlen($3.code));
+            strcpy(ctmp2 , $1.code);
+            strcat(ctmp2 , $3.code);
+            $$.code = ctmp2;
+
 						char tmp[2];
 						tmp[0] = ',';tmp[1] = '\0';
 						char * tmp2 = (char *) malloc(20+strlen($1.mystr)+2+strlen($3.mystr));
@@ -2368,7 +2403,7 @@ void yyerror(const char *s){
 					}
 		      | logic_expression	{
 						fprintf(logout,"At line no: %d arguments : logic_expression\n\n",line_count);
-
+            $$.code = $1.code;
             $$.arg_list  = (struct node *) malloc(1+sizeof(struct node));
             $$.arg_list->name = $1.mystr;
 

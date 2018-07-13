@@ -14,6 +14,8 @@ MUL BX
 MOV t0,AX
 
 
+PUSH a
+CALL f
 MOV AX,a
 MOV BX,f(a)
 ADD BX,,AX
@@ -38,6 +40,8 @@ MOV a,AX
 MOV AX,2
 MOV b,AX
 
+PUSH b
+CALL f
 MOV AX,f
 MOV a,AX
 
