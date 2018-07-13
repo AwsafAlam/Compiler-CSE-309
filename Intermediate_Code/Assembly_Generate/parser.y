@@ -57,11 +57,15 @@ char *newTemp()
 	return t;
 }
 
+char * printFunction(){
+  char * print="\n\nPRINT PROC\n\n\tpush ax\n\tpush bx\n\tpush cx\n\tpush dx\n\tor ax,ax\n \tjge enddif\n\tpush ax\n\tmov dl,'-'\n\tmov ah,2\n\tint 21h\n\tpop ax\n\tneg ax\nenddif:\n\txor cx,cx\n\tmov bx,10d\nrepeat:\n\txor dx,dx\n\tdiv bx\n\t push dx\n\tinc cx\n\tor ax,ax\n\tjne repeat\n\tmov ah,2\nprint_loop:\n\tpop dx\n\tor dl,30h\n\tint 21h\n\tloop print_loop\n\tpop dx\n\tpop cx\n\tpop bx\n\tpop ax\n\tret\n\PRINT ENDP\n";
+	return print;
+}
 char *printID(char * id){
     char ctmp[11];
-  ctmp[0]='L';ctmp[1]='E';ctmp[2]='A';ctmp[3]=' ';ctmp[4]='D';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+  ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-  char * ctmp2 = (char *) malloc(1+strlen(ctmp)*10+strlen(id)+2);
+  char * ctmp2 = (char *) malloc(20+strlen(ctmp)*10+strlen(id)+2);
 
   strcat(ctmp2 , ctmp);
   strcat(ctmp2 , id);
@@ -69,13 +73,13 @@ char *printID(char * id){
   ctmp[0]='\n';ctmp[1]='\0';
   strcat(ctmp2 , ctmp);
 
-  ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='H';ctmp[6]=',';ctmp[7]='0';ctmp[8]='9';ctmp[9]='H';ctmp[10]='\0';
+  ctmp[0]='C';ctmp[1]='A';ctmp[2]='L';ctmp[3]='L';ctmp[4]=' ';ctmp[5]='P';ctmp[6]='R';ctmp[7]='I';ctmp[8]='N';ctmp[9]='T';ctmp[10]='\0';
   strcat(ctmp2 , ctmp);
 
   ctmp[0]='\n';ctmp[1]='\0';
   strcat(ctmp2 , ctmp);
 
-  ctmp[0]='I';ctmp[1]='N';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='2';ctmp[5]='1';ctmp[6]='H';ctmp[7]='\0';strcat(ctmp2 , ctmp);
+  /* ctmp[0]='I';ctmp[1]='N';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='2';ctmp[5]='1';ctmp[6]='H';ctmp[7]='\0';strcat(ctmp2 , ctmp);
   ctmp[0]='\n';ctmp[1]='\0';
   strcat(ctmp2 , ctmp);
 
@@ -100,7 +104,7 @@ char *printID(char * id){
 
   ctmp[0]='I';ctmp[1]='N';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='2';ctmp[5]='1';ctmp[6]='H';ctmp[7]='\0';strcat(ctmp2 , ctmp);
   ctmp[0]='\n';ctmp[1]='\0';
-  strcat(ctmp2 , ctmp);
+  strcat(ctmp2 , ctmp); */
 
   return ctmp2;
 
@@ -166,21 +170,23 @@ void yyerror(const char *s){
             fprintf(code,"%s",init);
 
     			}
-
           init = ".CODE\n";
-          fprintf(code,"%s\n",init);
+          fprintf(code,"%s",init);
 
           fprintf(code,"%s",$1.code);
+          fprintf(code,"%s\n",printFunction());
 
           init = "\nEND MAIN";
           fprintf(code,"%s\n",init);
 
           fprintf(error,"Total Errors: %d\n\n",error_count);
+          //cout<<"---FInal Code----\n\n"<<$1.code<<endl;
+
 				}
 				;
 			program : program unit	{
 					fprintf(logout,"At line no: %d program : program unit\n\n",line_count);
-					char * tmp = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr));
+					char * tmp = (char *) malloc(20+strlen($1.mystr)+strlen($2.mystr)+10);
 					char tmp2[2];
 					tmp2[0]='\n';tmp2[1]='\0';
 					strcpy(tmp , $1.mystr);
@@ -188,7 +194,7 @@ void yyerror(const char *s){
 					strcat(tmp , $2.mystr);
 					$$.mystr = tmp;
 
-          char * ctmp = (char *) malloc(1+strlen($1.code)+strlen($2.code));
+          char * ctmp = (char *) malloc(20+strlen($1.code)+strlen($2.code)+10);
           char ctmp2[2];
           ctmp2[0]='\n';ctmp2[1]='\0';
           strcpy(ctmp , $1.code);
@@ -229,7 +235,7 @@ void yyerror(const char *s){
                char tmp[2];
                tmp[0]='(';tmp[1]='\0';
                char * tmp2 = (char *)
-               malloc(1+strlen($1.mystr)+strlen($2.mystr)+1+strlen($4.mystr)+2);
+               malloc(20+strlen($1.mystr)+strlen($2.mystr)+1+strlen($4.mystr)+22);
                strcpy(tmp2 , $1.mystr);
                strcat(tmp2 , $2.mystr);
                strcat(tmp2 , tmp);
@@ -271,7 +277,7 @@ void yyerror(const char *s){
 
                char tmp[2];
                tmp[0]='(';tmp[1]='\0';
-               char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr)+3);
+               char * tmp2 = (char *) malloc(20+strlen($1.mystr)+strlen($2.mystr)+23);
                strcpy(tmp2 , $1.mystr);
                strcat(tmp2 , $2.mystr);
                strcat(tmp2 , tmp);
@@ -301,7 +307,7 @@ void yyerror(const char *s){
       	 		fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN  RPAREN compound_statement\n\n",line_count);
 						char tmp[2];
  						tmp[0]='(';tmp[1]='\0';
- 						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr)+4+strlen($6.mystr));
+ 						char * tmp2 = (char *) malloc(15+strlen($1.mystr)+strlen($2.mystr)+4+strlen($6.mystr));
  						strcpy(tmp2 , $1.mystr);
  						strcat(tmp2 , $2.mystr);
  						strcat(tmp2 , tmp);
@@ -312,7 +318,7 @@ void yyerror(const char *s){
 
             char ctmp[8];
 
-            char * ctmp2 = (char *) malloc(1+strlen($2.mystr)+35+strlen($6.code));
+            char * ctmp2 = (char *) malloc(25+strlen($2.mystr)+35+strlen($6.code));
             strcat(ctmp2 , $2.mystr);
             ctmp[0]=' ';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
@@ -334,10 +340,23 @@ void yyerror(const char *s){
             strcat(ctmp2 , $6.code);
             ctmp[0]='\n';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
+
+
+            if(!strcmp($2.mystr , "main")){
+              ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='H';ctmp[6]='\0';
+              strcat(ctmp2 , ctmp);
+              ctmp[0]=',';ctmp[1]='4';ctmp[2]='C';ctmp[3]='H';ctmp[4]='\n';ctmp[5]='\0';ctmp[6]='\0';
+              strcat(ctmp2 , ctmp);
+
+              ctmp[0]='I';ctmp[1]='N';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='2';ctmp[5]='1';ctmp[6]='H';ctmp[7]='\0';
+              strcat(ctmp2 , ctmp);
+              ctmp[0]='\n';ctmp[1]='\0';
+              strcat(ctmp2 , ctmp);
+            }
+            
             strcat(ctmp2 , $2.mystr);
             ctmp[0]=' ';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
-
             ctmp[0]='E';ctmp[1]='N';ctmp[2]='D';ctmp[3]='P';ctmp[4]='\0';ctmp[5]='\0';ctmp[6]='\0';
             strcat(ctmp2 , ctmp);
 
@@ -383,7 +402,7 @@ void yyerror(const char *s){
 						 fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement\n\n",line_count);
 						 char tmp[2];
 						 tmp[0]='(';tmp[1]='\0';
-						 char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr)+1+strlen($4.mystr)+1+strlen($6.mystr));
+						 char * tmp2 = (char *) malloc(15+strlen($1.mystr)+strlen($2.mystr)+1+strlen($4.mystr)+1+strlen($6.mystr));
 						 strcpy(tmp2 , $1.mystr);
 						 strcat(tmp2 , $2.mystr);
 						 strcat(tmp2 , tmp);
@@ -473,14 +492,14 @@ void yyerror(const char *s){
               fprintf(logout,"At line no: %d parameter_list  : parameter_list COMMA type_specifier ID\n\n",line_count);
               char tmp[2];
               tmp[0]=',';tmp[1]='\0';
-              char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1+strlen($3.mystr)+strlen($4.mystr));
+              char * tmp2 = (char *) malloc(15+strlen($1.mystr)+1+strlen($3.mystr)+strlen($4.mystr));
               strcpy(tmp2 , $1.mystr);
               strcat(tmp2 , tmp);
               strcat(tmp2 , $3.mystr);
               strcat(tmp2 , $4.mystr);
 
               $$.mystr = tmp2;
-              struct node * item = (struct node *) malloc(1+sizeof(struct node));
+              struct node * item = (struct node *) malloc(15+sizeof(struct node));
               item->name = $4.mystr;
               item->d_type = $3.mystr;
               item->arg_list = $1.arg_list;
@@ -505,13 +524,13 @@ void yyerror(const char *s){
               fprintf(logout,"At line no: %d parameter_list : parameter_list COMMA type_specifier\n\n",line_count);
               char tmp[2];
               tmp[0]=',';tmp[1]='\0';
-              char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1+strlen($3.mystr));
+              char * tmp2 = (char *) malloc(15+strlen($1.mystr)+1+strlen($3.mystr));
               strcpy(tmp2 , $1.mystr);
               strcat(tmp2 , tmp);
               strcat(tmp2 , $3.mystr);
               $$.mystr = tmp2;
 
-              struct node * item = (struct node *) malloc(1+sizeof(struct node));
+              struct node * item = (struct node *) malloc(15+sizeof(struct node));
               item->name = "";
               item->d_type = $3.mystr;
               item->arg_list = $1.arg_list;
@@ -522,13 +541,13 @@ void yyerror(const char *s){
             }
             | type_specifier ID  {
               fprintf(logout,"At line no: %d parameter_list : type_specifier ID\n\n",line_count);
-              char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr));
+              char * tmp2 = (char *) malloc(15+strlen($1.mystr)+strlen($2.mystr));
               strcpy(tmp2 , $1.mystr);
               strcat(tmp2 , $2.mystr);
 
               $$.mystr = tmp2;
               fprintf(logout,"%s \n\n",tmp2);
-              struct node * item = (struct node *) malloc(1+sizeof(struct node));
+              struct node * item = (struct node *) malloc(15+sizeof(struct node));
               item->name = $2.mystr;
               item->d_type = $1.mystr;
               item->arg_list = NULL;
@@ -548,7 +567,7 @@ void yyerror(const char *s){
               fprintf(logout,"At line no: %d parameter_list : type_specifier\n\n",line_count);
               fprintf(logout,"%s \n\n",$1.mystr);
               $$.mystr = $1.mystr;
-              struct node * item = (struct node *) malloc(1+sizeof(struct node));
+              struct node * item = (struct node *) malloc(15+sizeof(struct node));
               item->name = "";
               item->d_type = $1.mystr;
               item->arg_list = NULL;
@@ -571,7 +590,7 @@ void yyerror(const char *s){
 							fprintf(logout,"At line no: %d compound_statement : LCURL statements RCURL\n\n",line_count);
 							char tmp[2];
 							tmp[0]='{';tmp[1]='\0';
-							char * tmp2 = (char *) malloc(1+strlen($3.mystr)+5);
+							char * tmp2 = (char *) malloc(15+strlen($3.mystr)+5);
 							strcpy(tmp2 , tmp);
 							tmp[0] = '\n';
 							strcat(tmp2 , tmp);
@@ -594,7 +613,7 @@ void yyerror(const char *s){
               fprintf(logout,"At line no: %d compound_statement : LCURL RCURL\n\n",line_count);
 							 char tmp[2];
 							 tmp[0]='{';tmp[1]='\0';
-							 char * tmp2 = (char *) malloc(1+2);
+							 char * tmp2 = (char *) malloc(1+22);
 							 tmp[0] = '\n';
  							 strcat(tmp2 , tmp);
  							strcat(tmp2 , tmp);
@@ -611,7 +630,7 @@ void yyerror(const char *s){
 
       var_declaration : type_specifier declaration_list SEMICOLON  {
 				fprintf(logout,"At line no: %d var_declaration : type_specifier declaration_list SEMICOLON\n\n",line_count);
-				char * tmp = (char *) malloc(1 + strlen($1.mystr) + 1 + strlen($2.mystr));
+				char * tmp = (char *) malloc(1 + strlen($1.mystr) + 15 + strlen($2.mystr));
 				strcpy(tmp, $1.mystr);
 				char tmp2[2];
 				tmp2[1] = '\0';
@@ -636,7 +655,7 @@ void yyerror(const char *s){
 				fprintf(logout,"At line no: %d type_specifier:INT\n\n",line_count);
 				char tmp[5];
 				tmp[0]='i';tmp[1]='n';tmp[2]='t';tmp[3]=' ';tmp[4]='\0';
-				char * tmp2 = (char *) malloc(1+strlen(tmp));
+				char * tmp2 = (char *) malloc(11+strlen(tmp));
 				strcat(tmp2 , tmp);
 				$$.mystr = tmp2;
 				fprintf(logout,"%s \n\n",tmp2);
@@ -646,7 +665,7 @@ void yyerror(const char *s){
           fprintf(logout,"At line no: %d type_specifier : FLOAT\n\n",line_count);
 					char tmp[7];
 					tmp[0]='f';tmp[1]='l';tmp[2]='o';tmp[3]='a';tmp[4]='t';tmp[5]='   ';tmp[6]='\0';
-					char * tmp2 = (char *) malloc(1+strlen(tmp));
+					char * tmp2 = (char *) malloc(11+strlen(tmp));
 					strcat(tmp2 , tmp);
 					$$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
@@ -656,7 +675,7 @@ void yyerror(const char *s){
           fprintf(logout,"At line no: %d type_specifier : VOID\n\n",line_count);
 					char tmp[6];
 					tmp[0]='v';tmp[1]='o';tmp[2]='i';tmp[3]='d';tmp[4]=' ';tmp[5]='\0';
-					char * tmp2 = (char *) malloc(1+strlen(tmp));
+					char * tmp2 = (char *) malloc(11+strlen(tmp));
 					strcat(tmp2 , tmp);
 					$$.mystr = tmp2;
 					fprintf(logout,"%s \n\n",tmp2);
@@ -664,7 +683,7 @@ void yyerror(const char *s){
 		 		;
 			declaration_list : declaration_list COMMA ID {
 						fprintf(logout,"At line no: %d declaration_list : declaration_list COMMA ID\n\n",line_count);
-						char * tmp = (char *) malloc(1 + strlen($1.mystr)+ 1+strlen($3.mystr) );
+						char * tmp = (char *) malloc(11 + strlen($1.mystr)+ 1+strlen($3.mystr) );
 			      strcpy(tmp, $1.mystr);
 						char tmp2[2];
 						tmp2[1] = '\0';
@@ -684,7 +703,7 @@ void yyerror(const char *s){
 
 						char integer[2];
 						sprintf(integer, "%d", $5.intvalue);
-						char * tmp = (char *) malloc(1 + strlen($1.mystr)+ 1+strlen($3.mystr)+3 );
+						char * tmp = (char *) malloc(12 + strlen($1.mystr)+ 1+strlen($3.mystr)+3 );
 						strcpy(tmp, $1.mystr);
 						char tmp2[2];
 						tmp2[1] = '\0';
@@ -727,7 +746,7 @@ void yyerror(const char *s){
  						tmp[0]='[';tmp[1]='\0';
 						char integer[2];
 						sprintf(integer, "%d", $3.intvalue);
- 						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1+strlen(integer)+1);
+ 						char * tmp2 = (char *) malloc(15+strlen($1.mystr)+1+strlen(integer)+1);
  						strcpy(tmp2 , $1.mystr);
  						strcat(tmp2 , tmp);
 						strcat(tmp2 , integer);
@@ -747,13 +766,13 @@ void yyerror(const char *s){
 					 }
 				   | statements statement {
 						 fprintf(logout,"At line no: %d statements :| statements statement \n\n",line_count);
- 						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr));
+ 						char * tmp2 = (char *) malloc(15+strlen($1.mystr)+strlen($2.mystr));
  						strcpy(tmp2 , $1.mystr);
  						strcat(tmp2 , $2.mystr);
             $$ = $2;
             $$.mystr = tmp2;
 
-            char * ctmp2 = (char *) malloc(1+strlen($1.code)+strlen($2.code));
+            char * ctmp2 = (char *) malloc(15+strlen($1.code)+strlen($2.code));
             strcpy(ctmp2 , $1.code);
             strcat(ctmp2 , $2.code);
             $$.code = ctmp2;
@@ -782,7 +801,7 @@ void yyerror(const char *s){
 						fprintf(logout,"At line no: %d statement :  FOR LPAREN expression_statement expression_statement expression RPAREN statement\n\n",line_count);
 						char tmp[4];
  						tmp[0]='f';tmp[1]='o';tmp[2]='r';tmp[3]='\0';
- 						char * tmp2 = (char *) malloc(1+strlen(tmp)+1+strlen($3.mystr)+strlen($3.mystr)+strlen($3.mystr)+1+strlen($7.mystr));
+ 						char * tmp2 = (char *) malloc(19+strlen(tmp)+1+strlen($3.mystr)+strlen($3.mystr)+strlen($3.mystr)+1+strlen($7.mystr));
  						strcpy(tmp2 , tmp);
 						tmp[0]='(';tmp[1]='\0';
  						strcat(tmp2 , tmp);
@@ -797,7 +816,7 @@ void yyerror(const char *s){
 
             char ctmp[10];
             ctmp[9] = '\0';
-            char * ctmp2 = (char *) malloc(1+strlen(ctmp)*16+1+strlen($5.code)+strlen($3.code)+strlen($4.code)+1+strlen($7.code)+20);
+            char * ctmp2 = (char *) malloc(20+strlen(ctmp)*16+30+strlen($5.code)+strlen($3.code)+strlen($4.code)+1+strlen($7.code)+20);
 
             strcpy(ctmp2 , $3.code);
 
@@ -865,7 +884,7 @@ void yyerror(const char *s){
 						fprintf(logout,"At line no: %d statement : IF LPAREN expression RPAREN statement ELSE statement\n\n",line_count);
 						char tmp[5];
  						tmp[0]='i';tmp[1]='f';tmp[2]='\0';
- 						char * tmp2 = (char *) malloc(1+strlen(tmp)+strlen(tmp)+strlen($3.mystr)+1+strlen($5.mystr)+strlen(tmp)+strlen($7.mystr));
+ 						char * tmp2 = (char *) malloc(20+strlen(tmp)+strlen(tmp)+strlen($3.mystr)+90+strlen($5.mystr)+strlen(tmp)+strlen($7.mystr));
  						strcpy(tmp2 , tmp);
 						tmp[0]='(';tmp[1]='\0';
  						strcat(tmp2 , tmp);
@@ -882,7 +901,7 @@ void yyerror(const char *s){
             char ctmp[9];
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-            char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($5.code)+strlen($7.code)+strlen($3.code)+strlen($3.mystr)+1);
+            char * ctmp2 = (char *) malloc(30+strlen(ctmp)*4+strlen($5.code)+strlen($7.code)+strlen($3.code)+strlen($3.mystr)+1);
 
             strcpy(ctmp2 , $3.code);
 
@@ -946,7 +965,7 @@ void yyerror(const char *s){
 							fprintf(logout,"At line no: %d statement : IF LPAREN expression RPAREN statement\n\n",line_count);
 							char tmp[5];
 							tmp[0]='i';tmp[1]='f';tmp[2]='\0';
-							char * tmp2 = (char *) malloc(1+strlen(tmp)+2+strlen($3.mystr)+1+strlen($5.mystr));
+							char * tmp2 = (char *) malloc(30+strlen(tmp)+2+strlen($3.mystr)+1+strlen($5.mystr));
 							strcpy(tmp2 , tmp);
 							tmp[0]='(';tmp[1]='\0';
 							strcat(tmp2 , tmp);
@@ -960,7 +979,7 @@ void yyerror(const char *s){
             char ctmp[9];
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-            char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($5.code)+strlen($3.code)+strlen($3.mystr)+1);
+            char * ctmp2 = (char *) malloc(30+strlen(ctmp)*4+strlen($5.code)+strlen($3.code)+strlen($3.mystr)+1);
             strcat(ctmp2 , $3.code);
 
             strcat(ctmp2 , ctmp);
@@ -1003,7 +1022,7 @@ void yyerror(const char *s){
 						fprintf(logout,"At line no: %d statement : WHILE LPAREN expression RPAREN statement\n\n",line_count);
 						char tmp[6];
 						tmp[0]='w';tmp[1]='h';tmp[2]='i';tmp[3]='l';tmp[4]='e';tmp[5]='\0';
- 						char * tmp2 = (char *) malloc(1+strlen(tmp)+1+strlen($3.mystr)+1+strlen($5.mystr));
+ 						char * tmp2 = (char *) malloc(30+strlen(tmp)+1+strlen($3.mystr)+1+strlen($5.mystr));
  						strcpy(tmp2 , tmp);
 						tmp[0]='(';tmp[1]='\0';
  						strcat(tmp2 , tmp);
@@ -1016,7 +1035,7 @@ void yyerror(const char *s){
 
             char ctmp[10];
             ctmp[9] = '\0';
-            char * ctmp2 = (char *) malloc(1+strlen(ctmp)*16+strlen($5.code)+strlen($3.code)+20);
+            char * ctmp2 = (char *) malloc(30+strlen(ctmp)*16+strlen($5.code)+strlen($3.code)+20);
 
             char *t = newLabel();
             strcat(ctmp2 , t);
@@ -1087,7 +1106,7 @@ void yyerror(const char *s){
 
 						char tmp[8];
 						tmp[0]='p';tmp[1]='r';tmp[2]='i';tmp[3]='n';tmp[4]='t';tmp[5]='l';tmp[6]='n';tmp[7]='\0';
- 						char * tmp2 = (char *) malloc(1+strlen(tmp)+1+strlen($3.mystr)+2);
+ 						char * tmp2 = (char *) malloc(30+strlen(tmp)+1+strlen($3.mystr)+2);
  						strcpy(tmp2 , tmp);
 						tmp[0]='(';tmp[1]='\0';
  						strcat(tmp2 , tmp);
@@ -1105,7 +1124,7 @@ void yyerror(const char *s){
 						fprintf(logout,"At line no: %d statement : RETURN expression SEMICOLON\n\n",line_count);
 						char tmp[8];
 						tmp[0]='r';tmp[1]='e';tmp[2]='t';tmp[3]='u';tmp[4]='r';tmp[5]='n';tmp[6]=' ';tmp[7]='\0';
-						char * tmp2 = (char *) malloc(1+strlen($2.mystr)+9);
+						char * tmp2 = (char *) malloc(30+strlen($2.mystr)+9);
 						strcpy(tmp2 , tmp);
 						strcat(tmp2 , $2.mystr);
 						tmp[0]=';';tmp[1]='\0';
@@ -1166,7 +1185,7 @@ void yyerror(const char *s){
               fprintf(logout,"At line no: %d expression_statement 	: SEMICOLON\n\n",line_count);
               char tmp[2];
               tmp[0]=';';tmp[1]='\0';
-              char * tmp2 = (char *) malloc(1+1);
+              char * tmp2 = (char *) malloc(11+1);
               strcpy(tmp2 , tmp);
               tmp[0]='\n';tmp[1]='\0';
               strcpy(tmp2 , tmp);
@@ -1179,14 +1198,14 @@ void yyerror(const char *s){
               fprintf(logout,"At line no: %d expression_statement 	: expression SEMICOLON\n\n",line_count);
               char tmp[2];
               tmp[0]=';';tmp[1]='\0';
-              char * tmp2 = (char *) malloc(1+strlen($1.mystr)+5);
+              char * tmp2 = (char *) malloc(12+strlen($1.mystr)+5);
               strcpy(tmp2 , $1.mystr);
               strcat(tmp2 , tmp);
               tmp[0]='\n';tmp[1]='\0';
               strcat(tmp2 , tmp);
               $$.mystr = tmp2;
 
-              char * ctmp2 = (char *) malloc(1+strlen($1.code)+5);
+              char * ctmp2 = (char *) malloc(20+strlen($1.code)+15);
 
               strcpy(ctmp2 , $1.code);
               tmp[0]='\n';tmp[1]='\0';
@@ -1227,7 +1246,7 @@ void yyerror(const char *s){
            | ID LTHIRD expression RTHIRD	{
              fprintf(logout,"At line no: %d variable : ID LTHIRD expression RTHIRD\n\n",line_count);
 
-             char * ctmp2 = (char *) malloc(1+strlen($3.code)+strlen($1.mystr)+strlen($3.mystr)+50);
+             char * ctmp2 = (char *) malloc(19+strlen($3.code)+strlen($1.mystr)+strlen($3.mystr)+50);
              strcpy(ctmp2 , $3.code);
 
              if(symboltable->Lookup($1.mystr) != NULL){
@@ -1287,7 +1306,7 @@ void yyerror(const char *s){
 
              char tmp[2];
              tmp[0]='[';tmp[1]='\0';
-             char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1+strlen($3.mystr)+1);
+             char * tmp2 = (char *) malloc(19+strlen($1.mystr)+1+strlen($3.mystr)+1);
              strcpy(tmp2 , $1.mystr);
              strcat(tmp2 , tmp);
              strcat(tmp2 , $3.mystr);
@@ -1373,7 +1392,7 @@ void yyerror(const char *s){
 
             char tmp[2];
 						tmp[0]='=';tmp[1]='\0';
-						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($3.mystr)+1);
+						char * tmp2 = (char *) malloc(11+strlen($1.mystr)+strlen($3.mystr)+1);
 						strcpy(tmp2 , $1.mystr);
 						strcat(tmp2 , tmp);
 						strcat(tmp2 , $3.mystr);
@@ -1463,7 +1482,7 @@ void yyerror(const char *s){
             char ctmp[8];
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-            char * ctmp2 = (char *) malloc(1+16+strlen($1.code)+strlen($3.code)+1);
+            char * ctmp2 = (char *) malloc(1+46+strlen($1.code)+strlen($3.code)+1);
             strcpy(ctmp2 , $3.code);
             strcat(ctmp2 , $1.code);
 
@@ -1505,7 +1524,7 @@ void yyerror(const char *s){
 						}
 					 | rel_expression LOGICOP rel_expression	{
 						 fprintf(logout,"At line no: %d logic_expression : rel_expression LOGICOP rel_expression\n\n",line_count);
- 						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr)+strlen($3.mystr));
+ 						char * tmp2 = (char *) malloc(11+strlen($1.mystr)+strlen($2.mystr)+strlen($3.mystr));
  						strcpy(tmp2 , $1.mystr);
  						strcat(tmp2 , $2.mystr);
  						strcat(tmp2 , $3.mystr);
@@ -1515,7 +1534,7 @@ void yyerror(const char *s){
             char ctmp[8];
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-            char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+30);
+            char * ctmp2 = (char *) malloc(19+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+30);
             strcat(ctmp2 , $3.code);
             strcpy(ctmp2 , $1.code);
 
@@ -1587,7 +1606,7 @@ void yyerror(const char *s){
 					}
 					| simple_expression RELOP simple_expression	{
 						fprintf(logout,"At line no: %d rel_expression	: simple_expression RELOP simple_expression\n\n",line_count);
-						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+strlen($2.mystr)+strlen($3.mystr));
+						char * tmp2 = (char *) malloc(19+strlen($1.mystr)+strlen($2.mystr)+strlen($3.mystr));
 						strcpy(tmp2 , $1.mystr);
 						strcat(tmp2 , $2.mystr);
 						strcat(tmp2 , $3.mystr);
@@ -1597,7 +1616,7 @@ void yyerror(const char *s){
               char ctmp[9];
               ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-              char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.code)+strlen($3.code)+strlen($1.mystr)+strlen($3.mystr)+1);
+              char * ctmp2 = (char *) malloc(19+strlen(ctmp)*4+strlen($1.code)+strlen($3.code)+strlen($1.mystr)+strlen($3.mystr)+1);
 
               strcat(ctmp2 , ctmp);
               if($1.VAR_NAME != NULL){
@@ -1712,7 +1731,7 @@ void yyerror(const char *s){
             char ctmp[8];
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-            char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+30);
+            char * ctmp2 = (char *) malloc(29+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+30);
             strcat(ctmp2 , $3.code);
             strcpy(ctmp2 , $1.code);
 
@@ -1726,27 +1745,6 @@ void yyerror(const char *s){
             ctmp[0]='\n';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
 
-            if($2.charvalue == '+'){
-              ctmp[0]='A';ctmp[1]='D';ctmp[2]='D';ctmp[3]=' ';ctmp[4]='\0';
-              strcat(ctmp2 , ctmp);
-            }
-            else if($2.charvalue == '-'){
-              ctmp[0]='S';ctmp[1]='U';ctmp[2]='B';ctmp[3]=' ';ctmp[4]='\0';
-              strcat(ctmp2 , ctmp);
-            }
-
-            if($1.VAR_NAME != NULL){
-              strcat(ctmp2 , $1.VAR_NAME);
-            }
-            else{
-              strcat(ctmp2 , $1.mystr);
-            }
-            ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\0';
-            strcat(ctmp2 , ctmp);
-
-            ctmp[0]='\n';ctmp[1]='\0';
-            strcat(ctmp2 , ctmp);
-
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
             strcat(ctmp2 , ctmp);
 
@@ -1756,6 +1754,23 @@ void yyerror(const char *s){
             else{
               strcat(ctmp2 , $1.mystr);
             }
+
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+
+            if($2.charvalue == '+'){
+              ctmp[0]='A';ctmp[1]='D';ctmp[2]='D';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+              strcat(ctmp2 , ctmp);
+            }
+            else if($2.charvalue == '-'){
+              ctmp[0]='S';ctmp[1]='U';ctmp[2]='B';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
+              strcat(ctmp2 , ctmp);
+            }
+
+
+            ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\0';
+            strcat(ctmp2 , ctmp);
 
             ctmp[0]='\n';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
@@ -1778,7 +1793,7 @@ void yyerror(const char *s){
 
             char tmp[2];
 						tmp[0]=$2.charvalue; tmp[1]='\0';
-						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1+strlen($3.mystr));
+						char * tmp2 = (char *) malloc(19+strlen($1.mystr)+1+strlen($3.mystr));
 						strcpy(tmp2 , $1.mystr);
 						strcat(tmp2 , tmp);
 						strcat(tmp2 , $3.mystr);
@@ -1840,7 +1855,7 @@ void yyerror(const char *s){
            fprintf(logout,"At line no: %d term :	term MULOP unary_expression\n\n",line_count);
 					 char tmp[2];
 					 tmp[0]=$2.charvalue ;tmp[1]='\0';
-					 char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1+strlen($3.mystr));
+					 char * tmp2 = (char *) malloc(11+strlen($1.mystr)+1+strlen($3.mystr));
 					 strcpy(tmp2 , $1.mystr);
 					 strcat(tmp2 , tmp);
 					 strcat(tmp2 , $3.mystr);
@@ -1849,7 +1864,7 @@ void yyerror(const char *s){
              char ctmp[8];
              ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-             char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+1);
+             char * ctmp2 = (char *) malloc(30+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+1);
              strcpy(ctmp2 , $1.code);
              strcat(ctmp2 , $3.code);
 
@@ -1906,7 +1921,7 @@ void yyerror(const char *s){
               char ctmp[8];
               ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-              char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+1);
+              char * ctmp2 = (char *) malloc(19+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+1);
               strcpy(ctmp2 , $1.code);
               strcat(ctmp2 , $3.code);
 
@@ -1959,7 +1974,7 @@ void yyerror(const char *s){
             char ctmp[8];
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-            char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+1);
+            char * ctmp2 = (char *) malloc(19+strlen(ctmp)*4+strlen($1.mystr)+strlen($3.mystr)+strlen($1.code)+strlen($3.code)+1);
             strcpy(ctmp2 , $1.code);
             strcat(ctmp2 , $3.code);
 
@@ -2016,7 +2031,7 @@ void yyerror(const char *s){
 							fprintf(logout,"At line no: %d unary_expression : ADDOP unary_expression\n\n",line_count);
 							char tmp[2];
 							tmp[0]=$1.charvalue;tmp[1]='\0';
-							char * tmp2 = (char *) malloc(1+strlen($2.mystr));
+							char * tmp2 = (char *) malloc(19+strlen($2.mystr));
 							strcat(tmp2 , tmp);
 							strcat(tmp2 , $2.mystr);
 							$$.mystr = tmp2;
@@ -2026,7 +2041,7 @@ void yyerror(const char *s){
                 char ctmp[8];
                 ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-                char * ctmp2 = (char *) malloc(1+strlen(ctmp)*3+strlen($2.mystr)+strlen($2.code)+1);
+                char * ctmp2 = (char *) malloc(19+strlen(ctmp)*3+strlen($2.mystr)+strlen($2.code)+1);
                 strcpy(ctmp2 , $2.code);
 
                 strcat(ctmp2 , ctmp);
@@ -2063,7 +2078,7 @@ void yyerror(const char *s){
 
               }
               else{
-                char * ctmp2 = (char *) malloc(1+strlen($2.mystr)+strlen($2.code)+1);
+                char * ctmp2 = (char *) malloc(19+strlen($2.mystr)+strlen($2.code)+1);
                 strcpy(ctmp2 , $2.code);
                 $$.code = ctmp2;
 
@@ -2074,7 +2089,7 @@ void yyerror(const char *s){
 						 fprintf(logout,"At line no: %d unary_expression : NOT unary_expression\n\n",line_count);
 						 char tmp[2];
  						 tmp[0]='!';tmp[1]='\0';
- 						char * tmp2 = (char *) malloc(1+strlen($2.mystr)+1);
+ 						char * tmp2 = (char *) malloc(19+strlen($2.mystr)+1);
  						strcat(tmp2 , tmp);
  						strcat(tmp2 , $2.mystr);
  						$$.mystr = tmp2;
@@ -2083,7 +2098,7 @@ void yyerror(const char *s){
             char ctmp[8];
             ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-            char * ctmp2 = (char *) malloc(1+strlen(ctmp)*3+strlen($2.mystr)+strlen($2.code)+1);
+            char * ctmp2 = (char *) malloc(30+strlen(ctmp)*3+strlen($2.mystr)+strlen($2.code)+1);
             strcpy(ctmp2 , $2.code);
 
             strcat(ctmp2 , ctmp);
@@ -2135,7 +2150,7 @@ void yyerror(const char *s){
 					fprintf(logout,"At line no: %d factor	: ID LPAREN argument_list RPAREN\n\n",line_count);
 					char tmp[2];
 					tmp[0]='(';tmp[1]='\0';
-					char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1+strlen($3.mystr)+1);
+					char * tmp2 = (char *) malloc(19+strlen($1.mystr)+1+strlen($3.mystr)+1);
 					strcpy(tmp2 , $1.mystr);
 					strcat(tmp2 , tmp);
 					strcat(tmp2 , $3.mystr);
@@ -2172,10 +2187,11 @@ void yyerror(const char *s){
         }
 				| LPAREN expression RPAREN	{
           //Scope handling
+          $$ = $2;
 					fprintf(logout,"At line no: %d factor : LPAREN expression RPAREN\n\n",line_count);
 					char tmp[2];
 					tmp[0]='(';tmp[1]='\0';
-					char * tmp2 = (char *) malloc(1+strlen($2.mystr)+2);
+					char * tmp2 = (char *) malloc(20+strlen($2.mystr)+2);
 					strcat(tmp2 , tmp);
 					strcat(tmp2 , $2.mystr);
 					tmp[0] = ')';
@@ -2189,7 +2205,7 @@ void yyerror(const char *s){
 					fprintf(logout,"At line no: %d factor : CONST_INT\n\n",line_count);
 					char tmp[2];
 					sprintf(tmp, "%d", $1.intvalue);
-					char * tmp2 = (char *) malloc(1+strlen(tmp));
+					char * tmp2 = (char *) malloc(20+strlen(tmp));
 					strcat(tmp2 , tmp);
           $$.d_type = "int";
 
@@ -2210,7 +2226,7 @@ void yyerror(const char *s){
             fprintf(error, "Error %d at Line %d: Error converting float: %m\n",error_count , line_count);
           else
             fprintf(logout,"%s \n\n",str);
-          char * tmp2 = (char *) malloc(1+strlen(str));
+          char * tmp2 = (char *) malloc(20+strlen(str));
 					strcpy(tmp2 , str);
 					$$ = $1;
 
@@ -2223,7 +2239,7 @@ void yyerror(const char *s){
           char ctmp[8];
           ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-          char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($1.code)+1);
+          char * ctmp2 = (char *) malloc(20+strlen(ctmp)*4+strlen($1.mystr)+strlen($1.code)+1);
           strcpy(ctmp2 , $1.code);
 
           strcat(ctmp2 , ctmp);
@@ -2261,7 +2277,7 @@ void yyerror(const char *s){
 
           char tmp[3];
           tmp[0] = ';';tmp[1]=';';tmp[2]='\0';
-          char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1);
+          char * tmp2 = (char *) malloc(20+strlen($1.mystr)+1);
           strcpy(tmp2 , $1.mystr);
           strcat(tmp2 , tmp);
           $$.mystr = tmp2;
@@ -2273,7 +2289,7 @@ void yyerror(const char *s){
           char ctmp[8];
           ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-          char * ctmp2 = (char *) malloc(1+strlen(ctmp)*4+strlen($1.mystr)+strlen($1.code)+1);
+          char * ctmp2 = (char *) malloc(20+strlen(ctmp)*4+strlen($1.mystr)+strlen($1.code)+1);
           strcpy(ctmp2 , $1.code);
 
           strcat(ctmp2 , ctmp);
@@ -2307,7 +2323,7 @@ void yyerror(const char *s){
 
           char tmp[3];
 					tmp[0] = ';';tmp[1]=';';tmp[2]='\0';
-					char * tmp2 = (char *) malloc(1+strlen($1.mystr)+1);
+					char * tmp2 = (char *) malloc(20+strlen($1.mystr)+1);
 					strcpy(tmp2 , $1.mystr);
 					strcat(tmp2 , tmp);
 					$$.mystr = tmp2;
@@ -2329,7 +2345,7 @@ void yyerror(const char *s){
 						fprintf(logout,"At line no: %d arguments : arguments COMMA logic_expression\n\n",line_count);
 						char tmp[2];
 						tmp[0] = ',';tmp[1] = '\0';
-						char * tmp2 = (char *) malloc(1+strlen($1.mystr)+2+strlen($3.mystr));
+						char * tmp2 = (char *) malloc(20+strlen($1.mystr)+2+strlen($3.mystr));
 						strcpy(tmp2 , $1.mystr);
 						strcat(tmp2 , tmp);
 						strcat(tmp2 , $3.mystr);
