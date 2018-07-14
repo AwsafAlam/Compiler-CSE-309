@@ -314,7 +314,7 @@ void yyerror(const char *s){
       	 		fprintf(logout,"At line no: %d func_definition : type_specifier ID LPAREN  RPAREN compound_statement\n\n",line_count);
 						char tmp[2];
  						tmp[0]='(';tmp[1]='\0';
- 						char * tmp2 = (char *) malloc(15+strlen($1.mystr)+strlen($2.mystr)+4+strlen($6.mystr));
+ 						char * tmp2 = (char *) malloc(55+strlen($1.mystr)+strlen($2.mystr)+4+strlen($6.mystr));
  						strcpy(tmp2 , $1.mystr);
  						strcat(tmp2 , $2.mystr);
  						strcat(tmp2 , tmp);
@@ -325,7 +325,7 @@ void yyerror(const char *s){
 
             char ctmp[8];
 
-            char * ctmp2 = (char *) malloc(25+strlen($2.mystr)+35+strlen($6.code));
+            char * ctmp2 = (char *) malloc(55+strlen($2.mystr)+35+strlen($6.code));
             strcat(ctmp2 , $2.mystr);
             ctmp[0]=' ';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
@@ -344,10 +344,25 @@ void yyerror(const char *s){
               strcat(ctmp2 , ctmp);
 
             }
-            strcat(ctmp2 , $6.code);
+            //JMP START
+            ctmp[0]='J';ctmp[1]='M';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='\0';
+            strcat(ctmp2 , ctmp);
+            char *t = newLabel();
+            $$.LABEL = t;
+            strcat(ctmp2 , t);
             ctmp[0]='\n';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
 
+            //RET LABEL:
+            //char *retlab = newLabel();
+            //labelCount--;
+            //$$.LABEL = retlab;
+            //func_ret = retlab;
+            strcat(ctmp2 , func_ret);
+            ctmp[0]=':';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
 
             if(!strcmp($2.mystr , "main")){
               ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='H';ctmp[6]='\0';
@@ -361,14 +376,23 @@ void yyerror(const char *s){
               strcat(ctmp2 , ctmp);
             }
             else{
-              //JMP START
-              ctmp[0]='J';ctmp[1]='M';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='\0';
+              //POP BP; RET 4
+             ctmp[0]='P';ctmp[1]='O';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='P';ctmp[6]='\n';ctmp[7]='\0';
               strcat(ctmp2 , ctmp);
-              strcat(ctmp2 , func_ret);
-              ctmp[0]='\n';ctmp[1]='\0';
+              ctmp[0]='R';ctmp[1]='E';ctmp[2]='T';ctmp[3]=' ';ctmp[4]=' ';ctmp[5]='\n';ctmp[6]='\0';
               strcat(ctmp2 , ctmp);
 
             }
+            //START
+            strcat(ctmp2 , t);
+            ctmp[0]=':';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            strcat(ctmp2 , $6.code);
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
 
             strcat(ctmp2 , $2.mystr);
             ctmp[0]=' ';ctmp[1]='\0';
@@ -458,7 +482,7 @@ void yyerror(const char *s){
              $$.code = $7.code;
              char tmp[2];
 						 tmp[0]='(';tmp[1]='\0';
-						 char * tmp2 = (char *) malloc(15+strlen($1.mystr)+strlen($2.mystr)+1+strlen($4.mystr)+1+strlen($7.mystr));
+						 char * tmp2 = (char *) malloc(55+strlen($1.mystr)+strlen($2.mystr)+1+strlen($4.mystr)+1+strlen($7.mystr));
 						 strcpy(tmp2 , $1.mystr);
 						 strcat(tmp2 , $2.mystr);
 						 strcat(tmp2 , tmp);
@@ -477,6 +501,63 @@ void yyerror(const char *s){
              ctmp[0]=' ';ctmp[1]='\0';
              strcat(ctmp2 , ctmp);
              ctmp[0]='P';ctmp[1]='R';ctmp[2]='O';ctmp[3]='C';ctmp[4]='\n';ctmp[5]='\0';
+             strcat(ctmp2 , ctmp);
+
+             if(!strcmp($2.mystr , "main")){
+                ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]='\0';
+               strcat(ctmp2 , ctmp);
+               ctmp[0]=',';ctmp[1]='@';ctmp[2]='D';ctmp[3]='A';ctmp[4]='T';ctmp[5]='A';ctmp[6]='\n';ctmp[7]='\0';
+               strcat(ctmp2 , ctmp);
+
+               ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='D';ctmp[5]='S';ctmp[6]='\0';
+               strcat(ctmp2 , ctmp);
+               ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\n';ctmp[5]='\0';
+               strcat(ctmp2 , ctmp);
+
+             }
+             //JMP START
+             ctmp[0]='J';ctmp[1]='M';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='\0';
+             strcat(ctmp2 , ctmp);
+             char *t = newLabel();
+             $$.LABEL = t;
+             strcat(ctmp2 , t);
+             ctmp[0]='\n';ctmp[1]='\0';
+             strcat(ctmp2 , ctmp);
+
+             //RET LABEL:
+             //char *retlab = newLabel();
+             //$$.LABEL = retlab;
+             //func_ret = retlab;
+             strcat(ctmp2 , func_ret);
+             ctmp[0]=':';ctmp[1]='\0';
+             strcat(ctmp2 , ctmp);
+             ctmp[0]='\n';ctmp[1]='\0';
+             strcat(ctmp2 , ctmp);
+
+             if(!strcmp($2.mystr , "main")){
+               ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='H';ctmp[6]='\0';
+               strcat(ctmp2 , ctmp);
+               ctmp[0]=',';ctmp[1]='4';ctmp[2]='C';ctmp[3]='H';ctmp[4]='\n';ctmp[5]='\0';ctmp[6]='\0';
+               strcat(ctmp2 , ctmp);
+
+               ctmp[0]='I';ctmp[1]='N';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='2';ctmp[5]='1';ctmp[6]='H';ctmp[7]='\0';
+               strcat(ctmp2 , ctmp);
+               ctmp[0]='\n';ctmp[1]='\0';
+               strcat(ctmp2 , ctmp);
+             }
+             else{
+               //POP BP; RET 4
+              ctmp[0]='P';ctmp[1]='O';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='P';ctmp[6]='\n';ctmp[7]='\0';
+               strcat(ctmp2 , ctmp);
+               ctmp[0]='R';ctmp[1]='E';ctmp[2]='T';ctmp[3]=' ';ctmp[4]=' ';ctmp[5]='\n';ctmp[6]='\0';
+               strcat(ctmp2 , ctmp);
+
+             }
+             //START
+             strcat(ctmp2 , t);
+             ctmp[0]=':';ctmp[1]='\0';
+             strcat(ctmp2 , ctmp);
+             ctmp[0]='\n';ctmp[1]='\0';
              strcat(ctmp2 , ctmp);
 
              //PUSH BP
@@ -1254,30 +1335,11 @@ void yyerror(const char *s){
             strcat(ctmp2 , ctmp);
             ctmp[0]='J';ctmp[1]='M';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='\0';
             strcat(ctmp2 , ctmp);
-            char *t = newLabel();
-            $$.LABEL = t;
-            strcat(ctmp2 , t);
-            ctmp[0]='\n';ctmp[1]='\0';
-            strcat(ctmp2 , ctmp);
-
             char *retlab = newLabel();
             $$.LABEL = retlab;
             func_ret = retlab;
             strcat(ctmp2 , retlab);
-            ctmp[0]=':';ctmp[1]='\0';
-            strcat(ctmp2 , ctmp);
-            ctmp[0]='\n';ctmp[1]='\0';
-            strcat(ctmp2 , ctmp);
 
-            //POP BP; RET 4
-           ctmp[0]='P';ctmp[1]='O';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='P';ctmp[6]='\n';ctmp[7]='\0';
-            strcat(ctmp2 , ctmp);
-            ctmp[0]='R';ctmp[1]='E';ctmp[2]='T';ctmp[3]=' ';ctmp[4]=' ';ctmp[5]='\n';ctmp[6]='\0';
-            strcat(ctmp2 , ctmp);
-
-            strcat(ctmp2 , t);
-            ctmp[0]=':';ctmp[1]='\0';
-            strcat(ctmp2 , ctmp);
             ctmp[0]='\n';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
 
