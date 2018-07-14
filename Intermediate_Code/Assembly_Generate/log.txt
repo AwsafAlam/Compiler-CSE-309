@@ -32,46 +32,46 @@ a
 
 At line no: 2 factor	: variable
 
-a 
+a2 
 
 At line no: 2 unary_expression : factor
 
-a 
+a2 
 
 At line no: 2 term :	term MULOP unary_expression
 
-2*a 
+2*a2 
 
 At line no: 2 simple_expression : term
 
-2*a 
+2*a2 
 
 At line no: 2 rel_expression	: simple_expression
 
-2*a 
+2*a2 
 
 At line no: 2 logic_expression : rel_expression
 
-2*a 
+2*a2 
 
 At line no: 2 expression : logic_expression
 
-2*a 
+2*a2 
 
 At line no: 2 statement : RETURN expression SEMICOLON
 
-return 2*a;
+return 2*a2;
  
 
 At line no: 2 statements : statement 
 
-return 2*a;
+return 2*a2;
  
 
 At line no: 3 compound_statement : LCURL statements RCURL
 
 {
-return 2*a;
+return 2*a2;
 
 } 
 
@@ -88,27 +88,27 @@ ScopeTable with id 2 removed
 At line no: 3 func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
 
 int f(int a){
-return 2*a;
+return 2*a2;
 
 } 
 
 At line no: 3 unit : func_definition
 
 int f(int a){
-return 2*a;
+return 2*a2;
 
 } 
 
 At line no: 3 program : | unit
 
 int f(int a){
-return 2*a;
+return 2*a2;
 
 }
 
 At line no: 5 type_specifier:INT
 
-ÄÿeÿoUint  
+ÄH'ùŒUint  
 
 At line no: 5 type_specifier:INT
 
@@ -161,51 +161,51 @@ a
 
 At line no: 7 factor	: variable
 
-a 
+a3 
 
 At line no: 7 unary_expression : factor
 
-a 
+a3 
 
 At line no: 7 term :	unary_expression
 
-a 
+a3 
 
 At line no: 7 simple_expression : term
 
-a 
+a3 
 
 At line no: 7 rel_expression	: simple_expression
 
-a 
+a3 
 
 At line no: 7 logic_expression : rel_expression
 
-a 
+a3 
 
 At line no: 7 arguments : logic_expression
 
-a 
+a3 
 
 At line no: 7 argument_list : arguments
 
-a 
+a3 
 
 At line no: 7 factor	: ID LPAREN argument_list RPAREN
 
-f(a) 
+f(a3) 
 
 At line no: 7 unary_expression : factor
 
-f(a) 
+f(a3) 
 
 At line no: 7 term :	unary_expression
 
-f(a) 
+f(a3) 
 
 At line no: 7 simple_expression : term
 
-f(a) 
+f(a3) 
 
 At line no: 7 variable : ID
 
@@ -213,19 +213,19 @@ a
 
 At line no: 7 factor	: variable
 
-a 
+a3 
 
 At line no: 7 unary_expression : factor
 
-a 
+a3 
 
 At line no: 7 term :	unary_expression
 
-a 
+a3 
 
 At line no: 7 simple_expression : simple_expression ADDOP term
 
-f(a)+a 
+f(a3)+a3 
 
 At line no: 7 variable : ID
 
@@ -233,46 +233,46 @@ b
 
 At line no: 7 factor	: variable
 
-b 
+b3 
 
 At line no: 7 unary_expression : factor
 
-b 
+b3 
 
 At line no: 7 term :	unary_expression
 
-b 
+b3 
 
 At line no: 7 simple_expression : simple_expression ADDOP term
 
-f(a)+a+b 
+f(a3)+a3+b3 
 
 At line no: 7 rel_expression	: simple_expression
 
-f(a)+a+b 
+f(a3)+a3+b3 
 
 At line no: 7 logic_expression : rel_expression
 
-f(a)+a+b 
+f(a3)+a3+b3 
 
 At line no: 7 expression : variable ASSIGNOP logic_expression
 
-x=f(a)+a+b 
+x3=f(a3)+a3+b3 
 
 At line no: 7 expression_statement 	: expression SEMICOLON
 
-x=f(a)+a+b;
+x3=f(a3)+a3+b3;
  
 
 At line no: 7 statement : expression_statement
 
-x=f(a)+a+b;
+x3=f(a3)+a3+b3;
  
 
 At line no: 7 statements :| statements statement 
 
 int x;
-x=f(a)+a+b;
+x3=f(a3)+a3+b3;
  
 
 At line no: 8 variable : ID
@@ -281,50 +281,50 @@ x
 
 At line no: 8 factor	: variable
 
-x 
+x3 
 
 At line no: 8 unary_expression : factor
 
-x 
+x3 
 
 At line no: 8 term :	unary_expression
 
-x 
+x3 
 
 At line no: 8 simple_expression : term
 
-x 
+x3 
 
 At line no: 8 rel_expression	: simple_expression
 
-x 
+x3 
 
 At line no: 8 logic_expression : rel_expression
 
-x 
+x3 
 
 At line no: 8 expression : logic_expression
 
-x 
+x3 
 
 At line no: 8 statement : RETURN expression SEMICOLON
 
-return x;
+return x3;
  
 
 At line no: 8 statements :| statements statement 
 
 int x;
-x=f(a)+a+b;
-return x;
+x3=f(a3)+a3+b3;
+return x3;
  
 
 At line no: 9 compound_statement : LCURL statements RCURL
 
 {
 int x;
-x=f(a)+a+b;
-return x;
+x3=f(a3)+a3+b3;
+return x3;
 
 } 
 
@@ -343,32 +343,32 @@ ScopeTable with id 3 removed
 
 At line no: 9 func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
 
-ÄÿeÿoUint g(int a,int b){
+ÄH'ùŒUint g(int a,int b){
 int x;
-x=f(a)+a+b;
-return x;
+x3=f(a3)+a3+b3;
+return x3;
 
 } 
 
 At line no: 9 unit : func_definition
 
-ÄÿeÿoUint g(int a,int b){
+ÄH'ùŒUint g(int a,int b){
 int x;
-x=f(a)+a+b;
-return x;
+x3=f(a3)+a3+b3;
+return x3;
 
 } 
 
 At line no: 9 program : program unit
 
 int f(int a){
-return 2*a;
+return 2*a2;
 
 }
-ÄÿeÿoUint g(int a,int b){
+ÄH'ùŒUint g(int a,int b){
 int x;
-x=f(a)+a+b;
-return x;
+x3=f(a3)+a3+b3;
+return x3;
 
 } 
 
@@ -459,23 +459,23 @@ At line no: 14 logic_expression : rel_expression
 
 At line no: 14 expression : variable ASSIGNOP logic_expression
 
-a=1 
+a4=1 
 
 At line no: 14 expression_statement 	: expression SEMICOLON
 
-a=1;
+a4=1;
  
 
 At line no: 14 statement : expression_statement
 
-a=1;
+a4=1;
  
 
 At line no: 14 statements :| statements statement 
 
 int a,b;
 int c[3];
-a=1;
+a4=1;
  
 
 At line no: 15 factor : CONST_INT
@@ -552,7 +552,7 @@ At line no: 15 statements :| statements statement
 
 int a,b;
 int c[3];
-a=1;
+a4=1;
 c[2]=2;
  
 
@@ -650,25 +650,25 @@ f(c[2])
 
 At line no: 16 expression : variable ASSIGNOP logic_expression
 
-a=f(c[2]) 
+a4=f(c[2]) 
 
 At line no: 16 expression_statement 	: expression SEMICOLON
 
-a=f(c[2]);
+a4=f(c[2]);
  
 
 At line no: 16 statement : expression_statement
 
-a=f(c[2]);
+a4=f(c[2]);
  
 
 At line no: 16 statements :| statements statement 
 
 int a,b;
 int c[3];
-a=1;
+a4=1;
 c[2]=2;
-a=f(c[2]);
+a4=f(c[2]);
  
 
 At line no: 17 variable : ID
@@ -677,31 +677,31 @@ a
 
 At line no: 17 factor	: variable
 
-a 
+a4 
 
 At line no: 17 unary_expression : factor
 
-a 
+a4 
 
 At line no: 17 term :	unary_expression
 
-a 
+a4 
 
 At line no: 17 simple_expression : term
 
-a 
+a4 
 
 At line no: 17 rel_expression	: simple_expression
 
-a 
+a4 
 
 At line no: 17 logic_expression : rel_expression
 
-a 
+a4 
 
 At line no: 17 arguments : logic_expression
 
-a 
+a4 
 
 At line no: 17 factor : CONST_INT
 
@@ -729,58 +729,58 @@ At line no: 17 logic_expression : rel_expression
 
 At line no: 17 arguments : arguments COMMA logic_expression
 
-a,3 
+a4,3 
 
 At line no: 17 argument_list : arguments
 
-a,3 
+a4,3 
 
 At line no: 17 factor	: ID LPAREN argument_list RPAREN
 
-g(a,3) 
+g(a4,3) 
 
 At line no: 17 unary_expression : factor
 
-g(a,3) 
+g(a4,3) 
 
 At line no: 17 term :	unary_expression
 
-g(a,3) 
+g(a4,3) 
 
 At line no: 17 simple_expression : term
 
-g(a,3) 
+g(a4,3) 
 
 At line no: 17 rel_expression	: simple_expression
 
-g(a,3) 
+g(a4,3) 
 
 At line no: 17 logic_expression : rel_expression
 
-g(a,3) 
+g(a4,3) 
 
 At line no: 17 expression : logic_expression
 
-g(a,3) 
+g(a4,3) 
 
 At line no: 17 expression_statement 	: expression SEMICOLON
 
-g(a,3);
+g(a4,3);
  
 
 At line no: 17 statement : expression_statement
 
-g(a,3);
+g(a4,3);
  
 
 At line no: 17 statements :| statements statement 
 
 int a,b;
 int c[3];
-a=1;
+a4=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
+a4=f(c[2]);
+g(a4,3);
  
 
 At line no: 18 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
@@ -792,10 +792,10 @@ At line no: 18 statements :| statements statement
 
 int a,b;
 int c[3];
-a=1;
+a4=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
+a4=f(c[2]);
+g(a4,3);
 println(a);
  
 
@@ -836,10 +836,10 @@ At line no: 19 statements :| statements statement
 
 int a,b;
 int c[3];
-a=1;
+a4=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
+a4=f(c[2]);
+g(a4,3);
 println(a);
 return 0;
  
@@ -849,10 +849,10 @@ At line no: 20 compound_statement : LCURL statements RCURL
 {
 int a,b;
 int c[3];
-a=1;
+a4=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
+a4=f(c[2]);
+g(a4,3);
 println(a);
 return 0;
 
@@ -877,10 +877,10 @@ At line no: 20 func_definition : type_specifier ID LPAREN  RPAREN compound_state
 int main(){
 int a,b;
 int c[3];
-a=1;
+a4=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
+a4=f(c[2]);
+g(a4,3);
 println(a);
 return 0;
 
@@ -891,10 +891,10 @@ At line no: 20 unit : func_definition
 int main(){
 int a,b;
 int c[3];
-a=1;
+a4=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
+a4=f(c[2]);
+g(a4,3);
 println(a);
 return 0;
 
@@ -903,22 +903,22 @@ return 0;
 At line no: 20 program : program unit
 
 int f(int a){
-return 2*a;
+return 2*a2;
 
 }
-ÄÿeÿoUint g(int a,int b){
+ÄH'ùŒUint g(int a,int b){
 int x;
-x=f(a)+a+b;
-return x;
+x3=f(a3)+a3+b3;
+return x3;
 
 }
 int main(){
 int a,b;
 int c[3];
-a=1;
+a4=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
+a4=f(c[2]);
+g(a4,3);
 println(a);
 return 0;
 
@@ -927,22 +927,22 @@ return 0;
 At line no: 21 start : program
 
 int f(int a){
-return 2*a;
+return 2*a2;
 
 }
-ÄÿeÿoUint g(int a,int b){
+ÄH'ùŒUint g(int a,int b){
 int x;
-x=f(a)+a+b;
-return x;
+x3=f(a3)+a3+b3;
+return x3;
 
 }
 int main(){
 int a,b;
 int c[3];
-a=1;
+a4=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
+a4=f(c[2]);
+g(a4,3);
 println(a);
 return 0;
 

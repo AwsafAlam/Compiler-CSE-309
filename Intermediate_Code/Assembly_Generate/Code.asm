@@ -4,14 +4,14 @@
 t0 DW ?
 a2 DW ?
 x3 DW ?
-t1 DW ?
 t2 DW ?
+t3 DW ?
 a3 DW ?
 b3 DW ?
 a4 DW ?
 b4 DW ?
-t3 DW ?
 t4 DW ?
+t5 DW ?
 c4 DW 3 DUP (?)
 .CODE
 f PROC
@@ -20,7 +20,7 @@ MOV BP,SP
 MOV AX,[BP+4]
 MOV a2,AX
 MOV AX,2
-MOV BX,a
+MOV BX,a2
 MUL BX
 MOV t0,AX
 
@@ -36,22 +36,24 @@ MOV AX,[BP+4]
 MOV a3,AX
 MOV AX,[BP+6]
 MOV b3,AX
-PUSH a
+PUSH a3
 CALL f
-MOV AX,a
-MOV BX,f(a)
-ADD BX,,AX
-MOV t1,BX
+MOV t1,AX
 
-MOV AX,b
+MOV AX,a3
 MOV BX,t1
-ADD BX,,AX
+ADD BX,AX
 MOV t2,BX
 
-MOV AX,t2
-MOV x,AX
+MOV AX,b3
+MOV BX,t2
+ADD BX,AX
+MOV t3,BX
 
-MOV AX,x
+MOV AX,t3
+MOV ,AX
+
+MOV AX,x3
 
 POP BP
 RET 4
@@ -61,29 +63,33 @@ MOV AX,@DATA
 MOV DS,AX
 
 MOV AX,1
-MOV a,AX
+MOV ,AX
 
 MOV BX,2
 ADD BX,BX
-MOV AX,c[BX]
-MOV t3,AX
+MOV AX,c4[BX]
+MOV t4,AX
 
 MOV AX,2
 MOV c[BX],AX
 
 MOV BX,2
 ADD BX,BX
-MOV AX,c[BX]
-MOV t4,AX
+MOV AX,c4[BX]
+MOV t5,AX
 
-PUSH t4
+PUSH t5
 CALL f
-MOV AX,f
-MOV a,AX
+MOV t6,AX
+
+MOV AX,t6
+MOV ,AX
 
 PUSH 3
-PUSH a
+PUSH a4
 CALL g
+MOV t7,AX
+
 
 MOV AX,a
 CALL PRINT
