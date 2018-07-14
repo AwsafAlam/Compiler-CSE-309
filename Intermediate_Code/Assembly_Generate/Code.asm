@@ -85,8 +85,9 @@ MOV a4,AX
 MOV AX,2
 MOV b4,AX
 
+PUSH b4
 PUSH a4
-CALL f
+CALL g
 MOV t4,AX
 
 MOV AX,t4

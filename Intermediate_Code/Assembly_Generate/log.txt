@@ -591,46 +591,78 @@ At line no: 16 arguments : logic_expression
 
 a 
 
-At line no: 16 argument_list : arguments
+At line no: 16 variable : ID
 
-a 
+b
 
-At line no: 16 factor	: ID LPAREN argument_list RPAREN
+At line no: 16 factor	: variable
 
-f(a) 
+b 
 
 At line no: 16 unary_expression : factor
 
-f(a) 
+b 
 
 At line no: 16 term :	unary_expression
 
-f(a) 
+b 
 
 At line no: 16 simple_expression : term
 
-f(a) 
+b 
 
 At line no: 16 rel_expression	: simple_expression
 
-f(a) 
+b 
 
 At line no: 16 logic_expression : rel_expression
 
-f(a) 
+b 
+
+At line no: 16 arguments : arguments COMMA logic_expression
+
+a,b 
+
+At line no: 16 argument_list : arguments
+
+a,b 
+
+At line no: 16 factor	: ID LPAREN argument_list RPAREN
+
+g(a,b) 
+
+At line no: 16 unary_expression : factor
+
+g(a,b) 
+
+At line no: 16 term :	unary_expression
+
+g(a,b) 
+
+At line no: 16 simple_expression : term
+
+g(a,b) 
+
+At line no: 16 rel_expression	: simple_expression
+
+g(a,b) 
+
+At line no: 16 logic_expression : rel_expression
+
+g(a,b) 
 
 At line no: 16 expression : variable ASSIGNOP logic_expression
 
-a=f(a) 
+a=g(a,b) 
 
 At line no: 16 expression_statement 	: expression SEMICOLON
 
-a=f(a);
+a=g(a,b);
  
 
 At line no: 16 statement : expression_statement
 
-a=f(a);
+a=g(a,b);
  
 
 At line no: 16 statements :| statements statement 
@@ -638,7 +670,7 @@ At line no: 16 statements :| statements statement
 int a,b;
 a=1;
 b=2;
-a=f(a);
+a=g(a,b);
  
 
 At line no: 17 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
@@ -651,7 +683,7 @@ At line no: 17 statements :| statements statement
 int a,b;
 a=1;
 b=2;
-a=f(a);
+a=g(a,b);
 println(a4);
  
 
@@ -693,7 +725,7 @@ At line no: 18 statements :| statements statement
 int a,b;
 a=1;
 b=2;
-a=f(a);
+a=g(a,b);
 println(a4);
 return 0;
  
@@ -704,7 +736,7 @@ At line no: 19 compound_statement : LCURL statements RCURL
 int a,b;
 a=1;
 b=2;
-a=f(a);
+a=g(a,b);
 println(a4);
 return 0;
 
@@ -729,7 +761,7 @@ int main(){
 int a,b;
 a=1;
 b=2;
-a=f(a);
+a=g(a,b);
 println(a4);
 return 0;
 
@@ -741,7 +773,7 @@ int main(){
 int a,b;
 a=1;
 b=2;
-a=f(a);
+a=g(a,b);
 println(a4);
 return 0;
 
@@ -764,7 +796,7 @@ int main(){
 int a,b;
 a=1;
 b=2;
-a=f(a);
+a=g(a,b);
 println(a4);
 return 0;
 
@@ -787,7 +819,7 @@ int main(){
 int a,b;
 a=1;
 b=2;
-a=f(a);
+a=g(a,b);
 println(a4);
 return 0;
 
