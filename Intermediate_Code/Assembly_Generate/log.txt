@@ -291,32 +291,80 @@ At line no: 8 term :	unary_expression
 
 x 
 
+At line no: 8 variable : ID
+
+b
+
+At line no: 8 factor	: variable
+
+b 
+
+At line no: 8 unary_expression : factor
+
+b 
+
+At line no: 8 term :	unary_expression
+
+b 
+
 At line no: 8 simple_expression : term
 
-x 
+b 
 
 At line no: 8 rel_expression	: simple_expression
 
-x 
+b 
 
 At line no: 8 logic_expression : rel_expression
 
-x 
+b 
+
+At line no: 8 arguments : logic_expression
+
+b 
+
+At line no: 8 argument_list : arguments
+
+b 
+
+At line no: 8 factor	: ID LPAREN argument_list RPAREN
+
+f(b) 
+
+At line no: 8 unary_expression : factor
+
+f(b) 
+
+At line no: 8 term :	term MULOP unary_expression
+
+x*f(b) 
+
+At line no: 8 simple_expression : term
+
+x*f(b) 
+
+At line no: 8 rel_expression	: simple_expression
+
+x*f(b) 
+
+At line no: 8 logic_expression : rel_expression
+
+x*f(b) 
 
 At line no: 8 expression : logic_expression
 
-x 
+x*f(b) 
 
 At line no: 8 statement : RETURN expression SEMICOLON
 
-return x;
+return x*f(b);
  
 
 At line no: 8 statements :| statements statement 
 
 int x;
 x=f(a)+a+b;
-return x;
+return x*f(b);
  
 
 At line no: 9 compound_statement : LCURL statements RCURL
@@ -324,7 +372,7 @@ At line no: 9 compound_statement : LCURL statements RCURL
 {
 int x;
 x=f(a)+a+b;
-return x;
+return x*f(b);
 
 } 
 
@@ -346,7 +394,7 @@ At line no: 9 func_definition : type_specifier ID LPAREN parameter_list RPAREN c
 int g(int a,int b){
 int x;
 x=f(a)+a+b;
-return x;
+return x*f(b);
 
 } 
 
@@ -355,7 +403,7 @@ At line no: 9 unit : func_definition
 int g(int a,int b){
 int x;
 x=f(a)+a+b;
-return x;
+return x*f(b);
 
 } 
 
@@ -368,7 +416,7 @@ return 2*a;
 int g(int a,int b){
 int x;
 x=f(a)+a+b;
-return x;
+return x*f(b);
 
 } 
 
@@ -699,9 +747,46 @@ c[2]=2;
 a=g(c[2],1);
  
 
-At line no: 17 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+At line no: 17 variable : ID
 
-println(a4);
+b
+
+At line no: 17 factor : CONST_INT
+
+0 
+
+At line no: 17 unary_expression : factor
+
+0 
+
+At line no: 17 term :	unary_expression
+
+0 
+
+At line no: 17 simple_expression : term
+
+0 
+
+At line no: 17 rel_expression	: simple_expression
+
+0 
+
+At line no: 17 logic_expression : rel_expression
+
+0 
+
+At line no: 17 expression : variable ASSIGNOP logic_expression
+
+b=0 
+
+At line no: 17 expression_statement 	: expression SEMICOLON
+
+b=0;
+ 
+
+At line no: 17 statement : expression_statement
+
+b=0;
  
 
 At line no: 17 statements :| statements statement 
@@ -711,40 +796,12 @@ int c[3];
 a=1;
 c[2]=2;
 a=g(c[2],1);
-println(a4);
+b=0;
  
 
-At line no: 18 factor : CONST_INT
+At line no: 18 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
 
-0 
-
-At line no: 18 unary_expression : factor
-
-0 
-
-At line no: 18 term :	unary_expression
-
-0 
-
-At line no: 18 simple_expression : term
-
-0 
-
-At line no: 18 rel_expression	: simple_expression
-
-0 
-
-At line no: 18 logic_expression : rel_expression
-
-0 
-
-At line no: 18 expression : logic_expression
-
-0 
-
-At line no: 18 statement : RETURN expression SEMICOLON
-
-return 0;
+println(a4);
  
 
 At line no: 18 statements :| statements statement 
@@ -754,11 +811,431 @@ int c[3];
 a=1;
 c[2]=2;
 a=g(c[2],1);
+b=0;
+println(a4);
+ 
+
+At line no: 19 variable : ID
+
+i
+
+At line no: 19 factor : CONST_INT
+
+0 
+
+At line no: 19 unary_expression : factor
+
+0 
+
+At line no: 19 term :	unary_expression
+
+0 
+
+At line no: 19 simple_expression : term
+
+0 
+
+At line no: 19 rel_expression	: simple_expression
+
+0 
+
+At line no: 19 logic_expression : rel_expression
+
+0 
+
+At line no: 19 expression : variable ASSIGNOP logic_expression
+
+i=0 
+
+At line no: 19 expression_statement 	: expression SEMICOLON
+
+i=0;
+ 
+
+At line no: 19 variable : ID
+
+i
+
+At line no: 19 factor	: variable
+
+i 
+
+At line no: 19 unary_expression : factor
+
+i 
+
+At line no: 19 term :	unary_expression
+
+i 
+
+At line no: 19 simple_expression : term
+
+i 
+
+At line no: 19 factor : CONST_INT
+
+4 
+
+At line no: 19 unary_expression : factor
+
+4 
+
+At line no: 19 term :	unary_expression
+
+4 
+
+At line no: 19 simple_expression : term
+
+4 
+
+At line no: 19 rel_expression	: simple_expression RELOP simple_expression
+
+i<4 
+
+At line no: 19 logic_expression : rel_expression
+
+i<4 
+
+At line no: 19 expression : logic_expression
+
+i<4 
+
+At line no: 19 expression_statement 	: expression SEMICOLON
+
+i<4;
+ 
+
+At line no: 19 variable : ID
+
+i
+
+At line no: 19 factor : variable INCOP
+
+i++ 
+
+At line no: 19 unary_expression : factor
+
+i++ 
+
+At line no: 19 term :	unary_expression
+
+i++ 
+
+At line no: 19 simple_expression : term
+
+i++ 
+
+At line no: 19 rel_expression	: simple_expression
+
+i++ 
+
+At line no: 19 logic_expression : rel_expression
+
+i++ 
+
+At line no: 19 expression : logic_expression
+
+i++ 
+
+  New ScopeTable with id 5 created
+
+At line no: 20 variable : ID
+
+a
+
+At line no: 20 factor : variable DECOP
+
+a-- 
+
+At line no: 20 unary_expression : factor
+
+a-- 
+
+At line no: 20 term :	unary_expression
+
+a-- 
+
+At line no: 20 simple_expression : term
+
+a-- 
+
+At line no: 20 rel_expression	: simple_expression
+
+a-- 
+
+At line no: 20 logic_expression : rel_expression
+
+a-- 
+
+At line no: 20 expression : logic_expression
+
+a-- 
+
+  New ScopeTable with id 6 created
+
+At line no: 21 variable : ID
+
+b
+
+At line no: 21 factor : variable INCOP
+
+b++ 
+
+At line no: 21 unary_expression : factor
+
+b++ 
+
+At line no: 21 term :	unary_expression
+
+b++ 
+
+At line no: 21 simple_expression : term
+
+b++ 
+
+At line no: 21 rel_expression	: simple_expression
+
+b++ 
+
+At line no: 21 logic_expression : rel_expression
+
+b++ 
+
+At line no: 21 expression : logic_expression
+
+b++ 
+
+At line no: 21 expression_statement 	: expression SEMICOLON
+
+b++;
+ 
+
+At line no: 21 statement : expression_statement
+
+b++;
+ 
+
+At line no: 21 statements : statement 
+
+b++;
+ 
+
+At line no: 22 compound_statement : LCURL statements RCURL
+
+{
+b++;
+
+} 
+
+ScopeTable # 6
+----------------------
+
+ScopeTable # 5
+----------------------
+
+ScopeTable # 4
+----------------------
+14 -->  <a : ID> 
+15 -->  <b : ID> 
+16 -->  <c : ID> 
+
+ScopeTable # 1
+----------------------
+8 -->  <main : ID> 
+19 -->  <f : ID> 
+20 -->  <g : ID> 
+
+ScopeTable with id 6 removed
+
+At line no: 22 statement : compound_statement
+
+{
+b++;
+
+} 
+
+At line no: 22 statement : WHILE LPAREN expression RPAREN statement
+
+while(a--){
+b++;
+
+} 
+
+At line no: 22 statements : statement 
+
+while(a--){
+b++;
+
+} 
+
+At line no: 23 compound_statement : LCURL statements RCURL
+
+{
+while(a--){
+b++;
+
+}
+} 
+
+ScopeTable # 5
+----------------------
+
+ScopeTable # 4
+----------------------
+14 -->  <a : ID> 
+15 -->  <b : ID> 
+16 -->  <c : ID> 
+
+ScopeTable # 1
+----------------------
+8 -->  <main : ID> 
+19 -->  <f : ID> 
+20 -->  <g : ID> 
+
+ScopeTable with id 6 removed
+
+At line no: 23 statement : compound_statement
+
+{
+while(a--){
+b++;
+
+}
+} 
+
+At line no: 23 statement :  FOR LPAREN expression_statement expression_statement expression RPAREN statement
+
+for(i=0;
+i<4;
+i++){
+while(a--){
+b++;
+
+}
+} 
+
+At line no: 23 statements :| statements statement 
+
+int a,b;
+int c[3];
+a=1;
+c[2]=2;
+a=g(c[2],1);
+b=0;
+println(a4);
+for(i=0;
+i<4;
+i++){
+while(a--){
+b++;
+
+}
+} 
+
+At line no: 24 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(b4);
+ 
+
+At line no: 24 statements :| statements statement 
+
+int a,b;
+int c[3];
+a=1;
+c[2]=2;
+a=g(c[2],1);
+b=0;
+println(a4);
+for(i=0;
+i<4;
+i++){
+while(a--){
+b++;
+
+}
+}println(b4);
+ 
+
+At line no: 25 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+
+println(a4);
+ 
+
+At line no: 25 statements :| statements statement 
+
+int a,b;
+int c[3];
+a=1;
+c[2]=2;
+a=g(c[2],1);
+b=0;
+println(a4);
+for(i=0;
+i<4;
+i++){
+while(a--){
+b++;
+
+}
+}println(b4);
+println(a4);
+ 
+
+At line no: 26 factor : CONST_INT
+
+0 
+
+At line no: 26 unary_expression : factor
+
+0 
+
+At line no: 26 term :	unary_expression
+
+0 
+
+At line no: 26 simple_expression : term
+
+0 
+
+At line no: 26 rel_expression	: simple_expression
+
+0 
+
+At line no: 26 logic_expression : rel_expression
+
+0 
+
+At line no: 26 expression : logic_expression
+
+0 
+
+At line no: 26 statement : RETURN expression SEMICOLON
+
+return 0;
+ 
+
+At line no: 26 statements :| statements statement 
+
+int a,b;
+int c[3];
+a=1;
+c[2]=2;
+a=g(c[2],1);
+b=0;
+println(a4);
+for(i=0;
+i<4;
+i++){
+while(a--){
+b++;
+
+}
+}println(b4);
 println(a4);
 return 0;
  
 
-At line no: 19 compound_statement : LCURL statements RCURL
+At line no: 27 compound_statement : LCURL statements RCURL
 
 {
 int a,b;
@@ -766,6 +1243,16 @@ int c[3];
 a=1;
 c[2]=2;
 a=g(c[2],1);
+b=0;
+println(a4);
+for(i=0;
+i<4;
+i++){
+while(a--){
+b++;
+
+}
+}println(b4);
 println(a4);
 return 0;
 
@@ -783,22 +1270,9 @@ ScopeTable # 1
 19 -->  <f : ID> 
 20 -->  <g : ID> 
 
-ScopeTable with id 4 removed
+ScopeTable with id 6 removed
 
-At line no: 19 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
-
-int main(){
-int a,b;
-int c[3];
-a=1;
-c[2]=2;
-a=g(c[2],1);
-println(a4);
-return 0;
-
-} 
-
-At line no: 19 unit : func_definition
+At line no: 27 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
 
 int main(){
 int a,b;
@@ -806,12 +1280,45 @@ int c[3];
 a=1;
 c[2]=2;
 a=g(c[2],1);
+b=0;
+println(a4);
+for(i=0;
+i<4;
+i++){
+while(a--){
+b++;
+
+}
+}println(b4);
 println(a4);
 return 0;
 
 } 
 
-At line no: 19 program : program unit
+At line no: 27 unit : func_definition
+
+int main(){
+int a,b;
+int c[3];
+a=1;
+c[2]=2;
+a=g(c[2],1);
+b=0;
+println(a4);
+for(i=0;
+i<4;
+i++){
+while(a--){
+b++;
+
+}
+}println(b4);
+println(a4);
+return 0;
+
+} 
+
+At line no: 27 program : program unit
 
 int f(int a){
 return 2*a;
@@ -820,7 +1327,7 @@ return 2*a;
 int g(int a,int b){
 int x;
 x=f(a)+a+b;
-return x;
+return x*f(b);
 
 }
 int main(){
@@ -829,12 +1336,22 @@ int c[3];
 a=1;
 c[2]=2;
 a=g(c[2],1);
+b=0;
+println(a4);
+for(i=0;
+i<4;
+i++){
+while(a--){
+b++;
+
+}
+}println(b4);
 println(a4);
 return 0;
 
 } 
 
-At line no: 20 start : program
+At line no: 28 start : program
 
 int f(int a){
 return 2*a;
@@ -843,7 +1360,7 @@ return 2*a;
 int g(int a,int b){
 int x;
 x=f(a)+a+b;
-return x;
+return x*f(b);
 
 }
 int main(){
@@ -852,6 +1369,16 @@ int c[3];
 a=1;
 c[2]=2;
 a=g(c[2],1);
+b=0;
+println(a4);
+for(i=0;
+i<4;
+i++){
+while(a--){
+b++;
+
+}
+}println(b4);
 println(a4);
 return 0;
 

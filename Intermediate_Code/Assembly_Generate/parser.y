@@ -2505,11 +2505,11 @@ void yyerror(const char *s){
           free(str);
 				}
 				| variable INCOP	{
-          fprintf(logout,"At line no: %d factor : variable DECOP\n\n",line_count);
+          fprintf(logout,"At line no: %d factor : variable INCOP\n\n",line_count);
           char ctmp[8];
           ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-          char * ctmp2 = (char *) malloc(20+strlen(ctmp)*4+strlen($1.mystr)+strlen($1.code)+1);
+          char * ctmp2 = (char *) malloc(40+strlen(ctmp)*4+strlen($1.mystr)+strlen($1.code)+1);
           strcpy(ctmp2 , $1.code);
 
           strcat(ctmp2 , ctmp);
@@ -2522,19 +2522,24 @@ void yyerror(const char *s){
           ctmp[0]='\n';ctmp[1]='\0';
           strcat(ctmp2 , ctmp);
 
-          ctmp[0]='I';ctmp[1]='N';ctmp[2]='C';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]='\0';ctmp[7]='\0';
+          ctmp[0]='I';ctmp[1]='N';ctmp[2]='C';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]='\n';ctmp[7]='\0';
           strcat(ctmp2 , ctmp);
 
-          ctmp[0]='\n';ctmp[1]='\0';
-          strcat(ctmp2 , ctmp);
+          //ctmp[0]='\n';ctmp[1]='\0';
+          //strcat(ctmp2 , ctmp);
 
           ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
           strcat(ctmp2 , ctmp);
-          //char * fals = newTemp();
-          char * fals = $$.mystr;
+          if($1.VAR_NAME != NULL){
+            strcat(ctmp2 , $1.VAR_NAME);
+          }
+          else{
+            strcat(ctmp2 , $1.mystr);
+          }
+          //char * fals = $$.mystr;
+          //$$.VAR_NAME = fals;
 
-          $$.VAR_NAME = fals;
-          strcat(ctmp2 , fals);
+          //strcat(ctmp2 , fals);
 
           ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\0';
           strcat(ctmp2 , ctmp);
@@ -2543,15 +2548,16 @@ void yyerror(const char *s){
           strcat(ctmp2 , ctmp);
 
           $$.code = ctmp2;
-          strcat(ctmp2 , $1.mystr);
+          //strcat(ctmp2 , $1.mystr);
 
           char tmp[3];
-          tmp[0] = ';';tmp[1]=';';tmp[2]='\0';
+          tmp[0] = '+';tmp[1]='+';tmp[2]='\0';
           char * tmp2 = (char *) malloc(20+strlen($1.mystr)+1);
           strcpy(tmp2 , $1.mystr);
           strcat(tmp2 , tmp);
           $$.mystr = tmp2;
           fprintf(logout,"%s \n\n",tmp2);
+
 				}
 				| variable DECOP	{
 					fprintf(logout,"At line no: %d factor : variable DECOP\n\n",line_count);
@@ -2559,7 +2565,7 @@ void yyerror(const char *s){
           char ctmp[8];
           ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='A';ctmp[5]='X';ctmp[6]=',';ctmp[7]='\0';
 
-          char * ctmp2 = (char *) malloc(20+strlen(ctmp)*4+strlen($1.mystr)+strlen($1.code)+1);
+          char * ctmp2 = (char *) malloc(40+strlen(ctmp)*4+strlen($1.mystr)+strlen($1.code)+1);
           strcpy(ctmp2 , $1.code);
 
           strcat(ctmp2 , ctmp);
@@ -2580,8 +2586,12 @@ void yyerror(const char *s){
 
           ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
           strcat(ctmp2 , ctmp);
-
-          strcat(ctmp2 , $1.mystr);
+          if($1.VAR_NAME != NULL){
+            strcat(ctmp2 , $1.VAR_NAME);
+          }
+          else{
+            strcat(ctmp2 , $1.mystr);
+          }
 
           ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\0';
           strcat(ctmp2 , ctmp);
@@ -2592,7 +2602,7 @@ void yyerror(const char *s){
           $$.code = ctmp2;
 
           char tmp[3];
-					tmp[0] = ';';tmp[1]=';';tmp[2]='\0';
+					tmp[0] = '-';tmp[1]='-';tmp[2]='\0';
 					char * tmp2 = (char *) malloc(20+strlen($1.mystr)+1);
 					strcpy(tmp2 , $1.mystr);
 					strcat(tmp2 , tmp);

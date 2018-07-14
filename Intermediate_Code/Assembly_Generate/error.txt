@@ -1,2 +1,8 @@
-Total Errors: 0
+Error 1 at Line 19: Undeclared Variable: i
+
+Error 2 at Line 19: Undeclared Variable: i
+
+Error 3 at Line 19: Undeclared Variable: i
+
+Total Errors: 3
 

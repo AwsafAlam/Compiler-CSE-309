@@ -5,7 +5,7 @@ int f(int a){
 int g(int a, int b){
     int x;
     x=f(a)+a+b;
-    return x;
+    return x*f(b);
 }
 
 int main(){
@@ -14,6 +14,14 @@ int main(){
     a=1;
     c[2]=2;
     a=g(c[2],1);
+    b=0;
+    println(a);
+    for(i=0;i<4;i++){
+        while(a--){
+            b++;
+        }
+    }
+    println(b);
     println(a);
     return 0;
 }
