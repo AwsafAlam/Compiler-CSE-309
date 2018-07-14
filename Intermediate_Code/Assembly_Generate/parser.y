@@ -5,6 +5,10 @@
 #include<string.h>
 #include<cmath>
 #include<vector>
+#include <fstream>
+#include <sstream>
+#include <string>
+
 #include "SymbolTable.h"
 
 using namespace std;
@@ -63,7 +67,7 @@ char *newTemp()
 }
 
 char * printFunction(){
-  char * print="\n\nPRINT PROC\n\n\tpush ax\n\tpush bx\n\tpush cx\n\tpush dx\n\tor ax,ax\n \tjge enddif\n\tpush ax\n\tmov dl,'-'\n\tmov ah,2\n\tint 21h\n\tpop ax\n\tneg ax\nenddif:\n\txor cx,cx\n\tmov bx,10d\nrepeat:\n\txor dx,dx\n\tdiv bx\n\t push dx\n\tinc cx\n\tor ax,ax\n\tjne repeat\n\tmov ah,2\nprint_loop:\n\tpop dx\n\tor dl,30h\n\tint 21h\n\tloop print_loop\n\tpop dx\n\tpop cx\n\tpop bx\n\tpop ax\n\tret\n\PRINT ENDP\n";
+  char * print="\n\nPRINT PROC\n\nPUSH DX\nPUSH CX\nPUSH BX\nPUSH AX\nOR AX,AX\nJGE check_NEG\nPUSH AX\nMOV DL,'-'\nMOV AH,2\nINT 21H\nPOP AX\nNEG AX\ncheck_NEG:\nXOR CX,CX\nMOV BX,10D\nprint_char:\nXOR DX,DX\nDIV BX\n PUSH DX\nINC CX\nOR AX,AX\nJNE print_char\nMOV AH,2\nprint_loop:\nPOP DX\nOR DL,30H\nINT 21H\nloop print_loop\nPOP DX\nPOP CX\nPOP BX\nPOP AX\nRET 2\n\PRINT ENDP\n";
 	return print;
 }
 char *printID(char * id){
@@ -2686,6 +2690,9 @@ int main(int argc,char *argv[])
 
 	yyin=fp;
 	yyparse();
+
+
+
  fclose(logout);
  fclose(error);
  fclose(code);

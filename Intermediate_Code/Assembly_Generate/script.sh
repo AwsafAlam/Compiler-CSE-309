@@ -11,3 +11,7 @@ echo '4'
 g++ -o a.out y.o l.o -lfl -ly	#compiles the scanner and parser to create output file a.out; -lfl and -ly includes library files 					for lex and yacc(bison)
 echo '5'
 ./a.out input.c
+echo '6'
+g++ -o b.out Optimize.cpp
+echo '7'
+./b.out input.c
