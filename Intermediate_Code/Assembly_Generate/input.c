@@ -4,7 +4,7 @@ int f(int a){
 
 int g(int a, int b){
     int x;
-    x=f(a)+a+b;
+    x=f(a)+a;
     return x;
 }
 

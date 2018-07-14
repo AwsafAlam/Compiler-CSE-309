@@ -4,14 +4,16 @@
 t0 DW ?
 a2 DW ?
 x3 DW ?
+t1 DW ?
 t2 DW ?
-t3 DW ?
 a3 DW ?
 b3 DW ?
 a4 DW ?
 b4 DW ?
+t3 DW ?
 t4 DW ?
 t5 DW ?
+t6 DW ?
 c4 DW 3 DUP (?)
 .CODE
 f PROC
@@ -45,13 +47,8 @@ MOV BX,t1
 ADD BX,AX
 MOV t2,BX
 
-MOV AX,b3
-MOV BX,t2
-ADD BX,AX
-MOV t3,BX
-
-MOV AX,t3
-MOV ,AX
+MOV AX,t2
+MOV x3,AX
 
 MOV AX,x3
 
@@ -63,12 +60,12 @@ MOV AX,@DATA
 MOV DS,AX
 
 MOV AX,1
-MOV ,AX
+MOV a4,AX
 
 MOV BX,2
 ADD BX,BX
 MOV AX,c4[BX]
-MOV t4,AX
+MOV t3,AX
 
 MOV AX,2
 MOV c[BX],AX
@@ -76,19 +73,19 @@ MOV c[BX],AX
 MOV BX,2
 ADD BX,BX
 MOV AX,c4[BX]
+MOV t4,AX
+
+PUSH t4
+CALL f
 MOV t5,AX
 
-PUSH t5
-CALL f
-MOV t6,AX
-
-MOV AX,t6
-MOV ,AX
+MOV AX,t5
+MOV a4,AX
 
 PUSH 3
 PUSH a4
 CALL g
-MOV t7,AX
+MOV t6,AX
 
 
 MOV AX,a

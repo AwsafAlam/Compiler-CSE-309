@@ -1354,8 +1354,11 @@ void yyerror(const char *s){
                   }
                   char integer[2];
                   sprintf(integer, "%d", symboltable->Lookup($1.mystr)->getCurrentScope());
-                  strcat($1.mystr , integer);
-                  $$.VAR_NAME = $1.mystr;
+                  char * var = (char *) malloc(15+strlen($1.mystr));
+                  strcat(var, $1.mystr);
+                  strcat(var, integer);
+                  //strcat($1.mystr , integer);
+                  $$.VAR_NAME = var;
                   //return_Type = symboltable->Lookup($1.mystr)->getDataType();
               }
             }
@@ -1627,7 +1630,12 @@ void yyerror(const char *s){
                 strcat(ctmp2 , ctmp);
               }
               else{
-                strcat(ctmp2 , $1.mystr);
+                if($1.VAR_NAME == NULL){
+                  strcat(ctmp2 , $1.mystr);
+                }
+                else{
+                  strcat(ctmp2 , $1.VAR_NAME);
+                }
               }
             }
             ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\0';
@@ -2331,6 +2339,7 @@ void yyerror(const char *s){
           ctmp[0]='M';ctmp[1]='O';ctmp[2]='V';ctmp[3]=' ';ctmp[4]='\0';
           strcat(ctmp2 , ctmp);
           char *t = newTemp();
+          DATA_SEGMENT.push_back(t);
           $$.VAR_NAME = t;
           strcat(ctmp2 , t);
           ctmp[0]=',';ctmp[1]='A';ctmp[2]='X';ctmp[3]='\n';ctmp[4]='\0';

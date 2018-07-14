@@ -1,6 +1,4 @@
 Error 1 at line 5: Return Type does not match
 
-Error 2 at line 11: Return Type does not match
-
-Total Errors: 2
+Total Errors: 1
 
