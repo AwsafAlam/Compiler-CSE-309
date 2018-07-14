@@ -26,6 +26,7 @@ vector<SymbolInfo *> param_list;
  FILE *error= fopen("error.txt","w");
  FILE *code = fopen("Code.asm","w");
 
+char * func_ret;
 string return_Type = "";
 bool returnFlag = false;
 SymbolTable * symboltable = new SymbolTable(30);
@@ -360,9 +361,11 @@ void yyerror(const char *s){
               strcat(ctmp2 , ctmp);
             }
             else{
-              ctmp[0]='P';ctmp[1]='O';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='P';ctmp[6]='\n';ctmp[7]='\0';
+              //JMP START
+              ctmp[0]='J';ctmp[1]='M';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='\0';
               strcat(ctmp2 , ctmp);
-              ctmp[0]='R';ctmp[1]='E';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='4';ctmp[5]='\n';ctmp[6]='\0';
+              strcat(ctmp2 , func_ret);
+              ctmp[0]='\n';ctmp[1]='\0';
               strcat(ctmp2 , ctmp);
 
             }
@@ -475,6 +478,7 @@ void yyerror(const char *s){
              strcat(ctmp2 , ctmp);
              ctmp[0]='P';ctmp[1]='R';ctmp[2]='O';ctmp[3]='C';ctmp[4]='\n';ctmp[5]='\0';
              strcat(ctmp2 , ctmp);
+
              //PUSH BP
              ctmp[0]='P';ctmp[1]='U';ctmp[2]='S';ctmp[3]='H';ctmp[4]=' ';ctmp[5]='B';ctmp[6]='P';ctmp[7]='\0';
              strcat(ctmp2 , ctmp);
@@ -487,14 +491,15 @@ void yyerror(const char *s){
              ctmp[0]='S';ctmp[1]='P';ctmp[2]='\n';ctmp[3]='\0';
              strcat(ctmp2 , ctmp);
 
-
              strcat(ctmp2 , $7.code);
              ctmp[0]='\n';ctmp[1]='\0';
              strcat(ctmp2 , ctmp);
-             //POP BP; RET 4
-            ctmp[0]='P';ctmp[1]='O';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='P';ctmp[6]='\n';ctmp[7]='\0';
+
+             //JMP START
+             ctmp[0]='J';ctmp[1]='M';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='\0';
              strcat(ctmp2 , ctmp);
-             ctmp[0]='R';ctmp[1]='E';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='4';ctmp[5]='\n';ctmp[6]='\0';
+             strcat(ctmp2 , func_ret);
+             ctmp[0]='\n';ctmp[1]='\0';
              strcat(ctmp2 , ctmp);
 
              strcat(ctmp2 , $2.mystr);
@@ -1245,6 +1250,34 @@ void yyerror(const char *s){
               strcat(ctmp2 , $2.mystr);
             }
 
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+            ctmp[0]='J';ctmp[1]='M';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='\0';
+            strcat(ctmp2 , ctmp);
+            char *t = newLabel();
+            $$.LABEL = t;
+            strcat(ctmp2 , t);
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            char *retlab = newLabel();
+            $$.LABEL = retlab;
+            func_ret = retlab;
+            strcat(ctmp2 , retlab);
+            ctmp[0]=':';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+            ctmp[0]='\n';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
+
+            //POP BP; RET 4
+           ctmp[0]='P';ctmp[1]='O';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='P';ctmp[6]='\n';ctmp[7]='\0';
+            strcat(ctmp2 , ctmp);
+            ctmp[0]='R';ctmp[1]='E';ctmp[2]='T';ctmp[3]=' ';ctmp[4]=' ';ctmp[5]='\n';ctmp[6]='\0';
+            strcat(ctmp2 , ctmp);
+
+            strcat(ctmp2 , t);
+            ctmp[0]=':';ctmp[1]='\0';
+            strcat(ctmp2 , ctmp);
             ctmp[0]='\n';ctmp[1]='\0';
             strcat(ctmp2 , ctmp);
 

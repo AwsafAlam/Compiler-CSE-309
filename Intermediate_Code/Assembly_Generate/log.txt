@@ -108,7 +108,7 @@ return 2*a;
 
 At line no: 5 type_specifier:INT
 
- ˆÅC¾Uint  
+ H“7Vint  
 
 At line no: 5 type_specifier:INT
 
@@ -343,7 +343,7 @@ ScopeTable with id 3 removed
 
 At line no: 9 func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
 
- ˆÅC¾Uint g(int a,int b){
+ H“7Vint g(int a,int b){
 int x;
 x=f(a)+a+b;
 return x;
@@ -352,7 +352,7 @@ return x;
 
 At line no: 9 unit : func_definition
 
- ˆÅC¾Uint g(int a,int b){
+ H“7Vint g(int a,int b){
 int x;
 x=f(a)+a+b;
 return x;
@@ -365,7 +365,7 @@ int f(int a){
 return 2*a;
 
 }
- ˆÅC¾Uint g(int a,int b){
+ H“7Vint g(int a,int b){
 int x;
 x=f(a)+a+b;
 return x;
@@ -817,7 +817,7 @@ int f(int a){
 return 2*a;
 
 }
- ˆÅC¾Uint g(int a,int b){
+ H“7Vint g(int a,int b){
 int x;
 x=f(a)+a+b;
 return x;
@@ -840,7 +840,7 @@ int f(int a){
 return 2*a;
 
 }
- ˆÅC¾Uint g(int a,int b){
+ H“7Vint g(int a,int b){
 int x;
 x=f(a)+a+b;
 return x;
