@@ -1193,10 +1193,15 @@ void yyerror(const char *s){
             if(symboltable->Lookup($3.mystr) == NULL){
                 error_count++;
                 fprintf(error, "Error %d at Line %d: Undeclared Variable: %s\n\n",error_count , line_count,$3.mystr);
+                $$.code = "";
+            }
+            else{
+              char integer[2];
+              sprintf(integer, "%d", symboltable->Lookup($3.mystr)->getCurrentScope());
+              strcat($3.mystr, integer);
+              $$.code = printID($3.mystr);
 
             }
-
-            $$.code = printID($3.mystr);
 
 						char tmp[8];
 						tmp[0]='p';tmp[1]='r';tmp[2]='i';tmp[3]='n';tmp[4]='t';tmp[5]='l';tmp[6]='n';tmp[7]='\0';
@@ -1625,7 +1630,11 @@ void yyerror(const char *s){
             strcat(ctmp2 , ctmp);
             if(symboltable->Lookup($1.mystr)!= NULL){
               if(symboltable->Lookup($1.mystr)->getDataStructure() == "ARRAY"){
+                char integer[2];
+                sprintf(integer, "%d", symboltable->Lookup($1.mystr)->getCurrentScope());
+                strcat($1.mystr, integer);
                 strcat(ctmp2 , $1.mystr);
+
                 ctmp[0]='[';ctmp[1]='B';ctmp[2]='X';ctmp[3]=']';ctmp[4]='\0';
                 strcat(ctmp2 , ctmp);
               }

@@ -4,7 +4,7 @@ int f(int a){
 
 int g(int a, int b){
     int x;
-    x=f(a)+a;
+    x=f(a)+a+b;
     return x;
 }
 
@@ -13,8 +13,7 @@ int main(){
     int c[3];
     a=1;
     c[2]=2;
-    a=f(c[2]);
-    g(a,3);
+    a=g(c[2],1);
     println(a);
     return 0;
 }

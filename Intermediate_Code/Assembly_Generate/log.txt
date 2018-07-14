@@ -108,7 +108,7 @@ return 2*a;
 
 At line no: 5 type_specifier:INT
 
- (y5UVint  
+ ˆÅC¾Uint  
 
 At line no: 5 type_specifier:INT
 
@@ -227,32 +227,52 @@ At line no: 7 simple_expression : simple_expression ADDOP term
 
 f(a)+a 
 
+At line no: 7 variable : ID
+
+b
+
+At line no: 7 factor	: variable
+
+b 
+
+At line no: 7 unary_expression : factor
+
+b 
+
+At line no: 7 term :	unary_expression
+
+b 
+
+At line no: 7 simple_expression : simple_expression ADDOP term
+
+f(a)+a+b 
+
 At line no: 7 rel_expression	: simple_expression
 
-f(a)+a 
+f(a)+a+b 
 
 At line no: 7 logic_expression : rel_expression
 
-f(a)+a 
+f(a)+a+b 
 
 At line no: 7 expression : variable ASSIGNOP logic_expression
 
-x=f(a)+a 
+x=f(a)+a+b 
 
 At line no: 7 expression_statement 	: expression SEMICOLON
 
-x=f(a)+a;
+x=f(a)+a+b;
  
 
 At line no: 7 statement : expression_statement
 
-x=f(a)+a;
+x=f(a)+a+b;
  
 
 At line no: 7 statements :| statements statement 
 
 int x;
-x=f(a)+a;
+x=f(a)+a+b;
  
 
 At line no: 8 variable : ID
@@ -295,7 +315,7 @@ return x;
 At line no: 8 statements :| statements statement 
 
 int x;
-x=f(a)+a;
+x=f(a)+a+b;
 return x;
  
 
@@ -303,7 +323,7 @@ At line no: 9 compound_statement : LCURL statements RCURL
 
 {
 int x;
-x=f(a)+a;
+x=f(a)+a+b;
 return x;
 
 } 
@@ -323,18 +343,18 @@ ScopeTable with id 3 removed
 
 At line no: 9 func_definition : type_specifier ID LPAREN parameter_list RPAREN compound_statement
 
- (y5UVint g(int a,int b){
+ ˆÅC¾Uint g(int a,int b){
 int x;
-x=f(a)+a;
+x=f(a)+a+b;
 return x;
 
 } 
 
 At line no: 9 unit : func_definition
 
- (y5UVint g(int a,int b){
+ ˆÅC¾Uint g(int a,int b){
 int x;
-x=f(a)+a;
+x=f(a)+a+b;
 return x;
 
 } 
@@ -345,9 +365,9 @@ int f(int a){
 return 2*a;
 
 }
- (y5UVint g(int a,int b){
+ ˆÅC¾Uint g(int a,int b){
 int x;
-x=f(a)+a;
+x=f(a)+a+b;
 return x;
 
 } 
@@ -600,46 +620,74 @@ At line no: 16 arguments : logic_expression
 
 c[2] 
 
-At line no: 16 argument_list : arguments
+At line no: 16 factor : CONST_INT
 
-c[2] 
-
-At line no: 16 factor	: ID LPAREN argument_list RPAREN
-
-f(c[2]) 
+1 
 
 At line no: 16 unary_expression : factor
 
-f(c[2]) 
+1 
 
 At line no: 16 term :	unary_expression
 
-f(c[2]) 
+1 
 
 At line no: 16 simple_expression : term
 
-f(c[2]) 
+1 
 
 At line no: 16 rel_expression	: simple_expression
 
-f(c[2]) 
+1 
 
 At line no: 16 logic_expression : rel_expression
 
-f(c[2]) 
+1 
+
+At line no: 16 arguments : arguments COMMA logic_expression
+
+c[2],1 
+
+At line no: 16 argument_list : arguments
+
+c[2],1 
+
+At line no: 16 factor	: ID LPAREN argument_list RPAREN
+
+g(c[2],1) 
+
+At line no: 16 unary_expression : factor
+
+g(c[2],1) 
+
+At line no: 16 term :	unary_expression
+
+g(c[2],1) 
+
+At line no: 16 simple_expression : term
+
+g(c[2],1) 
+
+At line no: 16 rel_expression	: simple_expression
+
+g(c[2],1) 
+
+At line no: 16 logic_expression : rel_expression
+
+g(c[2],1) 
 
 At line no: 16 expression : variable ASSIGNOP logic_expression
 
-a=f(c[2]) 
+a=g(c[2],1) 
 
 At line no: 16 expression_statement 	: expression SEMICOLON
 
-a=f(c[2]);
+a=g(c[2],1);
  
 
 At line no: 16 statement : expression_statement
 
-a=f(c[2]);
+a=g(c[2],1);
  
 
 At line no: 16 statements :| statements statement 
@@ -648,109 +696,12 @@ int a,b;
 int c[3];
 a=1;
 c[2]=2;
-a=f(c[2]);
+a=g(c[2],1);
  
 
-At line no: 17 variable : ID
+At line no: 17 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
 
-a
-
-At line no: 17 factor	: variable
-
-a 
-
-At line no: 17 unary_expression : factor
-
-a 
-
-At line no: 17 term :	unary_expression
-
-a 
-
-At line no: 17 simple_expression : term
-
-a 
-
-At line no: 17 rel_expression	: simple_expression
-
-a 
-
-At line no: 17 logic_expression : rel_expression
-
-a 
-
-At line no: 17 arguments : logic_expression
-
-a 
-
-At line no: 17 factor : CONST_INT
-
-3 
-
-At line no: 17 unary_expression : factor
-
-3 
-
-At line no: 17 term :	unary_expression
-
-3 
-
-At line no: 17 simple_expression : term
-
-3 
-
-At line no: 17 rel_expression	: simple_expression
-
-3 
-
-At line no: 17 logic_expression : rel_expression
-
-3 
-
-At line no: 17 arguments : arguments COMMA logic_expression
-
-a,3 
-
-At line no: 17 argument_list : arguments
-
-a,3 
-
-At line no: 17 factor	: ID LPAREN argument_list RPAREN
-
-g(a,3) 
-
-At line no: 17 unary_expression : factor
-
-g(a,3) 
-
-At line no: 17 term :	unary_expression
-
-g(a,3) 
-
-At line no: 17 simple_expression : term
-
-g(a,3) 
-
-At line no: 17 rel_expression	: simple_expression
-
-g(a,3) 
-
-At line no: 17 logic_expression : rel_expression
-
-g(a,3) 
-
-At line no: 17 expression : logic_expression
-
-g(a,3) 
-
-At line no: 17 expression_statement 	: expression SEMICOLON
-
-g(a,3);
- 
-
-At line no: 17 statement : expression_statement
-
-g(a,3);
+println(a4);
  
 
 At line no: 17 statements :| statements statement 
@@ -759,13 +710,41 @@ int a,b;
 int c[3];
 a=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
+a=g(c[2],1);
+println(a4);
  
 
-At line no: 18 statement : PRINTLN LPAREN ID RPAREN SEMICOLON
+At line no: 18 factor : CONST_INT
 
-println(a);
+0 
+
+At line no: 18 unary_expression : factor
+
+0 
+
+At line no: 18 term :	unary_expression
+
+0 
+
+At line no: 18 simple_expression : term
+
+0 
+
+At line no: 18 rel_expression	: simple_expression
+
+0 
+
+At line no: 18 logic_expression : rel_expression
+
+0 
+
+At line no: 18 expression : logic_expression
+
+0 
+
+At line no: 18 statement : RETURN expression SEMICOLON
+
+return 0;
  
 
 At line no: 18 statements :| statements statement 
@@ -774,66 +753,20 @@ int a,b;
 int c[3];
 a=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
-println(a);
- 
-
-At line no: 19 factor : CONST_INT
-
-0 
-
-At line no: 19 unary_expression : factor
-
-0 
-
-At line no: 19 term :	unary_expression
-
-0 
-
-At line no: 19 simple_expression : term
-
-0 
-
-At line no: 19 rel_expression	: simple_expression
-
-0 
-
-At line no: 19 logic_expression : rel_expression
-
-0 
-
-At line no: 19 expression : logic_expression
-
-0 
-
-At line no: 19 statement : RETURN expression SEMICOLON
-
+a=g(c[2],1);
+println(a4);
 return 0;
  
 
-At line no: 19 statements :| statements statement 
-
-int a,b;
-int c[3];
-a=1;
-c[2]=2;
-a=f(c[2]);
-g(a,3);
-println(a);
-return 0;
- 
-
-At line no: 20 compound_statement : LCURL statements RCURL
+At line no: 19 compound_statement : LCURL statements RCURL
 
 {
 int a,b;
 int c[3];
 a=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
-println(a);
+a=g(c[2],1);
+println(a4);
 return 0;
 
 } 
@@ -852,43 +785,41 @@ ScopeTable # 1
 
 ScopeTable with id 4 removed
 
-At line no: 20 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
+At line no: 19 func_definition : type_specifier ID LPAREN  RPAREN compound_statement
 
 int main(){
 int a,b;
 int c[3];
 a=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
-println(a);
+a=g(c[2],1);
+println(a4);
 return 0;
 
 } 
 
-At line no: 20 unit : func_definition
+At line no: 19 unit : func_definition
 
 int main(){
 int a,b;
 int c[3];
 a=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
-println(a);
+a=g(c[2],1);
+println(a4);
 return 0;
 
 } 
 
-At line no: 20 program : program unit
+At line no: 19 program : program unit
 
 int f(int a){
 return 2*a;
 
 }
- (y5UVint g(int a,int b){
+ ˆÅC¾Uint g(int a,int b){
 int x;
-x=f(a)+a;
+x=f(a)+a+b;
 return x;
 
 }
@@ -897,22 +828,21 @@ int a,b;
 int c[3];
 a=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
-println(a);
+a=g(c[2],1);
+println(a4);
 return 0;
 
 } 
 
-At line no: 21 start : program
+At line no: 20 start : program
 
 int f(int a){
 return 2*a;
 
 }
- (y5UVint g(int a,int b){
+ ˆÅC¾Uint g(int a,int b){
 int x;
-x=f(a)+a;
+x=f(a)+a+b;
 return x;
 
 }
@@ -921,9 +851,8 @@ int a,b;
 int c[3];
 a=1;
 c[2]=2;
-a=f(c[2]);
-g(a,3);
-println(a);
+a=g(c[2],1);
+println(a4);
 return 0;
 
 }

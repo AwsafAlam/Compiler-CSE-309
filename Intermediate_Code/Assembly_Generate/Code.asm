@@ -6,11 +6,11 @@ a2 DW ?
 x3 DW ?
 t1 DW ?
 t2 DW ?
+t3 DW ?
 a3 DW ?
 b3 DW ?
 a4 DW ?
 b4 DW ?
-t3 DW ?
 t4 DW ?
 t5 DW ?
 t6 DW ?
@@ -47,7 +47,12 @@ MOV BX,t1
 ADD BX,AX
 MOV t2,BX
 
-MOV AX,t2
+MOV AX,b3
+MOV BX,t2
+ADD BX,AX
+MOV t3,BX
+
+MOV AX,t3
 MOV x3,AX
 
 MOV AX,x3
@@ -65,30 +70,25 @@ MOV a4,AX
 MOV BX,2
 ADD BX,BX
 MOV AX,c4[BX]
-MOV t3,AX
+MOV t4,AX
 
 MOV AX,2
-MOV c[BX],AX
+MOV c4[BX],AX
 
 MOV BX,2
 ADD BX,BX
 MOV AX,c4[BX]
-MOV t4,AX
-
-PUSH t4
-CALL f
 MOV t5,AX
 
-MOV AX,t5
-MOV a4,AX
-
-PUSH 3
-PUSH a4
+PUSH 1
+PUSH t5
 CALL g
 MOV t6,AX
 
+MOV AX,t6
+MOV a4,AX
 
-MOV AX,a
+MOV AX,a4
 CALL PRINT
 MOV AX,0
 
