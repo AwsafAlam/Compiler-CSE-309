@@ -1791,7 +1791,7 @@ yyreduce:
               //POP BP; RET 4
              ctmp[0]='P';ctmp[1]='O';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='P';ctmp[6]='\n';ctmp[7]='\0';
               strcat(ctmp2 , ctmp);
-              ctmp[0]='R';ctmp[1]='E';ctmp[2]='T';ctmp[3]=' ';ctmp[4]=' ';ctmp[5]='\n';ctmp[6]='\0';
+              ctmp[0]='R';ctmp[1]='E';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='2';ctmp[5]='\n';ctmp[6]='\0';
               strcat(ctmp2 , ctmp);
 
             }
@@ -1970,7 +1970,7 @@ yyreduce:
                //POP BP; RET 4
               ctmp[0]='P';ctmp[1]='O';ctmp[2]='P';ctmp[3]=' ';ctmp[4]='B';ctmp[5]='P';ctmp[6]='\n';ctmp[7]='\0';
                strcat(ctmp2 , ctmp);
-               ctmp[0]='R';ctmp[1]='E';ctmp[2]='T';ctmp[3]=' ';ctmp[4]=' ';ctmp[5]='\n';ctmp[6]='\0';
+               ctmp[0]='R';ctmp[1]='E';ctmp[2]='T';ctmp[3]=' ';ctmp[4]='2';ctmp[5]='\n';ctmp[6]='\0';
                strcat(ctmp2 , ctmp);
 
              }
