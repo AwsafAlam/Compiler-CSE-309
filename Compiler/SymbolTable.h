@@ -24,7 +24,7 @@ public:
   bool Insert(string name , string type,string datastructure);
   SymbolInfo* Lookup(string name );
   bool Delete(string name );
-
+  int getScopeNumber(){return scope;}
   int getCollision(){return collision;}
   void printHash();
 };
@@ -96,6 +96,7 @@ bool ScopeTable::Insert(string name , string type ,string datastructure)
    item->setName(name);
    item->setType(type);
    item->setDataStructure(datastructure);
+   item->setScope(scope);
    // item->index = index;
    item->next = NULL;
 
@@ -236,7 +237,7 @@ public:
   bool Remove(string name);
   SymbolInfo * Lookup(string name);
   SymbolInfo * LookupCurrentScope(string name);
-
+  ScopeTable * getCurrentScope(){return CurrentScope;}
   void PrintCurrentScope();
   void PrintAllScopes();
 

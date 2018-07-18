@@ -13,7 +13,7 @@ int main(){
     int a,b;
     a=1;
     b=2;
-    a=g(a,b);
+    a=f(a,b);
     println(a);
     return 0;
 }
