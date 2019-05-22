@@ -14,6 +14,11 @@ int main(){
     a=1;
     b=2;
     a=g(a,b);
-    println(a);
+    if(a<2)
+        if(b<1)
+            println(a);
+        else
+            println(b);
+
     return 0;
 }
